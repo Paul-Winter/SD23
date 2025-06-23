@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF Урок №11 Элементы", "WPF Урок №11 Элементы.csproj", "{231890CB-58E1-4E94-8A94-1B92EB647EDA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{231890CB-58E1-4E94-8A94-1B92EB647EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{231890CB-58E1-4E94-8A94-1B92EB647EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{231890CB-58E1-4E94-8A94-1B92EB647EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{231890CB-58E1-4E94-8A94-1B92EB647EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1EFE286A-AD8C-4487-A5C8-51E472E56504}
+	EndGlobalSection
+EndGlobal

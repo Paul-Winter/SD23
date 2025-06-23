@@ -1,0 +1,70 @@
+﻿<Window x:Class="WPF_Урок__13_Локализация.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_Урок__13_Локализация"
+        mc:Ignorable="d"
+        Title="Локализация" Height="500" Width="900">
+    <DockPanel LastChildFill="False">
+        <Menu IsMainMenu="True"
+              DockPanel.Dock="Top">
+            <MenuItem x:Name="menuFile">
+                <MenuItem x:Name="menuFileNew"></MenuItem>
+                <MenuItem x:Name="menuFileOpen"></MenuItem>
+                <MenuItem x:Name="menuFileSave"></MenuItem>
+                <MenuItem x:Name="menuFileExit"></MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="menuEdit">
+                <MenuItem x:Name="menuEditCopy"></MenuItem>
+                <MenuItem x:Name="menuEditCut"></MenuItem>
+                <MenuItem x:Name="menuEditPaste"></MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="menuHelp">
+                <MenuItem x:Name="menuHelpFAQ"></MenuItem>
+                <MenuItem x:Name="menuHelpAbout"></MenuItem>
+            </MenuItem>
+            <Separator/>
+            <MenuItem x:Name="menuLeft"></MenuItem>
+            <MenuItem x:Name="menuCenter"></MenuItem>
+            <MenuItem x:Name="menuRight"></MenuItem>
+            <Separator/>
+            <MenuItem x:Name="menuBold"></MenuItem>
+            <MenuItem x:Name="menuItalic"></MenuItem>
+            <MenuItem x:Name="menuUnderline"></MenuItem>
+            <Separator/>
+            <MenuItem x:Name="menuBackColor"></MenuItem>
+            <MenuItem x:Name="menuForeColor"></MenuItem>
+            <Separator/>
+            <TextBlock x:Name="tbLang"></TextBlock>
+            <RadioButton x:Name="btnEn"
+                         IsChecked="True"
+                         Click="radiobtn_Click">ENG</RadioButton>
+            <RadioButton x:Name="btnRu"
+                         Click="radiobtn_Click">РУС</RadioButton>
+        </Menu>
+        <RichTextBox x:Name="rtb"
+                     DockPanel.Dock="Top"
+                     MaxHeight="450"
+                     Height="420">            
+        </RichTextBox>
+        <StatusBar DockPanel.Dock="Bottom"
+                   >
+            <StatusBarItem>
+                <TextBlock Text="Ln 0"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="Col 0"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="Ch 0"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="tbLocal"/>
+            </StatusBarItem>
+        </StatusBar>
+    </DockPanel>
+</Window>
