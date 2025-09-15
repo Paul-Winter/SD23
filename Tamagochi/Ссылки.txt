@@ -3,7 +3,7 @@
 Ссылки на репозитории:
 
 1) Александрова:  
-2) Антонов:      
+2) Антонов: https://github.com/Pagan821/Tamagochi.git      
 3) Духина: https://github.com/Ananas2120/test_repo1     
 4) Землянский:  
 5) Золин:      
