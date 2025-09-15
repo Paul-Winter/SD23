@@ -2,7 +2,7 @@
 
 Ссылки на репозитории:
 
-1) Александрова:  
+1) Александрова:  https://github.com/krs333/bekon.git
 2) Антонов: https://github.com/Pagan821/Tamagochi.git      
 3) Духина: https://github.com/Ananas2120/test_repo1     
 4) Землянский:  
