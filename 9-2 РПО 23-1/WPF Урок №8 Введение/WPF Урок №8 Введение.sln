@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF Урок №8 Введение", "WPF Урок №8 Введение.csproj", "{2B84E7DA-CCAA-4699-BE88-39A074424EEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B84E7DA-CCAA-4699-BE88-39A074424EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B84E7DA-CCAA-4699-BE88-39A074424EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B84E7DA-CCAA-4699-BE88-39A074424EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B84E7DA-CCAA-4699-BE88-39A074424EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {32ECB337-4F35-41D5-AC65-1CE187F2F93E}
+	EndGlobalSection
+EndGlobal

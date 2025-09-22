@@ -1,0 +1,69 @@
+﻿<Window x:Class="WPF_Урок__8_Введение.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_Урок__8_Введение"
+        mc:Ignorable="d"
+        Title="WPF Урок №1. Введение" Height="450" Width="800" Background="Aqua">
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="textBox1"
+                     Height="50"
+                     Width="150"
+                     Margin="20">
+            </TextBox>
+            <Button Name="submitButton"
+                    FontFamily="Consolas"
+                    FontSize="20"
+                    Foreground="Green"
+                    Height="50"
+                    Width="150" Click="submitButton_Click">
+                Сложение
+            </Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="textBox2"
+                     Height="50"
+                     Width="150"
+                     Margin="20">
+            </TextBox>
+            <Button Name="submitButton2"
+                FontFamily="Consolas"
+                FontSize="20"
+                Foreground="Green"
+                Height="50"
+                Width="150" Click="submitButton_Click2">
+                Вычитание
+        </Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="textBox3"
+                     Height="50"
+                     Width="150"
+                     Margin="20"
+                     IsReadOnly="True">
+            </TextBox>
+            <Button Name="submitButton3"
+                FontFamily="Consolas"
+                FontSize="20"
+                Foreground="Green"
+                Height="50"
+                Width="150" Click="submitButton_Click3">
+                Умножение
+        </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="submitButton4"
+                        FontFamily="Consolas"
+                        FontSize="20"
+                        Foreground="Green"
+                        Height="50"
+                        Width="150"
+                        Margin="190, 20"
+                        Click="submitButton_Click4">
+                    Деление
+                </Button>
+        </StackPanel>
+    </StackPanel>
+</Window>
