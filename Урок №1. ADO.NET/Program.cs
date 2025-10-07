@@ -493,8 +493,6 @@ namespace Урок__1.ADO.NET
             }
         }
 
-
-
         static void Main(string[] args)
         {
             Program pr = new Program();
