@@ -10,13 +10,14 @@ namespace Урок__1.ADO.NET
         SqlConnection connection = null;
         bool exit = false;
         // INSERT STRING
-        // string insertGroups = @"insert into Groups (GroupName, Spec, EduForm) values ('9-РПО-23/1','Разработка ПО','Колледж')";
+        string insertGroups = @"insert into Groups (GroupName, Spec, EduForm) values ('9-РПО-23/1','Разработка ПО','Колледж')";
         // SELECT STRING
         string selectGroups = @"select * from Groups";
         string selectStudent = @"select * from Student";
         string selectTeacher = @"select * from Teacher";
         // UPDATE STRING
-        string updateString = @"update GroupName set '9-РПО-25/1 where id = 1";
+        string updateString = @"update Groups set GroupName = @GroupName, Spec = @Spec, EduForm = @EduForm where id = @id";
+
         //DELETE STRING
         string deleteString = @"delete from Groups where id = 1";
 
@@ -112,11 +113,50 @@ namespace Урок__1.ADO.NET
                 }
                 else if (choice == 3)
                 {
+                    Console.WriteLine("Выберите таблицу:");
+                    Console.WriteLine("1.Groups");
+                    Console.WriteLine("2.Student");
+                    Console.WriteLine("3.Teacher");
+                    int answ = Convert.ToInt32(Console.ReadLine());
+                    switch(answ)
+                    {
+                        case 1:
+                            UpdateGroups();
+                            break;
 
+                        case 2:
+                            UpdateStudent();
+                            break;
+
+                        case 3:
+                            UpdateTeacher();
+                            break;
+
+                    }
+                   
                 }
                 else if (choice == 4)
                 {
+                    Console.WriteLine("Выберите таблицу:");
+                    Console.WriteLine("1.Groups");
+                    Console.WriteLine("2.Student");
+                    Console.WriteLine("3.Teacher");
+                    int answ = Convert.ToInt32(Console.ReadLine());
+                    switch (answ)
+                    {
+                        case 1:
+                            DeleteGroups();
+                            break;
 
+                        case 2:
+                            DeleteStudent();
+                            break;
+
+                        case 3:
+                            DeleteTeacher();
+                            break;
+
+                    }
                 }
                 else if (choice == 5)
                 {
@@ -208,7 +248,7 @@ namespace Урок__1.ADO.NET
 
             connection.Open();
             dataReader = sqlCommand.ExecuteReader();
-            //connection.Close();
+            connection.Close();
             return Convert.ToInt32(dataReader[0]);
         }
 
@@ -230,7 +270,7 @@ namespace Урок__1.ADO.NET
                 Console.WriteLine("===============================================================================");
                 while (dataReader.Read())
                 {
-                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}");
+                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}\t|\t{dataReader[3]}");
                 }
                 Console.WriteLine("===============================================================================");
                 Console.WriteLine("=================================Конец_записей=================================");
@@ -264,7 +304,7 @@ namespace Урок__1.ADO.NET
                 Console.WriteLine("===============================================================================");
                 while (dataReader.Read())
                 {
-                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}");
+                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}\t|\t{((DateTime)dataReader[3]).ToLongDateString()}\t|\t{dataReader[4]}\t|\t{dataReader[5]}\t|\t{dataReader[6]}");
                 }
                 Console.WriteLine("===============================================================================");
                 Console.WriteLine("=================================Конец_записей=================================");
@@ -298,7 +338,7 @@ namespace Урок__1.ADO.NET
                 Console.WriteLine("===============================================================================");
                 while (dataReader.Read())
                 {
-                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}");
+                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}\t|\t{((DateTime)dataReader[3]).ToLongDateString()}");
                 }
                 Console.WriteLine("===============================================================================");
                 Console.WriteLine("=================================Конец_записей=================================");
@@ -409,7 +449,7 @@ namespace Урок__1.ADO.NET
         }
         public void InsertStudent()
         {
-            connection.Open();
+            //connection.Open();
 
             Console.WriteLine("Введите Имя студента: ");
             string firstName = Console.ReadLine();
@@ -419,16 +459,16 @@ namespace Урок__1.ADO.NET
             string birthDay = Console.ReadLine();
             Console.WriteLine("Введите Студенческий билет: ");
             int ticket = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Введите Название группы: ");
-            string groupName = Console.ReadLine();
-            connection.Close();
-            int groupId = IdChecker(groupName);
-            connection.Close();
-            connection.Open();
+            Console.WriteLine("Введите ID группы: ");
+            int groupName = Convert.ToInt32(Console.ReadLine());
+            //connection.Close();
+            //int groupId = IdChecker(groupName);
+            //connection.Close();
+            //connection.Open();
             Console.WriteLine("Введите Зачётную книжку: ");
             int testBook = Convert.ToInt32(Console.ReadLine());
 
-            string insertStudent = $@"insert into Students (FirstName, LastName, BirthDay, Ticket, GroupId, TestBook) values ('{firstName}','{lastName}','{birthDay}', {ticket}, {groupId}, {testBook})";
+            string insertStudent = $@"insert into Student (FirstName, LastName, BirthDay, Ticket, GroupId, TestBook) values ('{firstName}','{lastName}','{birthDay}', {ticket}, {groupName}, {testBook})";
 
             // запрос на добавление
             SqlCommand insertCommand = new SqlCommand();
@@ -441,6 +481,7 @@ namespace Урок__1.ADO.NET
             try
             {
                 // открываем соединение
+                connection.Open();
                 Console.WriteLine("Открыто соединение");
                 // выполняем запрос
                 // ExecuteNonQuery работает с запросами: INSERT, UPDATE, DELETE
@@ -465,7 +506,7 @@ namespace Урок__1.ADO.NET
             Console.WriteLine("Введите Категорию: ");
             string category = Console.ReadLine();
 
-            string insertTeacher = $@"insert into Students (FirstName, LastName, WorkDay, Category) values ('{firstName}','{lastName}','{workDay}', '{category}')";
+            string insertTeacher = $@"insert into Teacher (FirstName, LastName, WorkDay, Category) values ('{firstName}','{lastName}','{workDay}', '{category}')";
 
             // запрос на добавление
             SqlCommand insertCommand = new SqlCommand();
@@ -492,6 +533,333 @@ namespace Урок__1.ADO.NET
                 Console.WriteLine("Закрыто соединение");
             }
         }
+
+        // UPDATE FUNC
+        public void UpdateGroups()
+        {
+            Console.WriteLine("Введите ID:");
+            int ansID = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Выберите необходимые данные для изменения");
+            Console.WriteLine("1. Название группы");
+            Console.WriteLine("2. Специальность");
+            Console.WriteLine("3. Форма обучения");
+            
+            int ans = Convert.ToInt32(Console.ReadLine());
+            if (ans == 1)
+            {
+                updateString = @"update Groups set GroupName = @GroupName where id = @id";
+            }
+            if (ans == 2)
+            {
+                updateString = @"update Groups set Spec = @Spec where id = @id";
+            }
+            if (ans == 3)
+            {
+                updateString = @"update Groups set EduForm = @EduForm where id = @id";
+            }
+            SqlCommand updateCmd = new SqlCommand(updateString, connection);
+
+            updateCmd.Parameters.AddWithValue("@id", ansID);
+            switch (ans)
+            {
+                case 1:
+                    Console.WriteLine("Введите новое название группы:");
+                    string NewGroup = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@GroupName", NewGroup);
+                    
+                    break;
+                   
+
+                case 2:
+                    Console.WriteLine("Введите новую специальность:");
+                    string NewSpec = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@Spec", NewSpec);
+                    
+                    break;
+
+                case 3:
+                    Console.WriteLine("Введите новую форму обучения:");
+                    string NewForm = Console.ReadLine();
+                    
+                    updateCmd.Parameters.AddWithValue("@EduForm", NewForm);
+                    break;
+
+            }
+            try
+            {
+                // открываем соединение
+                connection.Open();
+                Console.WriteLine("Открыто соединение");
+                updateCmd.ExecuteNonQuery();
+                Console.WriteLine("Выполнен запрос");
+            }
+            finally
+            {
+                // закрыть соединение
+                connection.Close();
+                Console.WriteLine("Закрыто соединение");
+            }
+
+
+        }
+        public void UpdateStudent()
+        {
+            Console.WriteLine("Введите ID:");
+            int ansID = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Выберите необходимые данные для изменения");
+            Console.WriteLine("1. Имя студента");
+            Console.WriteLine("2. Фамилию студента");
+            Console.WriteLine("3. День рождения");
+            Console.WriteLine("4. Студенческий билет");
+            Console.WriteLine("5. Название групп");
+            Console.WriteLine("6. Зачётную книжку");
+
+            int ans = Convert.ToInt32(Console.ReadLine());
+            if (ans == 1)
+            {
+                updateString = @"update Student set FirstName = @FirstName where id = @id";
+            }
+            if (ans == 2)
+            {
+                updateString = @"update Student set LastName = @LastName where id = @id";
+            }
+            if (ans == 3)
+            {
+                updateString = @"update Student set BirthDay = @BirthDay where id = @id";
+            }
+            if (ans == 4)
+            {
+                updateString = @"update Student set Ticket = @Ticket where id = @id";
+            }
+            if (ans == 5)
+            {
+                updateString = @"update Student set GroupId = @GroupId where id = @id";
+            }
+            if (ans == 6)
+            {
+                updateString = @"update Student set TestBook = @TestBook where id = @id";
+            }
+            SqlCommand updateCmd = new SqlCommand(updateString, connection);
+
+            updateCmd.Parameters.AddWithValue("@id", ansID);
+            switch (ans)
+            {
+                case 1:
+                    Console.WriteLine("Введите новое имя студента:");
+                    string NewFName = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@FirstName", NewFName);
+
+                    break;
+
+
+                case 2:
+                    Console.WriteLine("Введите новую фамилию:");
+                    string NewLName = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@LastName", NewLName);
+
+                    break;
+
+                case 3:
+                    Console.WriteLine("Введите новую дату рождения:");
+                    string NewBirthDay = Console.ReadLine();
+
+                    updateCmd.Parameters.AddWithValue("@BirthDay", NewBirthDay);
+                    break;
+
+                case 4:
+                    Console.WriteLine("Введите новый студенческий билет:");
+                    string NewTicket = Console.ReadLine();
+
+                    updateCmd.Parameters.AddWithValue("@Ticket", NewTicket);
+                    break;
+
+                case 5:
+            
+                    Console.WriteLine("Введите новый студенческий билет:");
+                    string NewGroupId = Console.ReadLine();
+
+                    updateCmd.Parameters.AddWithValue("@GroupId", NewGroupId);
+                    break;
+
+                case 6:
+
+                    Console.WriteLine("Введите новый студенческий билет:");
+                    string NewTestBook = Console.ReadLine();
+
+                    updateCmd.Parameters.AddWithValue("@TestBook", NewTestBook);
+                    break;
+
+            }
+            try
+            {
+                // открываем соединение
+                connection.Open();
+                Console.WriteLine("Открыто соединение");
+                updateCmd.ExecuteNonQuery();
+                Console.WriteLine("Выполнен запрос");
+            }
+            finally
+            {
+                // закрыть соединение
+                connection.Close();
+                Console.WriteLine("Закрыто соединение");
+            }
+
+        }
+        public void UpdateTeacher()
+        {
+            Console.WriteLine("Введите ID:");
+            int ansID = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Выберите необходимые данные для изменения");
+            Console.WriteLine("1. Имя учителя");
+            Console.WriteLine("2. Фамилия учителя");
+            Console.WriteLine("3. Первый рабочий день");
+            Console.WriteLine("4. Категория");
+
+            int ans = Convert.ToInt32(Console.ReadLine());
+            if (ans == 1)
+            {
+                updateString = @"update Teacher set FirstName = @FirstName where id = @id";
+            }
+            if (ans == 2)
+            {
+                updateString = @"update Teacher set LastName = @LastName where id = @id";
+            }
+            if (ans == 3)
+            {
+                updateString = @"update Teacher set WorkDay = @WorkDay where id = @id";
+            }
+            if (ans == 4)
+            {
+                updateString = @"update Teacher set Category = @Category where id = @id";
+            }
+            SqlCommand updateCmd = new SqlCommand(updateString, connection);
+
+            updateCmd.Parameters.AddWithValue("@id", ansID);
+            switch (ans)
+            {
+                case 1:
+                    Console.WriteLine("Введите новое имя:");
+                    string NewFirstName = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@FirstName", NewFirstName);
+
+                    break;
+
+
+                case 2:
+                    Console.WriteLine("Введите новую фамилию:");
+                    string NewLastName = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@LastName", NewLastName);
+
+                    break;
+
+                case 3:
+                    Console.WriteLine("Введите новый первый рабочий день:");
+                    string NewWorkDay = Console.ReadLine();
+
+                    updateCmd.Parameters.AddWithValue("@WorkDay", NewWorkDay);
+                    break;
+
+                case 4:
+                    Console.WriteLine("Введите новую категорию:");
+                    string NewCategory = Console.ReadLine();
+
+                    updateCmd.Parameters.AddWithValue("@Category", NewCategory);
+                    break;
+
+
+            }
+            try
+            {
+                // открываем соединение
+                connection.Open();
+                Console.WriteLine("Открыто соединение");
+                updateCmd.ExecuteNonQuery();
+                Console.WriteLine("Выполнен запрос");
+            }
+            finally
+            {
+                // закрыть соединение
+                connection.Close();
+                Console.WriteLine("Закрыто соединение");
+            }
+        }
+
+
+        //DELETE FUNC
+        public void DeleteGroups()
+        {
+            Console.WriteLine("Введите ID:");
+            int ansID = Convert.ToInt32(Console.ReadLine());
+            deleteString = @"delete from Groups where id = @id";
+            SqlCommand updateCmd = new SqlCommand(deleteString, connection);
+            updateCmd.Parameters.AddWithValue("@id", ansID);
+            try
+            {
+                // открываем соединение
+                connection.Open();
+                Console.WriteLine("Открыто соединение");
+                updateCmd.ExecuteNonQuery();
+                Console.WriteLine("Выполнен запрос");
+            }
+            finally
+            {
+                // закрыть соединение
+                connection.Close();
+                Console.WriteLine("Закрыто соединение");
+            }
+        }
+        public void DeleteStudent()
+        {
+            Console.WriteLine("Введите ID:");
+            int ansID = Convert.ToInt32(Console.ReadLine());
+
+
+            deleteString = @"delete from Student where id = @id";
+            SqlCommand updateCmd = new SqlCommand(deleteString, connection);
+            updateCmd.Parameters.AddWithValue("@id", ansID);
+            try
+            {
+                // открываем соединение
+                connection.Open();
+                Console.WriteLine("Открыто соединение");
+                updateCmd.ExecuteNonQuery();
+                Console.WriteLine("Выполнен запрос");
+            }
+            finally
+            {
+                // закрыть соединение
+                connection.Close();
+                Console.WriteLine("Закрыто соединение");
+            }
+        }
+        public void DeleteTeacher()
+        {
+            Console.WriteLine("Введите ID:");
+            int ansID = Convert.ToInt32(Console.ReadLine());
+
+            deleteString = @"delete from Teacher where id = @id";
+            SqlCommand updateCmd = new SqlCommand(deleteString, connection);
+            updateCmd.Parameters.AddWithValue("@id", ansID);
+            try
+            {
+                // открываем соединение
+                connection.Open();
+                Console.WriteLine("Открыто соединение");
+                updateCmd.ExecuteNonQuery();
+                Console.WriteLine("Выполнен запрос");
+            }
+            finally
+            {
+                // закрыть соединение
+                connection.Close();
+                Console.WriteLine("Закрыто соединение");
+            }
+        }
+
 
         static void Main(string[] args)
         {
