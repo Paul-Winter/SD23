@@ -3,22 +3,22 @@ using System.Data.SqlClient;
 
 namespace Урок__1.ADO.NET
 {
-    public class Student
+    public class Teacher
     {
         SqlConnection connection = null;
 
-        public Student()
+        public Teacher()
         {
             connection = new SqlConnection(@"Data Source=ITSTEP-42\SQLEXPRESS; Initial Catalog=Academy; Integrated Security=SSPI;");
         }
 
-        string selectStudentString = @"select * from Student";
-        string insertStudentString = null;
-        string updateStudentString = @"update Groups set GroupName = @GroupName, Spec = @Spec, EduForm = @EduForm where id = @id";
-        string deleteStudentString = @"delete from Groups where id = 1";
+        string selectTeacherString = @"select * from Teacher";
+        string insertTeacherString = null;
+        string updateTeacherString = @"update Groups set GroupName = @GroupName, Spec = @Spec, EduForm = @EduForm where id = @id";
+        string deleteTeacherString = @"delete from Groups where id = 1";
 
 
-        public void SelectStudent()
+        public void SelectTeacher()
         {
             SqlDataReader dataReader = null;
 
@@ -28,14 +28,14 @@ namespace Урок__1.ADO.NET
                 connection.Open();
                 Console.WriteLine("Открыто соединение");
                 Console.WriteLine("Создан объект читателя");
-                SqlCommand sqlCommand = new SqlCommand(selectStudentString, connection);
+                SqlCommand sqlCommand = new SqlCommand(selectTeacherString, connection);
                 Console.WriteLine("Создана команда на извлечение");
                 dataReader = sqlCommand.ExecuteReader();
                 Console.WriteLine("================================Чтение_записей:================================");
                 Console.WriteLine("===============================================================================");
                 while (dataReader.Read())
                 {
-                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}\t|\t{((DateTime)dataReader[3]).ToLongDateString()}\t|\t{dataReader[4]}\t|\t{dataReader[5]}\t|\t{dataReader[6]}");
+                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}\t|\t{((DateTime)dataReader[3]).ToLongDateString()}");
                 }
                 Console.WriteLine("===============================================================================");
                 Console.WriteLine("=================================Конец_записей=================================");
@@ -52,35 +52,25 @@ namespace Урок__1.ADO.NET
                 }
             }
         }
-        public void InsertStudent()
+        public void InsertTeacher()
         {
-            //connection.Open();
-
-            Console.WriteLine("Введите Имя студента: ");
+            Console.WriteLine("Введите Имя учителя: ");
             string firstName = Console.ReadLine();
-            Console.WriteLine("Введите Фамилию студента: ");
+            Console.WriteLine("Введите Фамилию учителя: ");
             string lastName = Console.ReadLine();
-            Console.WriteLine("Введите День рождения: ");
-            string birthDay = Console.ReadLine();
-            Console.WriteLine("Введите Студенческий билет: ");
-            int ticket = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Введите ID группы: ");
-            int groupName = Convert.ToInt32(Console.ReadLine());
-            //connection.Close();
-            //int groupId = IdChecker(groupName);
-            //connection.Close();
-            //connection.Open();
-            Console.WriteLine("Введите Зачётную книжку: ");
-            int testBook = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите Первый рабочий день: ");
+            string workDay = Console.ReadLine();
+            Console.WriteLine("Введите Категорию: ");
+            string category = Console.ReadLine();
 
-            insertStudentString = $@"insert into Student (FirstName, LastName, BirthDay, Ticket, GroupId, TestBook) values ('{firstName}','{lastName}','{birthDay}', {ticket}, {groupName}, {testBook})";
+            insertTeacherString = $@"insert into Teacher (FirstName, LastName, WorkDay, Category) values ('{firstName}','{lastName}','{workDay}', '{category}')";
 
             // запрос на добавление
             SqlCommand insertCommand = new SqlCommand();
             insertCommand.Connection = connection;
-            insertCommand.CommandText = insertStudentString;
+            insertCommand.CommandText = insertTeacherString;
 
-            SqlCommand insertCmd = new SqlCommand(insertStudentString, connection);
+            SqlCommand insertCmd = new SqlCommand(insertTeacherString, connection);
             Console.WriteLine("Создана команда на добавление");
 
             try
@@ -100,93 +90,68 @@ namespace Урок__1.ADO.NET
                 Console.WriteLine("Закрыто соединение");
             }
         }
-        public void UpdateStudent()
+        public void UpdateTeacher()
         {
             Console.WriteLine("Введите ID:");
             int ansID = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Выберите необходимые данные для изменения");
-            Console.WriteLine("1. Имя студента");
-            Console.WriteLine("2. Фамилию студента");
-            Console.WriteLine("3. День рождения");
-            Console.WriteLine("4. Студенческий билет");
-            Console.WriteLine("5. Название групп");
-            Console.WriteLine("6. Зачётную книжку");
+            Console.WriteLine("1. Имя учителя");
+            Console.WriteLine("2. Фамилия учителя");
+            Console.WriteLine("3. Первый рабочий день");
+            Console.WriteLine("4. Категория");
 
             int ans = Convert.ToInt32(Console.ReadLine());
             if (ans == 1)
             {
-                updateStudentString = @"update Student set FirstName = @FirstName where id = @id";
+                updateTeacherString = @"update Teacher set FirstName = @FirstName where id = @id";
             }
             if (ans == 2)
             {
-                updateStudentString = @"update Student set LastName = @LastName where id = @id";
+                updateTeacherString = @"update Teacher set LastName = @LastName where id = @id";
             }
             if (ans == 3)
             {
-                updateStudentString = @"update Student set BirthDay = @BirthDay where id = @id";
+                updateTeacherString = @"update Teacher set WorkDay = @WorkDay where id = @id";
             }
             if (ans == 4)
             {
-                updateStudentString = @"update Student set Ticket = @Ticket where id = @id";
+                updateTeacherString = @"update Teacher set Category = @Category where id = @id";
             }
-            if (ans == 5)
-            {
-                updateStudentString = @"update Student set GroupId = @GroupId where id = @id";
-            }
-            if (ans == 6)
-            {
-                updateStudentString = @"update Student set TestBook = @TestBook where id = @id";
-            }
-            SqlCommand updateCmd = new SqlCommand(updateStudentString, connection);
+            SqlCommand updateCmd = new SqlCommand(updateTeacherString, connection);
 
             updateCmd.Parameters.AddWithValue("@id", ansID);
             switch (ans)
             {
                 case 1:
-                    Console.WriteLine("Введите новое имя студента:");
-                    string NewFName = Console.ReadLine();
-                    updateCmd.Parameters.AddWithValue("@FirstName", NewFName);
+                    Console.WriteLine("Введите новое имя:");
+                    string NewFirstName = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@FirstName", NewFirstName);
 
                     break;
 
 
                 case 2:
                     Console.WriteLine("Введите новую фамилию:");
-                    string NewLName = Console.ReadLine();
-                    updateCmd.Parameters.AddWithValue("@LastName", NewLName);
+                    string NewLastName = Console.ReadLine();
+                    updateCmd.Parameters.AddWithValue("@LastName", NewLastName);
 
                     break;
 
                 case 3:
-                    Console.WriteLine("Введите новую дату рождения:");
-                    string NewBirthDay = Console.ReadLine();
+                    Console.WriteLine("Введите новый первый рабочий день:");
+                    string NewWorkDay = Console.ReadLine();
 
-                    updateCmd.Parameters.AddWithValue("@BirthDay", NewBirthDay);
+                    updateCmd.Parameters.AddWithValue("@WorkDay", NewWorkDay);
                     break;
 
                 case 4:
-                    Console.WriteLine("Введите новый студенческий билет:");
-                    string NewTicket = Console.ReadLine();
+                    Console.WriteLine("Введите новую категорию:");
+                    string NewCategory = Console.ReadLine();
 
-                    updateCmd.Parameters.AddWithValue("@Ticket", NewTicket);
+                    updateCmd.Parameters.AddWithValue("@Category", NewCategory);
                     break;
 
-                case 5:
-
-                    Console.WriteLine("Введите новый студенческий билет:");
-                    string NewGroupId = Console.ReadLine();
-
-                    updateCmd.Parameters.AddWithValue("@GroupId", NewGroupId);
-                    break;
-
-                case 6:
-
-                    Console.WriteLine("Введите новый студенческий билет:");
-                    string NewTestBook = Console.ReadLine();
-
-                    updateCmd.Parameters.AddWithValue("@TestBook", NewTestBook);
-                    break;
 
             }
             try
@@ -203,16 +168,14 @@ namespace Урок__1.ADO.NET
                 connection.Close();
                 Console.WriteLine("Закрыто соединение");
             }
-
         }
-        public void DeleteStudent()
+        public void DeleteTeacher()
         {
             Console.WriteLine("Введите ID:");
             int ansID = Convert.ToInt32(Console.ReadLine());
 
-
-            deleteStudentString = @"delete from Student where id = @id";
-            SqlCommand updateCmd = new SqlCommand(deleteStudentString, connection);
+            deleteTeacherString = @"delete from Teacher where id = @id";
+            SqlCommand updateCmd = new SqlCommand(deleteTeacherString, connection);
             updateCmd.Parameters.AddWithValue("@id", ansID);
             try
             {
@@ -229,6 +192,5 @@ namespace Урок__1.ADO.NET
                 Console.WriteLine("Закрыто соединение");
             }
         }
-
     }
 }

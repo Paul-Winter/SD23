@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Урок__1.ADO.NET
@@ -18,27 +19,26 @@ namespace Урок__1.ADO.NET
         string deleteStudentString = @"delete from Groups where id = 1";
 
 
-        public void SelectStudent()
+        public DataTable SelectStudent()
         {
             SqlDataReader dataReader = null;
-
             try
             {
-                // открываем соединение
                 connection.Open();
-                Console.WriteLine("Открыто соединение");
-                Console.WriteLine("Создан объект читателя");
-                SqlCommand sqlCommand = new SqlCommand(selectStudentString, connection);
-                Console.WriteLine("Создана команда на извлечение");
-                dataReader = sqlCommand.ExecuteReader();
-                Console.WriteLine("================================Чтение_записей:================================");
-                Console.WriteLine("===============================================================================");
-                while (dataReader.Read())
-                {
-                    Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}\t|\t{((DateTime)dataReader[3]).ToLongDateString()}\t|\t{dataReader[4]}\t|\t{dataReader[5]}\t|\t{dataReader[6]}");
-                }
-                Console.WriteLine("===============================================================================");
-                Console.WriteLine("=================================Конец_записей=================================");
+                SqlCommand cmd = new SqlCommand();
+
+                cmd.Connection = connection;
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = selectStudentString;
+
+                SqlDataAdapter dbAdapter = new SqlDataAdapter(cmd);
+
+                DataTable dtRecords = new DataTable();
+                dbAdapter.Fill(dtRecords);
+
+                connection.Close();
+
+                return dtRecords;
             }
             finally
             {

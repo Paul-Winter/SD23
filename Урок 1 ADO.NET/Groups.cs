@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace Урок__1.ADO.NET
 {
@@ -17,17 +19,28 @@ namespace Урок__1.ADO.NET
         string updateGroupsString = @"update Groups set GroupName = @GroupName, Spec = @Spec, EduForm = @EduForm where id = @id";
         string deleteGroupsString = @"delete from Groups where id = 1";
 
-        public void SelectGroup()
+        public DataTable SelectGroup()
         {
             SqlDataReader dataReader = null;
-
             try
             {
-                // открываем соединение
                 connection.Open();
-                Console.WriteLine("Открыто соединение");
-                Console.WriteLine("Создан объект читателя");
-                SqlCommand sqlCommand = new SqlCommand(selectGroupsString, connection);
+                SqlCommand cmd = new SqlCommand();
+
+                cmd.Connection = connection;
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = selectGroupsString;
+
+                SqlDataAdapter dbAdapter = new SqlDataAdapter(cmd);
+
+                DataTable dtRecords = new DataTable();
+                dbAdapter.Fill(dtRecords);
+
+                connection.Close();
+                return dtRecords;
+
+
+                /*SqlCommand sqlCommand = new SqlCommand(selectGroupsString, connection);
                 Console.WriteLine("Создана команда на извлечение");
                 dataReader = sqlCommand.ExecuteReader();
                 Console.WriteLine("================================Чтение_записей:================================");
@@ -37,7 +50,7 @@ namespace Урок__1.ADO.NET
                     Console.WriteLine($"{dataReader[0]}\t|\t{dataReader[1]}\t|\t{dataReader[2]}\t|\t{dataReader[3]}");
                 }
                 Console.WriteLine("===============================================================================");
-                Console.WriteLine("=================================Конец_записей=================================");
+                Console.WriteLine("=================================Конец_записей=================================");*/
             }
             finally
             {
@@ -51,6 +64,7 @@ namespace Урок__1.ADO.NET
                 }
             }
         }
+
         public void InsertGroups()
         {
             Console.WriteLine("Введите название группы: ");
