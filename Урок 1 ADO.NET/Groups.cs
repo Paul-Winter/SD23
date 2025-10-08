@@ -86,13 +86,9 @@ namespace Урок__1.ADO.NET
 
             try
             {
-                // открываем соединение
-                connection.Open();
-                Console.WriteLine("Открыто соединение");
-                // выполняем запрос
+                connection.Open();;
                 // ExecuteNonQuery работает с запросами: INSERT, UPDATE, DELETE
                 insertCmd.ExecuteNonQuery();
-                Console.WriteLine("Выполнен запрос");
             }
             finally
             {
