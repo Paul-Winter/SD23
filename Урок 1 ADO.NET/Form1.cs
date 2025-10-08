@@ -38,7 +38,6 @@ namespace Урок_1_ADO.NET
                 dataGridView1.DataSource = teacher.SelectTeacher();
             }
         }
-
         private void btnAdd_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex == 0)
@@ -54,12 +53,10 @@ namespace Урок_1_ADO.NET
                 
             }
         }
-
         private void btnUpdate_Click(object sender, EventArgs e)
         {
 
         }
-
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex == 0)
@@ -68,11 +65,11 @@ namespace Урок_1_ADO.NET
             }
             else if (comboBox1.SelectedIndex == 1)
             {
-
+                DeleteStudent();
             }
             else if (comboBox1.SelectedIndex == 2)
             {
-
+                DeleteTeacher();
             }
         }
 
@@ -133,7 +130,6 @@ namespace Урок_1_ADO.NET
                 MessageBox.Show("Выберите строку для удаления.");
             }
         }
-
         public void DeleteStudent()
         {
             if (dataGridView1.CurrentRow != null)
@@ -157,7 +153,6 @@ namespace Урок_1_ADO.NET
                 MessageBox.Show("Выберите строку для удаления.");
             }
         }
-
         public void DeleteTeacher()
         {
             if (dataGridView1.CurrentRow != null)
