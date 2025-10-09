@@ -13,6 +13,7 @@ namespace Модули
             lesson.InsertLesson();
             student.ShowStudent();
             lesson.ShowLesson();
+            student.FeedStudent();
         }
     }
 }
