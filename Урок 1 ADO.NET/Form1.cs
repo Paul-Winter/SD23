@@ -9,6 +9,8 @@ namespace Урок_1_ADO.NET
     public partial class Form1 : Form
     {
         string insertGroupsString = null;
+        string insertStudentString = null;
+        string insertTeacherString = null;
         string connString = @"Data Source=ITSTEP-42\SQLEXPRESS; Initial Catalog=Academy; Integrated Security=SSPI;";
         string deleteGroupsString = null;
         SqlCommand command = null;
@@ -46,11 +48,11 @@ namespace Урок_1_ADO.NET
             }
             else if (comboBox1.SelectedIndex == 1)
             {
-                
+                InsertStudent();
             }
             else if (comboBox1.SelectedIndex == 2)
             {
-                
+                InsertTeacher();
             }
         }
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -106,6 +108,72 @@ namespace Урок_1_ADO.NET
                     connection.Close();
                 }
             }
+        public void InsertStudent()
+        {
+            SqlCommand insertCmd = new SqlCommand(insertGroupsString, connection);
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    using (SqlCommand comm = new SqlCommand())
+                    {
+                        SqlCommand insertCommand = new SqlCommand();
+                        comm.Connection = conn;
+                        conn.Open();
+                        for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        {
+                            insertStudentString = $@"insert into Student (FirstName, LastName, BirthDay, Ticket, GroupId, TestBook) values (
+                                        '{dataGridView1.Rows[i].Cells["FirstName"].Value}',
+                                        '{dataGridView1.Rows[i].Cells["LastName"].Value}',
+                                        '{dataGridView1.Rows[i].Cells["BirthDay"].Value}',
+                                        {dataGridView1.Rows[i].Cells["Ticket"].Value},
+                                        {dataGridView1.Rows[i].Cells["GroupId"].Value}, 
+                                        {dataGridView1.Rows[i].Cells["TestBook"].Value})";
+                            comm.CommandText = insertGroupsString;
+                            comm.ExecuteNonQuery();
+                        }
+                        insertCommand.Connection = connection;
+                        insertCommand.CommandText = insertGroupsString;
+                    }
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public void InsertTeacher()
+        {
+            SqlCommand insertCmd = new SqlCommand(insertGroupsString, connection);
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    using (SqlCommand comm = new SqlCommand())
+                    {
+                        SqlCommand insertCommand = new SqlCommand();
+                        comm.Connection = conn;
+                        conn.Open();
+                        for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        {
+                            insertTeacherString = $@"insert into Teacher (FirstName, LastName, WorkDay, Category) values (
+                                        '{dataGridView1.Rows[i].Cells["FirstName"].Value}',
+                                        '{dataGridView1.Rows[i].Cells["LastName"].Value}',
+                                        '{dataGridView1.Rows[i].Cells["WorkDay"].Value}',
+                                        '{dataGridView1.Rows[i].Cells["Category"].Value}')";
+                            comm.CommandText = insertGroupsString;
+                            comm.ExecuteNonQuery();
+                        }
+                        insertCommand.Connection = connection;
+                        insertCommand.CommandText = insertGroupsString;
+                    }
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
 
         public void DeleteGroups()
         {
