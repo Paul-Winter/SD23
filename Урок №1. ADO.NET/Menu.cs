@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 
 namespace Урок__1.ADO.NET
@@ -13,7 +14,9 @@ namespace Урок__1.ADO.NET
 
         public Menu()
         {
-            connection = new SqlConnection(@"Data Source=ITSTEP-42\SQLEXPRESS; Initial Catalog=Academy; Integrated Security=SSPI;");
+            string connStr = ConfigurationManager.ConnectionStrings["AcademyConnectionString"].ConnectionString;
+            //connection = new SqlConnection(@"Data Source=ITSTEP-42\SQLEXPRESS; Initial Catalog=Academy; Integrated Security=SSPI;");
+            connection = new SqlConnection(connStr);
         }
 
         public void mainMenu()

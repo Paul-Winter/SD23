@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 
 namespace Урок__1.ADO.NET
@@ -9,7 +10,9 @@ namespace Урок__1.ADO.NET
 
         public Teacher()
         {
-            connection = new SqlConnection(@"Data Source=ITSTEP-42\SQLEXPRESS; Initial Catalog=Academy; Integrated Security=SSPI;");
+            string connStr = ConfigurationManager.ConnectionStrings["AcademyConnectionString"].ConnectionString;
+            //connection = new SqlConnection(@"Data Source=ITSTEP-42\SQLEXPRESS; Initial Catalog=Academy; Integrated Security=SSPI;");
+            connection = new SqlConnection(connStr);
         }
 
         string selectTeacherString = @"select * from Teacher";
@@ -59,19 +62,52 @@ namespace Урок__1.ADO.NET
             Console.WriteLine("Введите Фамилию учителя: ");
             string lastName = Console.ReadLine();
             Console.WriteLine("Введите Первый рабочий день: ");
-            string workDay = Console.ReadLine();
+            DateTime workDay = Convert.ToDateTime(Console.ReadLine());
             Console.WriteLine("Введите Категорию: ");
             string category = Console.ReadLine();
 
-            insertTeacherString = $@"insert into Teacher (FirstName, LastName, WorkDay, Category) values ('{firstName}','{lastName}','{workDay}', '{category}')";
+            //SqlParameter paramFirstName = new SqlParameter();
+            //SqlParameter paramLastName = new SqlParameter();
+            //SqlParameter paramWorkDay = new SqlParameter();
+            //SqlParameter paramCategory = new SqlParameter();
+            //// сопоставляем с параметром в запросе
+            //paramFirstName.ParameterName = "@pfn";
+            //paramLastName.ParameterName = "@pln";
+            //paramWorkDay.ParameterName = "@pwd";
+            //paramCategory.ParameterName = "@pc";
+            //// указываем тип параметра
+            //paramFirstName.SqlDbType = System.Data.SqlDbType.NVarChar;
+            //paramLastName.SqlDbType = System.Data.SqlDbType.NVarChar;
+            //paramWorkDay.SqlDbType = System.Data.SqlDbType.DateTime;
+            //paramCategory.SqlDbType = System.Data.SqlDbType.NVarChar;
+            //// значение параметра
+            //paramFirstName.Value = firstName;
+            //paramLastName.Value = lastName;
+            //paramWorkDay.Value = workDay;
+            //paramCategory.Value = category;
+
+            insertTeacherString = @"insert into Teacher (FirstName, LastName, WorkDay, Category) values (@pfn, @pln, @pwd, @pc)";
 
             // запрос на добавление
-            SqlCommand insertCommand = new SqlCommand();
-            insertCommand.Connection = connection;
-            insertCommand.CommandText = insertTeacherString;
+            SqlCommand insertCommand = new SqlCommand(insertTeacherString,connection);
 
-            SqlCommand insertCmd = new SqlCommand(insertTeacherString, connection);
-            Console.WriteLine("Создана команда на добавление");
+            insertCommand.Parameters.AddWithValue("@pfn", firstName);
+            insertCommand.Parameters.AddWithValue("@pln", lastName);
+            insertCommand.Parameters.AddWithValue("@pwd", workDay);
+            insertCommand.Parameters.AddWithValue("@pc", category);
+
+
+            // добавляем параметры в коллекцию параметров объекта SqlCommand
+            //insertCommand.Parameters.Add(paramFirstName);
+            //insertCommand.Parameters.Add(paramLastName);
+            //insertCommand.Parameters.Add(paramWorkDay);
+            //insertCommand.Parameters.Add(paramCategory);
+
+            //insertCommand.Connection = connection;
+            //insertCommand.CommandText = insertTeacherString;
+
+            //SqlCommand insertCmd = new SqlCommand(insertTeacherString, connection);
+            //Console.WriteLine("Создана команда на добавление");
 
             try
             {
@@ -80,7 +116,8 @@ namespace Урок__1.ADO.NET
                 Console.WriteLine("Открыто соединение");
                 // выполняем запрос
                 // ExecuteNonQuery работает с запросами: INSERT, UPDATE, DELETE
-                insertCmd.ExecuteNonQuery();
+
+                insertCommand.ExecuteNonQuery();
                 Console.WriteLine("Выполнен запрос");
             }
             finally
