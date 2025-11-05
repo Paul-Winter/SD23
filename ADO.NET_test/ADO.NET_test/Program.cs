@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.Contracts;
 
 namespace ADO.NET_test
 {
@@ -48,7 +49,6 @@ namespace ADO.NET_test
                 Console.WriteLine("Подключение закрыто");
             }*/
 
-            SqlConnection conn = null;
             SqlCommandBuilder cmd = null;
             SqlDataAdapter adapter = null;
             DataSet dataSet = null;
@@ -61,15 +61,27 @@ namespace ADO.NET_test
                 dataSet = new DataSet();
                 adapter = new SqlDataAdapter(selectString, connString);
                 cmd = new SqlCommandBuilder(adapter);
-                adapter.Fill(dataSet, "Student");
+                adapter.Fill(dataSet, "Groups");
                 
-                for (int i = 0; i < dataSet.Tables["Student"].Rows.Count; i++)
+                //for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+                //{
+                //    for (int j = 0; j < dataSet.Tables[0].Columns.Count; j++)
+                //    {
+                //        Console.Write($"{dataSet.Tables[0].Columns[j]} | ");
+                //    }
+                //    Console.WriteLine();
+                //}
+
+                foreach (DataTable dt in dataSet.Tables)
                 {
-                    for (int j = 0; j < dataSet.Tables["Student"].Columns.Count; j++)
+                    foreach (DataRow row in dt.Rows)
                     {
-                        Console.WriteLine($"{dataSet.Tables[j]} | ");
+                        foreach(DataColumn column in dt.Columns)
+                        {
+                            Console.Write($"{row[column].ToString()}\t|\t");
+                        }
+                        Console.WriteLine();
                     }
-                    Console.WriteLine();
                 }
             }
             catch (Exception ex)
