@@ -5,6 +5,7 @@ namespace Урок__4.Многопоточность
 {
     internal class Program
     {
+        static Random random = new Random();
         // 1. Описать метод, который будет выполняться
         public static void TimerMethod(object a)
         {
@@ -17,7 +18,6 @@ namespace Урок__4.Многопоточность
             Thread.Sleep(500);
             Console.WriteLine("Ожидание завершения потока!");
         }
-
         static void Method(object str)
         {
             string text = (string)str;
@@ -25,6 +25,49 @@ namespace Урок__4.Многопоточность
             {
                 Console.WriteLine($"{text}\t#{i.ToString()}");
             }
+        }
+
+        static void ListenerClient()
+        {
+            int counter = 0;
+            while (true)
+            {
+                Console.WriteLine("Нажмите любую клавишу для симуляции подключения");
+                Console.ReadKey(true);
+                ParameterizedThreadStart userInput = new ParameterizedThreadStart(UserThreadWork);
+                Thread userThread = new Thread(userInput);
+                userThread.Start((object)counter.ToString());
+                counter++;
+            }
+        }
+
+        private static void UserThreadWork(object a)
+        {
+            string userName = (string)a;
+            Console.WriteLine($"пользователь\t{userName} подключился");
+
+            while (true)
+            {
+                switch (GetUserCommand())
+                {
+                    case 0: Console.WriteLine($"#\t{userName} подписался на новости");
+                        break;
+                    case 1: Console.WriteLine($"#\t{userName} начал чат");
+                        break;
+                    case 2: Console.WriteLine($"#\t{userName} купил продукцию в магазине");
+                        break;
+                    case 3: Console.WriteLine($"#\t{userName} отправил письмо");
+                        break;
+                    default:
+                        Console.WriteLine($"#\t{userName} отключился");
+                        return;
+                }
+            }
+        }
+
+        private static int GetUserCommand()
+        {
+            return random.Next(0, 5);
         }
 
         static void Main(string[] args)
@@ -62,8 +105,7 @@ namespace Урок__4.Многопоточность
             thread.Abort();
             */
 
-            /*
-            ParameterizedThreadStart ts = new ParameterizedThreadStart(Method);
+            /*ParameterizedThreadStart ts = new ParameterizedThreadStart(Method);
 
             Thread t1 = new Thread(ts);
             Thread t2 = new Thread(ts);
@@ -86,12 +128,18 @@ namespace Урок__4.Многопоточность
             Console.ReadKey();
             */
 
-            ThreadStart ts = new ThreadStart(Method);
+            /*ThreadStart ts = new ThreadStart(Method);
             Thread thread = new Thread(ts);
             Console.WriteLine("Запуск потока!");
             thread.Start();
             Thread.Sleep(2000);
             Console.WriteLine("Поток завершил работу!");
+            */
+
+            ThreadStart ts = new ThreadStart(ListenerClient);
+            Thread userThread = new Thread(ts);
+            userThread.IsBackground = false;
+            userThread.Start();
         }
     }
 }
