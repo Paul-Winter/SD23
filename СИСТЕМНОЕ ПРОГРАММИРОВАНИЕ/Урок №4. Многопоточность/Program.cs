@@ -11,6 +11,13 @@ namespace Урок__4.Многопоточность
             Console.WriteLine("Hello in timer!");
         }
 
+        static void Method()
+        {
+            Console.WriteLine("Поток работает!");
+            Thread.Sleep(500);
+            Console.WriteLine("Ожидание завершения потока!");
+        }
+
         static void Method(object str)
         {
             string text = (string)str;
@@ -55,6 +62,7 @@ namespace Урок__4.Многопоточность
             thread.Abort();
             */
 
+            /*
             ParameterizedThreadStart ts = new ParameterizedThreadStart(Method);
 
             Thread t1 = new Thread(ts);
@@ -76,6 +84,14 @@ namespace Урок__4.Многопоточность
             t1.Start((object)"t1");
 
             Console.ReadKey();
+            */
+
+            ThreadStart ts = new ThreadStart(Method);
+            Thread thread = new Thread(ts);
+            Console.WriteLine("Запуск потока!");
+            thread.Start();
+            Thread.Sleep(2000);
+            Console.WriteLine("Поток завершил работу!");
         }
     }
 }
