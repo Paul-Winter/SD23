@@ -11,12 +11,12 @@ namespace Урок__4.Многопоточность
             Console.WriteLine("Hello in timer!");
         }
 
-        static void Method()
+        static void Method(object str)
         {
-            for (int i = 0; i < 100; i++)
+            string text = (string)str;
+            for (int i = 0; i < 2000; i++)
             {
-                Console.WriteLine("\t\t\tHello in Thread!");
-                Thread.Sleep(1000);
+                Console.WriteLine($"{text}\t#{i.ToString()}");
             }
         }
 
@@ -34,7 +34,8 @@ namespace Урок__4.Многопоточность
             //timer.Change(10000, 2000);
 
             //Console.ReadLine();*/
-            // Создать объект делегата
+
+            /* Создать объект делегата
             ThreadStart threadStart = new ThreadStart(Method);
 
             // Создать объект потока
@@ -52,6 +53,29 @@ namespace Урок__4.Многопоточность
             }
 
             thread.Abort();
+            */
+
+            ParameterizedThreadStart ts = new ParameterizedThreadStart(Method);
+
+            Thread t1 = new Thread(ts);
+            Thread t2 = new Thread(ts);
+            Thread t3 = new Thread(ts);
+            Thread t4 = new Thread(ts);
+            Thread t5 = new Thread(ts);
+
+            t1.Priority = ThreadPriority.Highest;
+            //t2.Priority = ThreadPriority.AboveNormal;
+            t3.Priority = ThreadPriority.Normal;
+            //t4.Priority = ThreadPriority.BelowNormal;
+            t5.Priority = ThreadPriority.Lowest;
+
+            t5.Start((object)"\t\t\t\tt5");
+            //t4.Start((object)"\t\t\tt4");
+            t3.Start((object)"\t\tt3");
+            //t2.Start((object)"\tt2");
+            t1.Start((object)"t1");
+
+            Console.ReadKey();
         }
     }
 }
