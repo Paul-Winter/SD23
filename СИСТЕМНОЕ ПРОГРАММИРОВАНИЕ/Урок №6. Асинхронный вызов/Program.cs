@@ -11,19 +11,21 @@ namespace Урок__6.Асинхронный_вызов
 
         static void Main(string[] args)
         {
-            byte[] info = new byte[1024];
-            Console.WriteLine($"Основной поток ID = {Thread.CurrentThread.ManagedThreadId}");
-            FileStream fs = new FileStream(@"../../Program.cs", FileMode.Open,
-                FileAccess.Read, FileShare.Read, 1024, FileOptions.Asynchronous);
-            fs.BeginRead(info, 0, info.Length, delegate (IAsyncResult result)
+            string[] files =
             {
-                Console.WriteLine($"Чтение в потоке {Thread.CurrentThread.ManagedThreadId} закончено");
-                int bytesRead = fs.EndRead(result);
-                fs.Close();
-                Console.WriteLine($"Количество считанных байт = {bytesRead}");
-                Console.WriteLine(Encoding.UTF8.GetString(info));
-                Console.ReadLine();
-            }, null);
+                "../../Program.cs",
+                "../../Properties/AssemblyInfo.cs",
+                "../../Урок №6. Асинхронный вызов.csproj"
+            };
+            for (int i = 0; i < files.Length; i++)
+            {
+                new AsyncCallBackReader(new FileStream(files[i], FileMode.Open, FileAccess.Read, FileShare.Read,
+                    1024, FileOptions.Asynchronous), 1024, delegate (byte[] info)
+                    {
+                        Console.WriteLine($"Количество прочитанных байт = {info.Length}");
+                        Console.WriteLine(Encoding.UTF8.GetString(info) + "\n\n");
+                    });
+            }
             Console.ReadLine();
         }
 
@@ -35,6 +37,32 @@ namespace Урок__6.Асинхронный_вызов
             fs.Close();
             Console.WriteLine($"Количество считанных байт = {bytesRead}");
             //Console.WriteLine(Encoding.UTF8.GetString(info));
+        }
+    }
+
+    public delegate void AsyncBytesReadDel(byte[] streamData);
+
+    class AsyncCallBackReader
+    {
+        FileStream fs;
+        byte[] info;
+        IAsyncResult result;
+        AsyncBytesReadDel callBackMethod;
+
+        public AsyncCallBackReader(FileStream s, int size, AsyncBytesReadDel meth)
+        {
+            fs = s;
+            info = new byte[size];
+            callBackMethod = meth;
+            result = s.BeginRead(info, 0, size, ReadIsComplete, null);
+        }
+
+        private void ReadIsComplete(IAsyncResult ar)
+        {
+            int countByte = fs.EndRead(result);
+            fs.Close();
+            Array.Resize(ref info, countByte);
+            callBackMethod(info);
         }
     }
 
