@@ -7,14 +7,23 @@ namespace Урок__6.Асинхронный_вызов
 {
     internal class Program
     {
-        private static byte[] info = new byte[1024];
+        private static byte[] statInfo = new byte[1024];
 
         static void Main(string[] args)
         {
+            byte[] info = new byte[1024];
             Console.WriteLine($"Основной поток ID = {Thread.CurrentThread.ManagedThreadId}");
             FileStream fs = new FileStream(@"../../Program.cs", FileMode.Open,
                 FileAccess.Read, FileShare.Read, 1024, FileOptions.Asynchronous);
-            fs.BeginRead(info, 0, info.Length, ReadIsComplete, fs);
+            fs.BeginRead(info, 0, info.Length, delegate (IAsyncResult result)
+            {
+                Console.WriteLine($"Чтение в потоке {Thread.CurrentThread.ManagedThreadId} закончено");
+                int bytesRead = fs.EndRead(result);
+                fs.Close();
+                Console.WriteLine($"Количество считанных байт = {bytesRead}");
+                Console.WriteLine(Encoding.UTF8.GetString(info));
+                Console.ReadLine();
+            }, null);
             Console.ReadLine();
         }
 
@@ -25,7 +34,7 @@ namespace Урок__6.Асинхронный_вызов
             int bytesRead = fs.EndRead(result);
             fs.Close();
             Console.WriteLine($"Количество считанных байт = {bytesRead}");
-            Console.WriteLine(Encoding.UTF8.GetString(info));
+            //Console.WriteLine(Encoding.UTF8.GetString(info));
         }
     }
 
