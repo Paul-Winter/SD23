@@ -1,29 +1,31 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace Урок__6.Асинхронный_вызов
 {
     internal class Program
     {
+        private static byte[] info = new byte[1024];
+
         static void Main(string[] args)
         {
-            string[] files =
-            {
-                "../../Program.cs",
-                "../../Урок №6. Асинхронный вызов.csproj",
-                "../../Properties/AssemblyInfo.cs"
-            };
-            AsyncReader[] readers = new AsyncReader[files.Length];
-            for (int i = 0; i < files.Length; i++)
-            {
-                readers[i] = new AsyncReader(new FileStream(files[i], FileMode.Open,
-                    FileAccess.Read, FileShare.Read, 1024, FileOptions.Asynchronous), 1024);
-            }
-            foreach (AsyncReader reader in readers)
-            {
-                Console.WriteLine(reader.EndRead());
-            }
+            Console.WriteLine($"Основной поток ID = {Thread.CurrentThread.ManagedThreadId}");
+            FileStream fs = new FileStream(@"../../Program.cs", FileMode.Open,
+                FileAccess.Read, FileShare.Read, 1024, FileOptions.Asynchronous);
+            fs.BeginRead(info, 0, info.Length, ReadIsComplete, fs);
+            Console.ReadLine();
+        }
+
+        static void ReadIsComplete(IAsyncResult result)
+        {
+            Console.WriteLine($"Чтение в потоке {Thread.CurrentThread.ManagedThreadId} закончено");
+            FileStream fs = (FileStream)result.AsyncState;
+            int bytesRead = fs.EndRead(result);
+            fs.Close();
+            Console.WriteLine($"Количество считанных байт = {bytesRead}");
+            Console.WriteLine(Encoding.UTF8.GetString(info));
         }
     }
 
