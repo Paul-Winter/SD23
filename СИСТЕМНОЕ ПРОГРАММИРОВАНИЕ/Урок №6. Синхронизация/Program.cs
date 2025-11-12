@@ -27,20 +27,17 @@ namespace Урок__6.Синхронизация
             }
             Console.WriteLine($"counter = {Counter.count}");
             */
-            Program proga = new Program();
-            Monitor.Enter(proga);
-            proga = null;
-            GC.Collect(0);
-            GC.WaitForPendingFinalizers();
-            Console.WriteLine("сбой в работе программы");
+            GoodLockAsync();
         }
-        ~Program()
-        {
-            lock(this)
-            {
-                Console.WriteLine("какая-то работа");
-            }
-        }
+
+
+        //~Program()
+        //{
+        //    lock(this)
+        //    {
+        //        Console.WriteLine("какая-то работа");
+        //    }
+        //}
 
         private static void BadAsync()
         {
@@ -88,6 +85,23 @@ namespace Урок__6.Синхронизация
                 threads[i].Join();
             }
             Console.WriteLine($"Field1 = {StaticLockCounter.Field1}\nField2 = {StaticLockCounter.Field2}");
+        }
+        private static void GoodLockAsync()
+        {
+            Console.WriteLine("Синхронизация статического типа:");
+            LockCounter counter = new LockCounter();
+            Monitor.Enter(counter);
+            Thread[] threads = new Thread[5];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(counter.UpdateFields);
+                threads[i].Start();
+            }
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i].Join();
+            }
+            Console.WriteLine($"count = {counter.Count}");
         }
     }
 
@@ -159,6 +173,22 @@ namespace Урок__6.Синхронизация
                     {
                         ++field2;
                     }
+                }
+            }
+        }
+    }
+    class LockCounter
+    {
+        int count;
+        object lockObj = new object();
+        public int Count { get { return count; } }
+        public void UpdateFields()
+        {
+            for (int i = 0; i < 1000000; i++)
+            {
+                lock(lockObj)
+                {
+                    ++count;
                 }
             }
         }
