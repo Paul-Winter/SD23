@@ -14,7 +14,8 @@ namespace Урок__6.Синхронизация
                 {
                     for (int j = 0; j < 1000000; j++)
                     {
-                        ++Counter.count;
+                        //++Counter.count;
+                        Interlocked.Increment(ref Counter.count);
                     }
                 });
                 threads[i].Start();
