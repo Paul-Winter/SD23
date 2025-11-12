@@ -27,7 +27,7 @@ namespace Урок__6.Синхронизация
             }
             Console.WriteLine($"counter = {Counter.count}");
             */
-            GoodAsync();
+            StaticAsync();
         }
 
         private static void BadAsync()
@@ -61,6 +61,21 @@ namespace Урок__6.Синхронизация
                 threads[i].Join();
             }
             Console.WriteLine($"Field1 = {counter.Field1}\nField2 = {counter.Field2}");
+        }
+        private static void StaticAsync()
+        {
+            Console.WriteLine("Синхронизация блокировкой:");
+            Thread[] threads = new Thread[5];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(StaticLockCounter.UpdateFields);
+                threads[i].Start();
+            }
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i].Join();
+            }
+            Console.WriteLine($"Field1 = {StaticLockCounter.Field1}\nField2 = {StaticLockCounter.Field2}");
         }
     }
 
@@ -115,5 +130,25 @@ namespace Урок__6.Синхронизация
             }
         }
     }
-
+    static class StaticLockCounter
+    {
+        static int field1;
+        static int field2;
+        public static int Field1 { get { return field1; } }
+        public static int Field2 { get { return field2; } }
+        public static void UpdateFields()
+        {
+            for (int i = 0; i < 1000000; i++)
+            {
+                lock (typeof(StaticLockCounter))
+                {
+                    ++field1;
+                    if (field1 % 2 == 0)
+                    {
+                        ++field2;
+                    }
+                }
+            }
+        }
+    }
 }
