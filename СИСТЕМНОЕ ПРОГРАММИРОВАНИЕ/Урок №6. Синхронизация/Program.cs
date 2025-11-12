@@ -27,7 +27,19 @@ namespace Урок__6.Синхронизация
             }
             Console.WriteLine($"counter = {Counter.count}");
             */
-            StaticAsync();
+            Program proga = new Program();
+            Monitor.Enter(proga);
+            proga = null;
+            GC.Collect(0);
+            GC.WaitForPendingFinalizers();
+            Console.WriteLine("сбой в работе программы");
+        }
+        ~Program()
+        {
+            lock(this)
+            {
+                Console.WriteLine("какая-то работа");
+            }
         }
 
         private static void BadAsync()
