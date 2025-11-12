@@ -113,7 +113,6 @@ namespace Урок__6.Синхронизация
         }
     }
 
-
     class Counter
     {
         public static int count;
