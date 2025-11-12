@@ -104,8 +104,7 @@ namespace Урок__6.Синхронизация
         {
             for (int i = 0; i < 1000000; i++)
             {
-                Monitor.Enter(this);
-                try
+                lock (this)
                 {
                     ++field1;
                     if (field1 % 2 == 0)
@@ -113,11 +112,8 @@ namespace Урок__6.Синхронизация
                         ++field2;
                     }
                 }
-                finally
-                {
-                    Monitor.Exit(this);
-                }
             }
         }
     }
+
 }
