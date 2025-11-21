@@ -26,8 +26,9 @@ namespace Урок__1.Сокеты
                     // метод Send - для отправки сообщений, Receive - для получения
                     if (socket.Connected)
                     {
-                        Console.Write("Введите сообщение: ");
-                        string strSend = Console.ReadLine();
+                        //Console.Write("Введите сообщение: ");
+                        //string strSend = Console.ReadLine();
+                        string strSend = "GET\n\r\n\r";
                         socket.Send(Encoding.ASCII.GetBytes(strSend));
                         byte[] buffer = new byte[1024];
                         int length;
