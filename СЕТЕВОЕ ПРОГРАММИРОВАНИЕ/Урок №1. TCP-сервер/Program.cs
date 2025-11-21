@@ -18,7 +18,7 @@ namespace Урок__1.TCP_сервер
             socket.Bind(endPoint);
 
             // 3. Установить сокет в режим прослушивания
-            socket.Listen(1000);
+            socket.Listen(10);
 
             // 4. Вызвать метод Accept (в цикле), чтобы получить сокет для обмена сообщениями
             try
@@ -27,7 +27,7 @@ namespace Урок__1.TCP_сервер
                 {
                     Socket ns = socket.Accept();
                     Console.WriteLine(ns.RemoteEndPoint.ToString());
-                    ns.Send(Encoding.ASCII.GetBytes(DateTime.Now.ToString()));
+                    ns.Send(Encoding.ASCII.GetBytes($"{DateTime.Now.ToString()}\t-\tHello from Zimin!"));                    
                     
                     // 5. После завершения обмена сообщениями, сокет закрывается
                     ns.Shutdown(SocketShutdown.Both);
@@ -37,6 +37,9 @@ namespace Урок__1.TCP_сервер
             catch (SocketException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
             }
         }
     }
