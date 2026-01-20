@@ -1,0 +1,36 @@
+p, span{
+    color: hsla(0, 100%, 50%, .5);
+    font-size: 14px;
+    font-family: Verdana, Tahoma, sans-serif;
+}
+
+/* это комментарий CSS */
+
+h1, h2, h3, h4, h5, h6 {
+    /* hue - saturation - lightness */
+    color: hsl(0, 100%, 50%);
+    font-size: 18px;
+    font-family: 'Times New Roman', serif;
+}
+
+.list {
+    color: chocolate
+}
+
+#abzac {
+    color: chartreuse
+}
+
+#p1 {
+    color: blueviolet
+}
+#p2 {
+    color: #ff00ff
+}
+#p3 {
+    color: rgb(255,0,0)
+}
+#p4 {
+   color: rgba(255,0,0,0.5);
+   font-style: italic; font-family: 'Open Sans', Verdana, Tahoma, sans-serif 
+}
