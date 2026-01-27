@@ -58,10 +58,18 @@ article {
     padding: 20px;
     margin-bottom: 15px;
 }
-article footer, blockquote footer {
+article footer{
     font: italic 14px Verdana, sans-serif;
     text-align: right;
     margin: 15px 0;
+}
+blockquote {
+    text-align: justify;
+}
+blockquote footer {
+    font: italic 14px Verdana, sans-serif;
+    text-align: right;
+    margin-bottom: 15px;
 }
 figcaption {
     font: italic 14px Verdana, sans-serif;
