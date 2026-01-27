@@ -28,3 +28,13 @@ td {
     background-color: #eeeeee;
     background-image: url(images/purple.jpg)
 }
+
+#left {
+    width: 20%;
+}
+#right {
+    width: 20%;
+}
+#main {
+    width: 60%;
+}
