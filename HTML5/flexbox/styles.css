@@ -1,0 +1,25 @@
+#parent {
+    display: flex;
+    flex-direction: row;
+    background-color: aquamarine;
+    width: 600px;
+    height: 200px;
+    justify-content: space-between;
+    align-items: center;
+}
+div {
+    background-color: antiquewhite;
+}
+#box1 {
+    width: 60%;
+}
+#box2 {
+    width: 20%;
+}
+#box3 {
+    width: 20%;
+}
+#box4 {
+    width: 20%;
+}
+

@@ -1,0 +1,26 @@
+.title {
+    color: green;
+}
+
+h1 {
+    color:  darkred;
+    align-self: center
+}
+
+p {
+    color: darkblue;
+    align-content: center
+}
+
+img {
+    width: 640px;
+    align-content: center;
+}
+
+div {
+    color: darkgoldenrod;
+}
+
+aside {
+    align-self: flex-end;
+}

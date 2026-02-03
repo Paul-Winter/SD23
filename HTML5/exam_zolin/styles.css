@@ -1,0 +1,23 @@
+.title {
+    background-color: fuchsia;
+    color: beige;
+    text-align: center;
+}
+
+.top_nav {
+    background-color: deepskyblue;
+    width: 1254px;
+    text-align: center
+}
+
+.top_nav ul il {
+    margin-right: 100px;
+}
+
+body {
+    background-color: beige
+}
+
+.im {
+    width: 300px;
+}
