@@ -5,16 +5,20 @@
         <title>Второй проект</title>
         <!--<link rel="stylesheet" href="styles.css" />-->
         <style>
+            body{
+                position: relative;
+                height: 2000px;
+            }
             div {
                 background: navy;
                 width: 100px;
                 height: 50px;
-                }
+                position: absolute;
+            }
         </style>  
         <script src="script.js"></script>
     </head>
-    <body onclick="PAR.innerText = 'Был нажат объект: ' + event.target.nodeName;
-                   console.log(event)">
+    <body onclick="moveDIV(event)">
         <div id="DIV"></div>
         <p id="PAR"></p>
     </body>
