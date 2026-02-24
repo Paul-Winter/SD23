@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
     <head>
         <meta charset="UTF-8" />
-        <title>Title</title>
-        <link rel="stylesheet" href="styles.css" />
+        <title>Второй проект</title>
+        <!--<link rel="stylesheet" href="styles.css" />-->
+        <style>
+            div {
+                background: navy;
+                width: 100px;
+                height: 50px;
+                }
+        </style>  
+        <script src="script.js"></script>
     </head>
-    <body>
-        <div id="clickableDIV"></div>
-        <script>
-            clickableDIV.onclick=function(){
-                alert("DIV have bean clicked")
-            }
-        </script>
+    <body onclick="PAR.innerText = 'Был нажат объект: ' + event.target.nodeName;
+                   console.log(event)">
+        <div id="DIV"></div>
+        <p id="PAR"></p>
     </body>
 </html>
