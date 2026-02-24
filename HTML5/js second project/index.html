@@ -4,9 +4,13 @@
         <meta charset="UTF-8" />
         <title>Title</title>
         <link rel="stylesheet" href="styles.css" />
-        <!--<script src="script.js"></script>'' "" ``-->
     </head>
     <body>
-        <div onclick="alert('DIV have been clicked!')"></div>
+        <div id="clickableDIV"></div>
+        <script>
+            clickableDIV.onclick=function(){
+                alert("DIV have bean clicked")
+            }
+        </script>
     </body>
 </html>
