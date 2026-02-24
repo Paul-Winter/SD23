@@ -6,40 +6,14 @@
         <link rel="stylesheet" href="styles.css" />
         <script src="script.js"></script>
     </head>
-    <body>
-        <h1>Mouse enter / Mouse over</h1>
-        <div id="div1">
-            <div id="div2"></div>
-        </div>
-        <div>Mouse enter
-            <span id="span1"></span>
-        </div>
-        <div>Mouse over
-            <span id="span2"></span>
-        </div>
-        <script>
-            div1.onmouseenter = function(){
-                span1.innerText = "div 1"
-                console.log("div1.onmouseEnter")
-            }
-            div1.onmouseover = function(){
-                span2.innerText = "div 1"
-                console.log("div1.onmouseOver")
-            }
-            div2.onmouseenter = function(){
-                span1.innerText = "div 2"
-                console.log("div2.onmouseEnter")
-            }
-            div2.onmouseover = function(){
-                span2.innerText = "div 2"
-                console.log("div2.onmouseOver")
-            }
-        </script>
+    <body onkeypress="keyHandler(event)">
+        <h1>Press space</h1>
+        <div id="gun"></div>
+        <div id="bullet"></div>
+        <div id="aim4"></div>
+        <div id="aim1"></div>
+        <div id="aim2"></div>
+        <div id="aim3"></div>
+        <div id="aim5"></div>
     </body>
 </html>
-
-
-
-
-
-
