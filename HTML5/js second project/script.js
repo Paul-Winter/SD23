@@ -30,4 +30,16 @@ function keyHandler(e) {
         onFly = true;
         moveBullet(randomMove());
     }
+    if(e.code == "KeyW" && !onFly) {
+    onFly = true;
+    moveBullet(-1);
+    }
+    if(e.code == "KeyS" && !onFly) {
+    onFly = true;
+    moveBullet(0);
+    }
+    if(e.code == "KeyX" && !onFly) {
+    onFly = true;
+    moveBullet(1);
+    }
 }
