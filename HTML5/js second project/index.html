@@ -11,8 +11,8 @@
             }
             div {
                 background: navy;
-                width: 100px;
-                height: 50px;
+                width: 255px;
+                height: 255px;
                 position: absolute;
             }
         </style>  
@@ -20,6 +20,19 @@
     </head>
     <body onclick="colorDIV(event)">
         <div id="DIV"></div>
+        <script>
+            DIV.addEventListener("mousemove", function(e){
+                DIV.style.backgroundColor = "rgb(127," +
+                    e.pageX + "," +
+                    e.pageY + ")";
+            })
+        </script>
         <p id="PAR"></p>
     </body>
 </html>
+
+
+
+
+
+
