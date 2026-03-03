@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>DOM Tree</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <h1>DOM Tree</h1>
+        <ul id="list">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+            <li>Item 4</li>
+        </ul>
+        <button onclick="addItem">Add item</button>
+        <button onclick="insertItem">Insert item</button>
+        <script>
+            function addItem() {
+                var newItem = document.createElement("li");
+                newItem.innerText = "New item";
+                list.appendChild(newItem);
+            }
+            function insertItem() {
+                var firstItem = list.childNodes[0];
+                var newItem = document.createElement("li");
+                newItem.innerText = "New item";
+                list.insertBefore(newItem, firstItem);
+            }
+        </script>
+    </body>
+</html>
