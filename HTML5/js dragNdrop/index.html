@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Drag and Drop</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <h1>Drag and Drop</h1>
+        <div id="div1"></div>
+        <script>
+            var isDrag = false;
+            div1.addEventListener("mousedown", function() {
+                isDrag = true;
+            });            
+            document.addEventListener("mouseup", function() {
+                isDrag = false;
+            });            
+            document.addEventListener("mousemove", function(e) {
+                if(isDrag) {
+                    div1.style.left = e.pageX + "px";
+                    div1.style.top = e.pageY + "px";
+                }
+            });
+        </script>
+    </body>
+</html>

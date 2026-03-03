@@ -1,0 +1,11 @@
+body {
+    position: relative;
+}
+#div1 {
+    background-color: tomato;
+    border: 1px solid red;
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    position: absolute;
+}
