@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Frames practice</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <h1>Frames Practice</h1>
+        <iframe src="about:blank"></iframe>
+        <iframe src="about:blank"></iframe>
+        <iframe src="about:blank" name="frame3"></iframe>
+        <iframe src="about:blank"></iframe>
+        <iframe src="about:blank"></iframe>
+        <iframe src="about:blank"></iframe>
+        <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/QKuHIPkn9-k?si=PJUXKuf1HCRaTYFO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
+        <button onclick="window.frames[0].location='https://online.top-academy.ru/'">IT TOP Academy</button>
+        <button onclick="window.frames[1].location='https://itcollegetop.ru/'">IT TOP College</button>
+        <button onclick="window.frames.frame3.location='https://topitschool.ru/stavropol'">IT TOP School</button>
+        <button onclick="window.frames[3].location='https://www.google.com'">GOOGLE</button>
+        <button onclick="window.frames[4].location='https://www.youtube.com'">YOUTUBE</button>
+        <button onclick="window.frames[5].location='https://www.youtube.com/embed/QKuHIPkn9-k?si=PJUXKuf1HCRaTYFO'">video from youtube</button>
+    </body>
+</html>

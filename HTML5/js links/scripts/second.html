@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Работа с событиями</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="script.js"></script>
+    </head>
+    <body onkeypress="keyHandler(event)"
+          onload="alert('body loaded!')">
+        <h1>Press space</h1>
+        <div id="gun"></div>
+        <div id="bullet"></div>
+  
+        <div id="aim1"></div>
+        <div id="aim2"></div>
+        <div id="aim3"></div>
+        <div id="aim5"></div>
+        <img src="images/TOP.jpg"/>    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                alert("DOM loaded!")
+            })
+        </script>
+    </body>
+</html>

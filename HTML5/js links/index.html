@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Links</title>
+        <link rel="stylesheet" href="style.css" />
+        <!--<script src="script.js"></script>-->
+    </head>
+    <body>
+        <h1>Links</h1>
+        <ul>
+            <li>
+                <a href="scripts/second.html">Second JS Project</a>
+            </li>
+            <li>
+                <a href="scripts/frames.html">Web Page Frames</a>
+            </li>
+            <li>
+                <a href="scripts/dragNdrop.html">Drag-and-Drop</a>
+            </li>
+            <li>
+                <a href="scripts/tree.html">DOM Elements</a>
+            </li>
+        </ul>
+        <input type="button"
+               value="Get link"
+               onclick="getLinks()"/>
+        <br/>
+        Выберите новый стиль:
+        <input type="button"
+               value="Стиль 1"
+               onclick="changeStyle(1)"/>
+        <input type="button"
+               value="Стиль 2"
+               onclick="changeStyle(2)"/>
+        <br/>
+        <script>
+            function getLinks() {
+                var str = "";
+                var links = document.links;
+                for(link of links)
+                    str += link.innerText + "(" + link.href + ")\n";
+                alert(str);
+            }
+            function changeStyle(num) {
+                var styleLink = document.getElementsByTagName("link")[0];
+                document.head.removeChild(styleLink);
+                styleLink = document.createElement("link");
+                styleLink.href = "style"+num+".css";
+                styleLink.rel = "stylesheet";
+                document.head.appendChild(styleLink);
+            }
+        </script>
+    </body>
+</html>
