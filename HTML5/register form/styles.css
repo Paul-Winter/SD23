@@ -1,0 +1,38 @@
+#regForm {
+    background-color: #5599EE;
+    display: block;
+    height: 800px;
+    width: 800px;
+    padding: 20px;
+}
+div {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    height: 800px;
+    width: 300px;
+    display: block;
+    float: left;
+    padding: 10px;
+    margin: 10px 0;
+}
+input {
+    border-radius: 10px;
+    border-width: 0;
+    display: block;
+    height: 30px;
+    /*margin: 10px 0;*/
+    padding: 0;
+    width: 200px;
+}
+#check {
+    height: 20px;
+    width: 20px;
+    float: left;
+}
+#enter {
+    background-color: green;
+    color: white;
+    text-align: center;
+    height: 60px;
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>jQuery</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="js/jquery-4.0.0.min.js"></script>
+        <!--<script src="script.js"></script>-->
+    </head>
+    <body>
+        <h1 class="title">jQuery</h1>
+        <div id="mainDiv">Today is <span id="today"></span></div>
+        <br />
+        <button id="button" onclick="buttonClicked()">Open</button>
+        <div id="menu">
+            <a id="button1"> Главная</a>
+            <a id="button2"> О нас</a>
+            <a id="button3">Литература</a>
+            <a id="button4">Контакты</a>
+        </div>
+        <p>При клике на кнопку раскрывается меню вида:</p>
+        <ul>
+            <li>Главная</li>
+            <li>О нас</li>
+            <li>Литература</li>
+            <li>Контакты</li>
+        </ul>
+        <p>
+            При нажатии на кнопку меню должно разворачиваться и сворачиваться с помощью одного из анимационных методов
+            jQuery.
+        </p>
+        <p>Внешний вид кнопки должен меняться: вместо названия "Open" - "Close" и наоборот.</p>
+        <footer>
+            <p>IT TOP College | <span id="todate"></span> г. | Все права защищены.</p>
+        </footer>
+        <script src="script.js"></script>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+footer {
+    position: flex;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.title {
+    color: green;
+}
+
+#menu {
+    background-color: moccasin;
+    width: 75px;
+    height: 70px;
+}
+
+#button1, #button2, #button3, #button4 {
+    margin-bottom: 10px;
+}

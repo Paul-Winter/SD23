@@ -1,0 +1,9 @@
+body {
+    font-family: "Courier New", Courier, monospace;
+}
+#addForm {
+    background-color: #5599EE;
+    display: block;
+    padding: 20px;
+    width: 800px;
+}

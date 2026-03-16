@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Регистрация пользователя</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <form id="regForm" method="get" onsubmit="return checkForm()">
+            <div>Регистрация</div>
+            <b>Имя:</b>
+            <input type="text" id="firstName" name="name1" required/>
+            <br/><br/>
+            <b>Фамилия:</b>
+            <input type="text" id="lastName" name="name2" required/>
+            <br/><br/>
+            <b>Логин:</b>
+            <input type="text" id="login" name="login"/>
+            <br/><br/>
+            <b>Пароль:</b>
+            <input type="password" id="pass1" name="password"/>
+            <br/><br/>
+            <b>Подверждение пароля:</b>
+            <input type="password" id="pass2"/>
+            <br/><br/>
+            <b>Электронная почта:</b>
+            <input type="email" id="email" name="email"/>
+            <br/><br/>
+            <b>Телефон:</b>
+            <input type="tel" id="phone" name="phone"/>
+            <br/><br/>
+            <b></b>
+            <input id="check" type="checkbox" name="accept"/>
+            <b>Я принимаю условия пользования площадкой</b>
+            <br/><br/>
+            <input id="enter" type="submit" value="Зарегистрироваться"/>
+        </form>
+    </body>
+</html>
