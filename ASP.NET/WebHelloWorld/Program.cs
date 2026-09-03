@@ -29,7 +29,7 @@ namespace WebHelloWorld
                 }
                 else
                 {
-                    await context.Response.WriteAsync($"Path: {path} {now}");
+                    await context.Response.WriteAsync($"Query string: {context.Request.QueryString}");
                 }
             });
             app.Run();
