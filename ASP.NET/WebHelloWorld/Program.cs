@@ -11,15 +11,15 @@ namespace WebHelloWorld
 
             app.Run(async (context) =>
             {
-                context.Response.ContentType = "text/html; charset=utf-8";
-                var paramString = new StringBuilder();
 
-                foreach (var param in context.Request.Query)
-                {
-                    paramString.Append($"<h2>{param.Key} - {param.Value}</h2>");
-                }
+                var response = context.Response;
+
+                response.Headers.ContentLanguage = "ru";
+                response.Headers.ContentType = "text/html";
+                response.Headers.Accept = "4 course";
+                response.Headers.Append("Student", "John Doe");
                 
-                await context.Response.WriteAsync($"{paramString.ToString()}");                
+                await context.Response.WriteAsync($"HELLO, WORLD!");                
             });
             app.Run();
         }
