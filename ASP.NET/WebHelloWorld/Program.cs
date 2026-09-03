@@ -9,17 +9,28 @@ namespace WebHelloWorld
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
+
             app.Run(async (context) =>
             {
+                var path = context.Request.Path;
+                string user = "/user";
+                string pass = "/secure";
+                var now = DateTime.Now.ToString();
+
                 context.Response.ContentType = "text/html; charset=utf-8";
 
-                var headers = new StringBuilder();
-                foreach (var header in context.Request.Headers)
+                if (path == "/user")
                 {
-                    headers.Append($"<p>{header.Key} - {header.Value}</p>");
+                    await context.Response.WriteAsync($"Welcome to USER page! {now}");
                 }
-
-                await context.Response.WriteAsync(headers.ToString());
+                else if (path == "/secure")
+                {
+                    await context.Response.WriteAsync($"ВВЕДИТЕ ПАРОЛЬ: _");
+                }
+                else
+                {
+                    await context.Response.WriteAsync($"Path: {path} {now}");
+                }
             });
             app.Run();
         }
