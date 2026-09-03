@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace WebHelloWorld
 {
     public class Program
@@ -7,9 +9,18 @@ namespace WebHelloWorld
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
-            //app.MapGet("/", () => "Привет от студентов четвёртого курса!");
+            app.Run(async (context) =>
+            {
+                context.Response.ContentType = "text/html; charset=utf-8";
 
-            app.UseWelcomePage();
+                var headers = new StringBuilder();
+                foreach (var header in context.Request.Headers)
+                {
+                    headers.Append($"<p>{header.Key} - {header.Value}</p>");
+                }
+
+                await context.Response.WriteAsync(headers.ToString());
+            });
             app.Run();
         }
     }
