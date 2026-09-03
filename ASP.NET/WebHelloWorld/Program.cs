@@ -2,16 +2,15 @@ namespace WebHelloWorld
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
-            app.MapGet("/", () => "Привет от студентов разработчиков четвёртого курса!");
+            //app.MapGet("/", () => "Привет от студентов четвёртого курса!");
 
-            await app.StartAsync();
-            await Task.Delay(6000);
-            await app.StopAsync();
+            app.UseWelcomePage();
+            app.Run();
         }
     }
 }
