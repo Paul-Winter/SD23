@@ -17,6 +17,7 @@ namespace WebHelloWorld
                 User userdata = new User("John Doe", "qwerty111");
 
                 await response.WriteAsJsonAsync(userdata);
+                //context.Request.ReadFromJsonAsync();
             });
             app.Run();
         }
