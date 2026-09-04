@@ -4,7 +4,6 @@ namespace WebHelloWorld
 {
     public class Program
     {
-        public record User(string login, string password);
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -12,12 +11,7 @@ namespace WebHelloWorld
 
             app.Run(async (context) =>
             {
-                var response = context.Response;
-                //response.ContentType = "text/html; charset=utf-8";
-                User userdata = new User("John Doe", "qwerty111");
-
-                await response.WriteAsJsonAsync(userdata);
-                //context.Request.ReadFromJsonAsync();
+                await context.Response.SendFileAsync("C:\\Users\\Student\\Desktop\\TOP.jpg");
             });
             app.Run();
         }
