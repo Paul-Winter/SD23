@@ -15,8 +15,18 @@ namespace WebHelloWorld
 
                 response.ContentType = "text/html; charset=utf-8";
 
-                context.Response.StatusCode = 404;
-                await context.Response.WriteAsync("Страница не найдена!");                
+                if (context.Request.Path == "/postdata")
+                {
+                    var form = context.Request.Form;
+                    string login = form["login"];
+                    string password = form["pass"];
+                    await context.Response.WriteAsync($"<h3>Login: {login}</h3>" +
+                        $"<h3>Password: {password}</h3>");                
+                }
+                else
+                {
+                    await context.Response.SendFileAsync("html/index.html");
+                }
             });
             app.Run();
         }
