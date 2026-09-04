@@ -11,15 +11,12 @@ namespace WebHelloWorld
 
             app.Run(async (context) =>
             {
-
                 var response = context.Response;
 
-                response.Headers.ContentLanguage = "ru";
-                response.Headers.ContentType = "text/html";
-                response.Headers.Accept = "4 course";
-                response.Headers.Append("Student", "John Doe");
-                
-                await context.Response.WriteAsync($"HELLO, WORLD!");                
+                response.ContentType = "text/html; charset=utf-8";
+
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync("Страница не найдена!");                
             });
             app.Run();
         }
