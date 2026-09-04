@@ -1,3 +1,4 @@
+using System.ComponentModel.Design;
 using System.Text;
 
 namespace WebHelloWorld
@@ -11,7 +12,18 @@ namespace WebHelloWorld
 
             app.Run(async (context) =>
             {
-                await context.Response.SendFileAsync("C:\\Users\\Student\\Desktop\\TOP.jpg");
+                if (context.Request.Path == "/pagefrom")
+                {
+                    await context.Response.WriteAsync("Page From");
+                }
+                else if (context.Request.Path == "/pageto")
+                {
+                    context.Response.Redirect("https://www.yandex.ru");
+                }
+                else
+                {
+                    await context.Response.WriteAsync("MAIN PAGE");
+                }
             });
             app.Run();
         }
