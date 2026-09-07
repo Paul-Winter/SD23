@@ -7,6 +7,6 @@
         {
             this.userData = userData;
         }
-        public string GetUserData() => $"UserData: {userData.ToString()}";
+        public string GetUserData() => $"From class: {userData.ToString()}";
     }
 }

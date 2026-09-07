@@ -10,20 +10,12 @@ namespace WebHelloWorld
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddTransient<IUserData, UserTime>();
-            builder.Services.AddTransient<UserData>();
-
+            builder.Services.AddTransient<IUserData, UserDate>();
+            
             var app = builder.Build();
 
-            app.Run(async (context) =>
-            {
-                context.Response.ContentType = "text/html; charset=utf-8";
+            app.UseMiddleware<UserDataMiddleware>();
 
-                //var userData = app.Services.GetService<UserData>();
-                var userData = context.RequestServices.GetService<UserData>();
-
-                await context.Response.WriteAsync($"<h3>UserData from: {userData?.GetUserData()}</h3>");
-            });
             app.Run();
         }
     }
