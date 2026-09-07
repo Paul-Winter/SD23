@@ -9,21 +9,25 @@ namespace WebHelloWorld
         {
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
+            var services = builder.Services;
 
             app.Run(async (context) =>
             {
-                if (context.Request.Path == "/pagefrom")
+                var servs = new StringBuilder();
+                servs.Append("<table>");
+                servs.Append("<tr><th>Тип сервиса</th><th>Lifetime</th><th>Реализация</th>");
+
+                foreach (var service in services)
                 {
-                    await context.Response.WriteAsync("Page From");
+                    servs.Append($"<tr><td>{service.ServiceType.FullName}</td>");
+                    servs.Append($"<td>{service.Lifetime}</td>");
+                    servs.Append($"<td>{service.ImplementationType?.FullName}</td></tr>");
                 }
-                else if (context.Request.Path == "/pageto")
-                {
-                    context.Response.Redirect("https://www.yandex.ru");
-                }
-                else
-                {
-                    await context.Response.WriteAsync("MAIN PAGE");
-                }
+                
+                servs.Append("</table>");
+                context.Response.ContentType = "text/html; charset=utf-8";
+
+                await context.Response.WriteAsync(servs.ToString());
             });
             app.Run();
         }
