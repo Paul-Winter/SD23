@@ -8,28 +8,19 @@ namespace WebHelloWorld
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddRazorPages();
+
+            //builder.Services.AddTransient<IUserData, UserTime>();
+            builder.Services.AddTransient<IUserData, UserDate>();
+
             var app = builder.Build();
-            var services = builder.Services;
-            //builder.Services.AddRazorPages();
 
             app.Run(async (context) =>
             {
-                var servs = new StringBuilder();
-                servs.Append("<table>");
-                servs.Append("<tr><th>Тип сервиса</th><th>Lifetime</th><th>Реализация</th>");
-
-                foreach (var service in services)
-                {
-                    servs.Append($"<tr><td>{service.ServiceType.FullName}</td>");
-                    servs.Append($"<td>{service.Lifetime}</td>");
-                    servs.Append($"<td>{service.ImplementationType?.FullName}</td></tr>");
-                }
-                
-                servs.Append("</table>");
                 context.Response.ContentType = "text/html; charset=utf-8";
 
-                await context.Response.WriteAsync(servs.ToString());
+                var userData = app.Services.GetService<IUserData>();
+
+                await context.Response.WriteAsync($"UserData from UserDate: {userData?.GetUserData()}");
             });
             app.Run();
         }
