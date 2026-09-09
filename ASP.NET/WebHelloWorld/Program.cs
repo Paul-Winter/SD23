@@ -8,22 +8,19 @@ namespace WebHelloWorld
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddTransient<IUserData, UserDate>();
+            var builder = WebApplication.CreateBuilder(args);            
             var app = builder.Build();
 
-            app.Map("/", () => "MAIN PAGE");
-            app.Map("/hello", () => Console.WriteLine("Hello, World!"));
-            app.Map("/users", () => "USERS");
-            app.Map("/users/{userId:int}", Handler);
-            app.Map("/date", (IUserData userDate) => $"Сегодня: {userDate.GetUserData()}");
+            app.Configuration["user"] = "John Doe";
+            app.Configuration["id"] = "13748";
+            
+            app.Run(async context =>
+            {
+                string? user = app.Configuration["user"];
+                string? userId = app.Configuration["id"];
 
-            app.Run();
-        }
-
-        static string Handler(int userId)
-        {
-            return $"User Id: {userId}";
+                await context.Response.WriteAsync($"<h2>пользователь {user}, id {userId}</h2>");
+            });
         }
     }
 }
