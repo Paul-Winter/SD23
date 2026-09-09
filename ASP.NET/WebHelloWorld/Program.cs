@@ -8,16 +8,20 @@ namespace WebHelloWorld
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            builder.Services.AddSingleton<ICounter, UserCounter>();
-            builder.Services.AddSingleton<CounterService>();
-            
+            var builder = WebApplication.CreateBuilder(args);            
             var app = builder.Build();
 
-            app.UseMiddleware<CounterMiddleware>();
+            app.Map("/", () => "MAIN PAGE");
+            app.Map("/hello", () => Console.WriteLine("Hello, World!"));
+            app.Map("/users", () => "USERS");
+            app.Map("/users/{userId}", Handler);
 
             app.Run();
+        }
+
+        static string Handler(string userId)
+        {
+            return $"User Id: {userId}";
         }
     }
 }
