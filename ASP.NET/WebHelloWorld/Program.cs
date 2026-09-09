@@ -10,8 +10,8 @@ namespace WebHelloWorld
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddTransient<ICounter, UserCounter>();
-            builder.Services.AddTransient<CounterService>();
+            builder.Services.AddScoped<ICounter, UserCounter>();
+            builder.Services.AddScoped<CounterService>();
             
             var app = builder.Build();
 
