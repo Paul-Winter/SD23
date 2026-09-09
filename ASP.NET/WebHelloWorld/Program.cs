@@ -10,9 +10,13 @@ namespace WebHelloWorld
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Configuration.AddJsonFile("config.json");
+            builder.Configuration.AddXmlFile("config.xml");
+            //                                config.ini
             var app = builder.Build();
 
-            app.Map("/", (IConfiguration appConfig) => $"User {appConfig["user"]}; Id {appConfig["id"]}");
+            app.Map("/", (IConfiguration appConfig)
+                => $"User {appConfig["user"]}; Id {appConfig["id"]}\n" +
+                $"Login {appConfig["login"]}; Password {appConfig["password"]}");
             app.Run();
         }
     }
