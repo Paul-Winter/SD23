@@ -8,13 +8,15 @@ namespace WebHelloWorld
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);            
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddTransient<IUserData, UserDate>();
             var app = builder.Build();
 
             app.Map("/", () => "MAIN PAGE");
             app.Map("/hello", () => Console.WriteLine("Hello, World!"));
             app.Map("/users", () => "USERS");
             app.Map("/users/{userId:int}", Handler);
+            app.Map("/date", (IUserData userDate) => $"Сегодня: {userDate.GetUserData()}");
 
             app.Run();
         }
