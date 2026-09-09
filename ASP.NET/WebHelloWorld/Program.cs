@@ -8,19 +8,12 @@ namespace WebHelloWorld
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);            
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Configuration.AddJsonFile("config.json");
             var app = builder.Build();
 
-            app.Configuration["user"] = "John Doe";
-            app.Configuration["id"] = "13748";
-            
-            app.Run(async context =>
-            {
-                string? user = app.Configuration["user"];
-                string? userId = app.Configuration["id"];
-
-                await context.Response.WriteAsync($"<h2>пользователь {user}, id {userId}</h2>");
-            });
+            app.Map("/", (IConfiguration appConfig) => $"User {appConfig["user"]}; Id {appConfig["id"]}");
+            app.Run();
         }
     }
 }
