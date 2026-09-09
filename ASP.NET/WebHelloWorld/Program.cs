@@ -10,13 +10,12 @@ namespace WebHelloWorld
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddTransient<IUserData, UserHello>();
-            builder.Services.AddTransient<IUserData, UserDate>();
-            builder.Services.AddTransient<IUserData, UserTime>();
+            builder.Services.AddTransient<ICounter, UserCounter>();
+            builder.Services.AddTransient<CounterService>();
             
             var app = builder.Build();
 
-            app.UseMiddleware<UserDataMiddleware>();
+            app.UseMiddleware<CounterMiddleware>();
 
             app.Run();
         }
