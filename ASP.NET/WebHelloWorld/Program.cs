@@ -14,12 +14,12 @@ namespace WebHelloWorld
             app.Map("/", () => "MAIN PAGE");
             app.Map("/hello", () => Console.WriteLine("Hello, World!"));
             app.Map("/users", () => "USERS");
-            app.Map("/users/{userId}", Handler);
+            app.Map("/users/{userId:int}", Handler);
 
             app.Run();
         }
 
-        static string Handler(string userId)
+        static string Handler(int userId)
         {
             return $"User Id: {userId}";
         }
