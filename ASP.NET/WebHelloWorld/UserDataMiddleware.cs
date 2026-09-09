@@ -3,14 +3,24 @@
     public class UserDataMiddleware
     {
         private readonly RequestDelegate rd;
-        public UserDataMiddleware(RequestDelegate rd)
+        private readonly IEnumerable<IUserData> userDatas;
+
+        public UserDataMiddleware(RequestDelegate rd, IEnumerable<IUserData> userDatas)
         {
             this.rd = rd;
+            this.userDatas = userDatas;
         }
-        public async Task InvokeAsync(HttpContext context, IUserData userData)
+        public async Task InvokeAsync(HttpContext context)
         {
             context.Response.ContentType = "text/html; charset=utf-8";
-            await context.Response.WriteAsync($"<h3>{userData.GetUserData()}</h3>");
+            string text = "";
+
+            foreach (var ud in userDatas)
+            {
+                text += $"<h3>{ud.GetUserData()}</h3>";
+            }
+
+            await context.Response.WriteAsync($"{text}");
         }
     }
 }

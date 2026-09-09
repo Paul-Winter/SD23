@@ -11,6 +11,7 @@ namespace WebHelloWorld
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddTransient<IUserData, UserDate>();
+            builder.Services.AddTransient<IUserData, UserTime>();
             
             var app = builder.Build();
 
