@@ -9,14 +9,22 @@ namespace WebHelloWorld
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Configuration.AddJsonFile("config.json");
-            builder.Configuration.AddXmlFile("config.xml");
-            //builder.Configuration.AddIniFile("config.ini");
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
             var app = builder.Build();
 
-            app.Map("/", (IConfiguration appConfig)
-                => $"User {appConfig["user"]}; Id {appConfig["id"]}\n" +
-                $"Login {appConfig["login"]}; Password {appConfig["password"]}");
+            app.Run(async (context) =>
+            {
+                var path = context.Request.Path;
+
+                app.Logger.LogInformation($"LogInformation: {context.Request.Path}");
+                app.Logger.LogWarning($"LogWarning: {context.Request.Path}");
+                app.Logger.LogError($"LogError: {context.Request.Path}");
+                app.Logger.LogCritical($"LogCritical: {context.Request.Path}");
+
+                await context.Response.WriteAsync("Hello, World!");
+            });
+
             app.Run();
         }
     }
