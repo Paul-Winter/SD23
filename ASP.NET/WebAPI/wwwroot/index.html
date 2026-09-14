@@ -32,7 +32,7 @@
         async function getUsers() {
             const response = await fetch("/api/users", {
                 method: "GET",
-                headers: { "Accept": "application/json" }
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }                
             });
             if (response.ok === true) {
                 const users = await response.json();
@@ -43,7 +43,7 @@
         async function getUser(id) {
             const response = await fetch(`/api/users/${id}`, {
                 method: "GET",
-                headers: { "Accept": "application/json" }
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }                
             });
             if (response.ok === true) {
                 const user = await response.json();
@@ -56,12 +56,12 @@
                 console.log(error.message);
             }
         }
-        async function addUser(userLog, userPass) {
+        async function addUser(userLogin, userPass) {
             const response = await fetch("/api/users", {
                 method: "POST",
-                headers: { "Accept": "application/json", "Content-Type": "appliction/json" },
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    login: userLog,
+                    login: userLogin,
                     password: userPass
                 })
             });
@@ -74,13 +74,13 @@
                 console.log(error.message);
             }
         }
-        async function editUser(userId, userLog, userPass) {
+        async function editUser(userId, userLogin, userPass) {
             const response = await fetch("/api/users", {
                 method: "PUT",
                 headers: { "Accept": "application/json", "Content-Type": "application/json" },
                 body: JSON.stringify({
                     id: userId,
-                    login: userLog,
+                    login: userLogin,
                     password: userPass
                 })
             });
