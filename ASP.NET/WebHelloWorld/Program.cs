@@ -11,15 +11,18 @@ namespace WebHelloWorld
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
-            app.Use(async (context, data) =>
-            {
-                context.Items["text"] = "Hello, World!";
-                await data.Invoke();
-            });
-
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync($"Text: {context.Items["text"]}");
+                if (context.Request.Cookies.ContainsKey("name"))
+                {
+                    string? name = context.Request.Cookies["name"];
+                    await context.Response.WriteAsync($"Hello {name}");
+                }
+                else
+                {
+                    context.Response.Cookies.Append("name", "John Doe");
+                    await context.Response.WriteAsync($"Hello, World!");
+                }
             });
 
             app.Run();
