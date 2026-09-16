@@ -62,7 +62,7 @@ namespace WebHelloWorld
                 await context.Response.WriteAsync(authForm);
             });
 
-            app.MapPost("/auth", async (string url, HttpContext context) =>
+            app.MapPost("/auth", async (HttpContext context) =>
             {
                 var form = context.Request.Form;
                 if (!form.ContainsKey("login") || !form.ContainsKey("password"))
@@ -84,7 +84,7 @@ namespace WebHelloWorld
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                 await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
-                return Results.Redirect(url??"/");
+                return Results.Redirect("/");
             });
 
             app.Map("/", [Authorize] () => "Hello, World!");
