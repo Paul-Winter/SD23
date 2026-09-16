@@ -89,6 +89,12 @@ namespace WebHelloWorld
 
             app.Map("/", [Authorize] () => "Hello, World!");
 
+            app.MapGet("/logout", async (HttpContext context) =>
+            {
+                await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return Results.Redirect("/auth");
+            });
+
             app.Run();
         }
     }
