@@ -11,25 +11,9 @@ namespace WebHelloWorld
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
-            //app.UseDeveloperExceptionPage();
-            app.Environment.EnvironmentName = "Production";
+            app.UseStatusCodePages("text/plain", "Error! Page not found!");
 
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler(app => app.Run(async (context) =>
-                {
-                    context.Response.StatusCode = 500;
-                    await context.Response.WriteAsync("Error 500. DivideByZeroException!");
-                }));
-            }
-
-            app.Run(async (context) =>
-            {
-                int x = 12;
-                int y = 0;
-                int z = x / y;
-                await context.Response.WriteAsync($"x = {x}; y = {y}; z = {z}");
-            });
+            app.Map("/hello", () => "Hello, World!");
 
             app.Run();
         }
