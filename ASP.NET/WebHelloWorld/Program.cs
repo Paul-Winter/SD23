@@ -14,6 +14,15 @@ namespace WebHelloWorld
             //app.UseDeveloperExceptionPage();
             app.Environment.EnvironmentName = "Production";
 
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler(app => app.Run(async (context) =>
+                {
+                    context.Response.StatusCode = 500;
+                    await context.Response.WriteAsync("Error 500. DivideByZeroException!");
+                }));
+            }
+
             app.Run(async (context) =>
             {
                 int x = 12;
