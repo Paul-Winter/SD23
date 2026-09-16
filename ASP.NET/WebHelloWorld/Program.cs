@@ -11,9 +11,16 @@ namespace WebHelloWorld
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
-            app.UseStatusCodePages("text/plain", "Error! Page not found!");
+            app.Use(async (context, data) =>
+            {
+                context.Items["text"] = "Hello, World!";
+                await data.Invoke();
+            });
 
-            app.Map("/hello", () => "Hello, World!");
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync($"Text: {context.Items["text"]}");
+            });
 
             app.Run();
         }
