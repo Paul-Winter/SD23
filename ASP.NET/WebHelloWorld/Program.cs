@@ -9,20 +9,17 @@ namespace WebHelloWorld
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Logging.ClearProviders();
-            builder.Logging.AddConsole();
             var app = builder.Build();
+
+            //app.UseDeveloperExceptionPage();
+            app.Environment.EnvironmentName = "Production";
 
             app.Run(async (context) =>
             {
-                var path = context.Request.Path;
-
-                app.Logger.LogInformation($"LogInformation: {context.Request.Path}");
-                app.Logger.LogWarning($"LogWarning: {context.Request.Path}");
-                app.Logger.LogError($"LogError: {context.Request.Path}");
-                app.Logger.LogCritical($"LogCritical: {context.Request.Path}");
-
-                await context.Response.WriteAsync("Hello, World!");
+                int x = 12;
+                int y = 0;
+                int z = x / y;
+                await context.Response.WriteAsync($"x = {x}; y = {y}; z = {z}");
             });
 
             app.Run();
