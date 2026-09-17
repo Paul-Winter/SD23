@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace WebAPI
 {
     public class Program
@@ -5,6 +7,10 @@ namespace WebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<AppContext>(options => options.UseSqlite(connection));
+
             var app = builder.Build();
 
             app.UseDefaultFiles();
@@ -20,6 +26,7 @@ namespace WebAPI
             };
 
             // GET
+            app.MapGet("/users", (AppContext db) => db.Users.ToList());
             app.MapGet("/api/users", () => users);
             app.MapGet("/api/users/{id}", (string id) =>
             {
