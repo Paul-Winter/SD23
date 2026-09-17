@@ -16,21 +16,11 @@ namespace WebAPI
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            List<User> users = new List<User>
-            {
-                new User() { Id = Guid.NewGuid().ToString(), Login = "111FirstUser111", Password = "11111"},
-                new User() { Id = Guid.NewGuid().ToString(), Login = "XyJIu*Gun", Password = "123456"},
-                new User() { Id = Guid.NewGuid().ToString(), Login = "DaRK-RaiN", Password = "qwerty"},
-                new User() { Id = Guid.NewGuid().ToString(), Login = "Black_Dragon", Password = "password"},
-                new User() { Id = Guid.NewGuid().ToString(), Login = "___Max_Frei___", Password = "sirmax"}
-            };
-
             // GET
-            app.MapGet("/users", (AppContext db) => db.Users.ToList());
-            app.MapGet("/api/users", () => users);
-            app.MapGet("/api/users/{id}", (string id) =>
+            app.MapGet("/api/users", async (AppContext db) => await db.Users.ToListAsync());
+            app.MapGet("/api/users/{id:guid}", async (string id, AppContext db) =>
             {
-                User? user = users.FirstOrDefault(u => u.Id == id);
+                User? user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
                 if (user == null)
                 {
                     return Results.NotFound(new { message = "User not found!" });
@@ -39,35 +29,37 @@ namespace WebAPI
             });
 
             // POST
-            app.MapPost("/api/users", (User user) =>
+            app.MapPost("/api/users", async (User user, AppContext db) =>
             {
-                user.Id = Guid.NewGuid().ToString();
-                users.Add(user);
+                await db.Users.AddAsync(user);
+                await db.SaveChangesAsync();
                 return user;
             });
 
             // PUT
-            app.MapPut("/api/users", (User userData) =>
+            app.MapPut("/api/users", async (User userData, AppContext db) =>
             {
-                User? user = users.FirstOrDefault(u => u.Id == userData.Id);
+                User? user = await db.Users.FirstOrDefaultAsync(u => u.Id == userData.Id);
                 if (user == null)
                 {
                     return Results.NotFound(new { message = "User not found!" });
                 }
                 user.Login = userData.Login;
                 user.Password = userData.Password;
+                await db.SaveChangesAsync();
                 return Results.Json(user);
             });
 
             // DELETE
-            app.MapDelete("/api/users/{id}", (string id) =>
+            app.MapDelete("/api/users/{id:guid}", async (string id, AppContext db) =>
             {
-                User? user = users.FirstOrDefault(u => u.Id == id);
+                User? user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
                 if (user == null)
                 {
                     return Results.NotFound(new { message = "User not found!" });
                 }
-                users.Remove(user);
+                db.Users.Remove(user);
+                await db.SaveChangesAsync();
                 return Results.Json(user);
             });
 
