@@ -14,21 +14,34 @@ namespace WebHelloWorld
         {
             List<User> users = new List<User>
             {
-                new User("John_Doe", "qwer1234", "john_doe@mail.ru"),
-                new User("Student1", "11111", "stud_ent@mail.edu"),
-                new User("Unnamed", "1234567", "un-name@mail.com")
+                new User("John_Doe", "qwer1234", "john_doe@mail.ru", new Role("user")),
+                new User("Student1", "11111", "stud_ent@mail.edu", new Role("user")),
+                new User("Unnamed", "1234567", "un-name@mail.com", new Role("admin"))
             };
+            var adminRole = new Role("admin");
+            var userRole = new Role("user");
 
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => options.LoginPath = "/auth");
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/auth";
+                    options.LogoutPath = "/logout";
+                    options.AccessDeniedPath = "/accessdenied";
+                });
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapGet("/accessdenied", async (HttpContext context) =>
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsync("ACCESS DENIED!");
+            });
 
             app.MapGet("/auth", async (HttpContext context) =>
             {
@@ -79,7 +92,8 @@ namespace WebHelloWorld
                 }
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.Login)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
                 };
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                 await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -87,7 +101,8 @@ namespace WebHelloWorld
                 return Results.Redirect("/");
             });
 
-            app.Map("/", [Authorize] () => "Hello, World!");
+            app.Map("/", [Authorize(Roles = "admin, user")] () => "Hello, World!");
+            app.Map("/adminka", [Authorize(Roles = "admin")] () => "Adminka");
 
             app.MapGet("/logout", async (HttpContext context) =>
             {
