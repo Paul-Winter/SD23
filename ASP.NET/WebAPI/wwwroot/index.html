@@ -3,36 +3,36 @@
 <head>
     <meta charset="utf-8" />
     <title>Пользовательская админка</title>
-    <style>        
-        button { margin: 5px; }
+    <style>
+        button{margin:5px;}
     </style>
 </head>
 <body>
     <h2>ПОЛЬЗОВАТЕЛИ:</h2>
     <div>
-        <input type="hidden" id="userId"/>
+        <input type="hidden" id="userId" />
         <p>
-            Login:<br/>
+            Login:<br />
             <input id="userLogin"/>
         </p>
         <p>
-            Password:<br/>
+            Password:<br />
             <input id="userPass"/>
         </p>
         <p>
-            <button id="saveBtn">СОХРАНИТЬ</button>
-            <button id="clearBtn">СБРОС</button>
+            <button id="saveBtn">SAVE</button>
+            <button id="clearBtn">CLEAR</button>
         </p>
     </div>
     <table>
-        <thead><tr><th>Login</th><th>Password</th></tr></thead>
+        <thead><tr><th>Login</th><th>Password</th><th></th></tr></thead>
         <tbody></tbody>
     </table>
     <script>
         async function getUsers() {
             const response = await fetch("/api/users", {
                 method: "GET",
-                headers: { "Accept": "application/json", "Content-Type": "application/json" }                
+                headers: { "Accept": "application/json" }
             });
             if (response.ok === true) {
                 const users = await response.json();
@@ -43,13 +43,13 @@
         async function getUser(id) {
             const response = await fetch(`/api/users/${id}`, {
                 method: "GET",
-                headers: { "Accept": "application/json", "Content-Type": "application/json" }                
+                headers: { "Accept": "application/json" }
             });
             if (response.ok === true) {
                 const user = await response.json();
-                document.getElementById("userId").value = user.Id;
-                document.getElementById("userLogin").value = user.Login;
-                document.getElementById("userPass").value = user.Password;
+                document.getElementById("userId").value = user.id;
+                document.getElementById("userLogin").value = user.login;
+                document.getElementById("userPass").value = user.password;
             }
             else {
                 const error = await response.json();
@@ -86,7 +86,7 @@
             });
             if (response.ok === true) {
                 const user = await response.json();
-                document.querySelector(`tr[data-rowid='${user.Id}']`).replaceWith(row(user));
+                document.querySelector(`tr[data-rowid='${user.id}']`).replaceWith(row(user));
             }
             else {
                 const error = await response.json();
@@ -100,16 +100,21 @@
             });
             if (response.ok === true) {
                 const user = await response.json();
-                document.querySelector(`tr[data-rowid='${user.Id}']`).remove();
+                document.querySelector(`tr[data-rowid='${user.id}']`).remove();
             }
             else {
                 const error = await response.json();
                 console.log(error.message);
             }
         }
+        function clear() {
+            document.getElementById("userId").value =
+            document.getElementById("userLogin").value =
+            document.getElementById("userPass").value = "";
+        }
         function row(user) {
             const tr = document.createElement("tr");
-            tr.setAttribute("data-rowid", user.Id);
+            tr.setAttribute("data-rowid", user.id);
 
             const tdLogin = document.createElement("td");
             tdLogin.append(user.Login);
@@ -118,41 +123,34 @@
             tdPass.append(user.Password);
             tr.append(tdPass);
 
-            const tdButtons = document.createElement("td");
-            const editButton = document.createElement("button");
-            editButton.append("ИЗМЕНИТЬ");
-            editButton.addEventListener("click", async () => await getUser(user.Id));
-            tdButtons.append(editButton);
+            const tdBtn = document.createElement("td");
+            const btnEdit = document.createElement("button");
+            btnEdit.append("EDIT");
+            btnEdit.addEventListener("click", async () => await getUser(user.id));
+            tdBtn.append(btnEdit);
+            const btnDrop = document.createElement("button");
+            btnDrop.append("DROP");
+            btnDrop.addEventListener("click", async () => await deleteUser(user.id));
+            tdBtn.append(btnDrop);
 
-            const dropButton = document.createElement("button");
-            dropButton.append("УДАЛИТЬ");
-            dropButton.addEventListener("click", async () => await dropUser(user.Id));
-            tdButtons.append(dropButton);
-            tr.appendChild(tdButtons);
-
+            tr.appendChild(tdBtn);
             return tr;
         }
-        function clear() {
-            document.getElementById("userId").value = "";
-            document.getElementById("userLogin").value = "";
-            document.getElementById("userPass").value = "";
-        }
-        document.getElementById("clearBtn").addEventListener("click", () => clear());
-
+        document.getElementById("clearBtn").addEventListener("click", async () => {
+            clear();
+        });
         document.getElementById("saveBtn").addEventListener("click", async () => {
             const id = document.getElementById("userId").value;
             const login = document.getElementById("userLogin").value;
             const password = document.getElementById("userPass").value;
-
             if (id === "") {
                 await addUser(login, password);
             }
             else {
                 await editUser(id, login, password);
-                clear();
             }
+            clear();
         });
-
         getUsers();
     </script>
 </body>
