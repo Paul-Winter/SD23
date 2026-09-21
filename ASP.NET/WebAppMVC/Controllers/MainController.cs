@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace WebAppMVC.Controllers
 {
@@ -6,9 +7,16 @@ namespace WebAppMVC.Controllers
     public class MainController : Controller
     {
         //[HttpGet]
-        public string Index()
+        public async Task Index()
         {
-            return "Hello, World!";
+            Response.ContentType = "text/html; charset=utf-8";
+            StringBuilder result = new StringBuilder("<h2>Request Headers</h2><table>");
+            foreach(var header in Request.Headers)
+            {
+                result.Append($"<tr><td>{header.Key}</td><td>{header.Value}</td></tr>");
+            }
+            result.Append("</table>");
+            await Response.WriteAsync(result.ToString());
         }
         //[HttpGet]
         public string Greet(string name)
