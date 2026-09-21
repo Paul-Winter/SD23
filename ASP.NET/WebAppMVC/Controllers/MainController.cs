@@ -5,19 +5,25 @@ namespace WebAppMVC.Controllers
     //[NonController] - отключаем контроллер
     public class MainController : Controller
     {
-        [HttpGet]
+        //[HttpGet]
         public string Index()
         {
-            return "This is Index action!";
+            return "Hello, World!";
+        }
+        //[HttpGet]
+        public string Greet(string name)
+        {
+            return $"Hello, {name}!";
         }
         //[ActionName("Greeting")] - меняем имя действия
-        [HttpPost]
+        //[HttpPost]
+        [NonAction]
         public string Hello()
         {
             return "Hello, World!";
         }
-        //[NonAction] // - отключаем действие (не все методы - действия)
-        [HttpDelete]
+        //[HttpDelete]
+        [NonAction] // - отключаем действие (не все методы - действия)
         public string Greeting()
         {
             return "Hello, User!";
