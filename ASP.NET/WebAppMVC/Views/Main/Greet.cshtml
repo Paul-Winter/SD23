@@ -2,6 +2,8 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    string studentName = "John";
+    string studentSurname = "Doe";
 }
 <DOCTYPE html>
     <html>
@@ -10,6 +12,7 @@
         <meta charset="utf-8" />
     </head>
     <body>
-        <h1>"Привет от программистов четвёртого курса!"</h1>
+        <h1>Сегодня @DateTime.Now.ToLongDateString()</h1>
+        <h2>@studentName @studentSurname</h2>
     </body>
 </html>
