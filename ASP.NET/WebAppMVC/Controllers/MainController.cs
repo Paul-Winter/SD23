@@ -6,18 +6,26 @@ namespace WebAppMVC.Controllers
     //[NonController] - отключаем контроллер
     public class MainController : Controller
     {
-        //[HttpGet]
+        [HttpGet]
         public async Task Index()
         {
             Response.ContentType = "text/html; charset=utf-8";
-            StringBuilder result = new StringBuilder("<h2>Request Headers</h2><table>");
-            foreach(var header in Request.Headers)
-            {
-                result.Append($"<tr><td>{header.Key}</td><td>{header.Value}</td></tr>");
-            }
-            result.Append("</table>");
-            await Response.WriteAsync(result.ToString());
+
+            string result = @"<form method='post'>
+            <label>Login:</label><br/>
+            <input name='login'/><br/>
+            <label>Password:</label><br/>
+            <input name='pass'/><br/>
+            <input type='submit' value='SEND'/>";
+
+            await Response.WriteAsync(result);
         }
+        [HttpPost]
+        public string Index(string login, string pass)
+        {
+            return $"Login: {login}\nPassword: {pass}";
+        }
+
         //[HttpGet]
         public string Greet(string name)
         {
