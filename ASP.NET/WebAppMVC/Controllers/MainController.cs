@@ -21,7 +21,7 @@ namespace WebAppMVC.Controllers
             await Response.WriteAsync(result);
         }
         [HttpPost]
-        public string Index(string login, string pass)
+        public string Index(string login, string pass) // наименования параметров должны совпадать с полями name
         {
             return $"Login: {login}\nPassword: {pass}";
         }
