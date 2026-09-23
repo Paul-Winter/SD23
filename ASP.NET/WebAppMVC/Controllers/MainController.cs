@@ -20,18 +20,18 @@ namespace WebAppMVC.Controllers
         //[HttpGet]
         public IActionResult Greet(string name)
         {
-            return new MainResult($"<h3>Not Found: {name}</h3>");
+            return View();
         }
         public IActionResult Meet()
         {
-            return new MainResult("<h2>403</h2>");
+            return View("~/Views/Home/Test.cshtml");
         }
         //[ActionName("Greeting")] - меняем имя действия
         //[HttpPost]
         //[NonAction]
         public IActionResult Hello()
         {
-            return new MainResult("<h1>Hello, World!</h1>");
+            return View("Greet");
         }
         //[HttpDelete]
         [NonAction] // - отключаем действие (не все методы - действия)
