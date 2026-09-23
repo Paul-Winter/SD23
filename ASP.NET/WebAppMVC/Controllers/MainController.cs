@@ -27,9 +27,13 @@ namespace WebAppMVC.Controllers
         }
 
         //[HttpGet]
-        public string Greet(string name)
+        public IActionResult Greet(string name)
         {
-            return $"Hello, {name}!";
+            return NotFound($"Not Found: {name}");
+        }
+        public IActionResult Meet()
+        {
+            return StatusCode(403);
         }
         //[ActionName("Greeting")] - меняем имя действия
         //[HttpPost]
