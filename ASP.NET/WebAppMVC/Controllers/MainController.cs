@@ -7,7 +7,7 @@ namespace WebAppMVC.Controllers
     public class MainController : Controller
     {
         [HttpGet]
-        public async Task Index()
+        public IActionResult Index()
         {
             Response.ContentType = "text/html; charset=utf-8";
 
@@ -18,12 +18,12 @@ namespace WebAppMVC.Controllers
             <input name='pass'/><br/>
             <input type='submit' value='SEND'/>";
 
-            await Response.WriteAsync(result);
+            return new MainResult(result);
         }
         [HttpPost]
-        public string Index(string login, string pass) // наименования параметров должны совпадать с полями name
+        public IActionResult Index(string login, string pass) // наименования параметров должны совпадать с полями name
         {
-            return $"Login: {login}\nPassword: {pass}";
+            return new MainResult($"<h2>Login: {login}</h2><h2>Password: {pass}</h2>");
         }
 
         //[HttpGet]
@@ -33,10 +33,10 @@ namespace WebAppMVC.Controllers
         }
         //[ActionName("Greeting")] - меняем имя действия
         //[HttpPost]
-        [NonAction]
-        public string Hello()
+        //[NonAction]
+        public IActionResult Hello()
         {
-            return "Hello, World!";
+            return new MainResult("<h1>Hello, World!</h1>");
         }
         //[HttpDelete]
         [NonAction] // - отключаем действие (не все методы - действия)
