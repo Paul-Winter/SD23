@@ -9,16 +9,7 @@ namespace WebAppMVC.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            Response.ContentType = "text/html; charset=utf-8";
-
-            string result = @"<form method='post'>
-            <label>Login:</label><br/>
-            <input name='login'/><br/>
-            <label>Password:</label><br/>
-            <input name='pass'/><br/>
-            <input type='submit' value='SEND'/>";
-
-            return new MainResult(result);
+            return View();
         }
         [HttpPost]
         public IActionResult Index(string login, string pass) // наименования параметров должны совпадать с полями name
@@ -29,11 +20,11 @@ namespace WebAppMVC.Controllers
         //[HttpGet]
         public IActionResult Greet(string name)
         {
-            return NotFound($"Not Found: {name}");
+            return new MainResult($"<h3>Not Found: {name}</h3>");
         }
         public IActionResult Meet()
         {
-            return StatusCode(403);
+            return new MainResult("<h2>403</h2>");
         }
         //[ActionName("Greeting")] - меняем имя действия
         //[HttpPost]
