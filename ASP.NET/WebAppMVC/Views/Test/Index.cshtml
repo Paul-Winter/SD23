@@ -12,7 +12,8 @@
         <meta charset="utf-8" />
     </head>
     <body>
-        <h1>работает тестовый контроллер:</h1>
+        <h1>@ViewData["Title"]</h1>
+        <h1>@ViewBag.Message:</h1>
         @if (now > 5 && now < 12)
             {
                 <h2>@morning</h2>
@@ -31,8 +32,49 @@
             }
 
         <h3>Сегодня: @DateTime.Now.ToLongDateString()</h3>
-        <p>2 + 2 = @(2 + 2)</p>
+        <p>2 + 2 = @Sum(2, 2)</p>
+        <p>2 - 2 = @Sub(2, 2)</p>
+        <p>2 * 2 = @Mult(2, 2)</p>
+        <p>2 / 2 = @Div(2, 2)</p>
         <p>@*comment*@</p>
         <p>Сейчас: @DateTime.Now.ToLongTimeString()</p>
+        @{
+            string[] students = {
+                "Александрова", "Антонов", "Золин", "Кубанов",
+                "Лушников", "Метелицин","Чавычалов"
+            };
+        }
+        <p>На паре присутствуют: @students.Length</p>
+        @*<ol>
+            @for (int i = 0; i < students.Length; i++)
+                {
+                    <li>@students[i]</li>
+                }
+        </ol> *@
+        <ul>
+            @foreach(var student in students)
+                {
+                    <li>@student</li>
+                }
+        </ul>
+        @functions
+            {
+            public int Sum(int x, int y)
+            {
+                return x + y;
+            }
+            public int Sub(int x, int y)
+            {
+                return x - y;
+            }
+            public int Mult(int x, int y)
+            {
+                return x * y;
+            }
+            public int Div(int x, int y)
+            {
+                return x / y;
+            }
+        }
     </body>
 </html>
