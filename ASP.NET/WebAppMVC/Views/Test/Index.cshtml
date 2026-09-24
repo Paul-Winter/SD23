@@ -1,0 +1,38 @@
+﻿@{
+    string morning = "Доброе утро!";
+    string day = "Добрый день!";
+    string evening = "Добрый вечер!";
+    string night = "Доброй ночи.";
+    int now = DateTime.Now.Hour;
+}
+<DOCTYPE html>
+    <html>
+    <head>
+        <title>IT TOP COLLEGE</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <h1>работает тестовый контроллер:</h1>
+        @if (now > 5 && now < 12)
+            {
+                <h2>@morning</h2>
+            }
+        else if (now > 12 && now < 18)
+            {
+                <h2>@day</h2>
+            }
+        else if (now > 18 && now < 24)
+            {
+                <h2>@evening</h2>
+            }
+        else
+            {
+                <h2>@night</h2>
+            }
+
+        <h3>Сегодня: @DateTime.Now.ToLongDateString()</h3>
+        <p>2 + 2 = @(2 + 2)</p>
+        <p>@*comment*@</p>
+        <p>Сейчас: @DateTime.Now.ToLongTimeString()</p>
+    </body>
+</html>
