@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>Пользователи:</h1>
+<table class="table">
+	<tr>
+		<td>Id</td>
+		<td>Login</td>
+		<td>Password</td>
+		<td>E-mail</td>
+		<td>Birth</td>
+		<td>Gender</td>
+		<td>Marriage</td>
+		<td>Programming Language</td>
+	</tr>
+	@foreach (var user in users)
+	{
+		<tr>
+			<td>@user.Id</td>
+			<td>@user.Login</td>
+			<td>@user.Password</td>
+			<td>@user.E-mail</td>
+			<td>@user.Birth</td>
+			<td>@user.Gender</td>
+			<td>@user.Marriage</td>
+			<td>@user.Programming Language</td>
+		</tr>
+	}
+</table>
