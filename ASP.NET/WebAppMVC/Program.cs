@@ -41,6 +41,10 @@ namespace WebAppMVC
                 name: "default",
                 pattern: "{controller=Test}/{action=Index}/{id?}")
                 .WithStaticAssets();
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Form}/{action=Index}/{id?}")
+                .WithStaticAssets();
 
             app.Run();
         }
