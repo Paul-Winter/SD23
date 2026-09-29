@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<form>
+    <h1>Отделы</h1>
+    <p>
+
+        <select name="DepartID">
+            @foreach(Depart depart in Model.Departs)
+                {
+                    <option value="@depart.Id">@depart.Name</option>
+                }
+            </select>
+    <input type="submit" />
+</form>
+	<table class="table">
+		<tr>
+			<td>Id</td>
+			<td>Name</td>
+			<td>BirthDate</td>
+
+		</tr>
+		@foreach (var emp in Model.Employees)
+		{
+			<tr>
+				<td>@emp.Id</td>
+				<td>@emp.Name</td>
+				<td>@emp.BirthDate</td>
+
+			</tr>
+		}
+	</table>
