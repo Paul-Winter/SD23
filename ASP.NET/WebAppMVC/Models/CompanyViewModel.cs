@@ -2,8 +2,8 @@
 {
     public class CompanyViewModel
     {
-        public IEnumerable<Employees> Employees { get; set; } = new List<Employees>();
-        public IEnumerable<Departs> Departs { get; set; } = new List<Departs>();
+        public IEnumerable<Employee> Employees { get; set; } = new List<Employee>();
+        public IEnumerable<Depart> Departs { get; set; } = new List<Depart>();
 
     }
 }

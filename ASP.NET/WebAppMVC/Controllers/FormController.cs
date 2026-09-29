@@ -12,7 +12,7 @@ namespace WebAppMVC.Controllers
             new User(23456, "Jack_Black", "12345", "black.j@umail.com", new DateOnly(2003, 03, 30), "male","no", "Python"),
             new User(43215, "JW", "asdf", "walker.johny@umail.com", new DateOnly(2010, 10, 20), "male","no", "Rust")
         };
-        List<Departs> departs = new List<Departs>
+        List<Depart> departs = new List<Depart>
         {
             new Departs(54321, )
         };
