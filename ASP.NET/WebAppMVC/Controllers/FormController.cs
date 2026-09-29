@@ -32,12 +32,13 @@ namespace WebAppMVC.Controllers
         public IActionResult Staff(int? departId)
         {
             List<Depart> companyDeparts = departs.Select(d => new Depart(d.Id, d.Name, d.Adress, d.Phone, d.Email)).ToList();
+            companyDeparts.Insert(0, new Depart(0, "ВСЕ ОТДЕЛЫ", "", "", ""));
             CompanyViewModel viewModel = new()
             {
                 Departs = companyDeparts,
                 Employees = employees
             };
-            if (departId != null && departId >= 0)
+            if (departId != null && departId > 0)
             {
                 viewModel.Employees = employees.Where(e => e.Depart.Id == departId);
             }

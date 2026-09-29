@@ -6,7 +6,6 @@
 <form>
     <h1>Отделы</h1>
     <p>
-
         <select name="DepartID">
             @foreach(Depart depart in Model.Departs)
                 {
@@ -15,20 +14,19 @@
             </select>
     <input type="submit" />
 </form>
-	<table class="table">
+<table class="table">
+	<tr>
+		<td>Id</td>
+		<td>Name</td>
+		<td>BirthDate</td>
+	</tr>
+	@foreach (var emp in Model.Employees)
+	{
 		<tr>
-			<td>Id</td>
-			<td>Name</td>
-			<td>BirthDate</td>
+			<td>@emp.Id</td>
+			<td>@emp.Name</td>
+			<td>@emp.BirthDate</td>
 
 		</tr>
-		@foreach (var emp in Model.Employees)
-		{
-			<tr>
-				<td>@emp.Id</td>
-				<td>@emp.Name</td>
-				<td>@emp.BirthDate</td>
-
-			</tr>
-		}
-	</table>
+	}
+</table>
