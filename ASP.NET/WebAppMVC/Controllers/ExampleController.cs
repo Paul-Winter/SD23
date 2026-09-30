@@ -11,7 +11,7 @@ namespace WebAppMVC.Controllers
         //}
         public string Index(Person person)
         {
-            return $"Person is {person.Name}";
+            return $"{person}";
         }
     }
 }
