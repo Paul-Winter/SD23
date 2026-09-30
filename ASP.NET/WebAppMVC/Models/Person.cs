@@ -6,6 +6,7 @@ namespace WebAppMVC.Models
     {
         [BindRequired]
         public string Name { get; set; }
+        [BindingBehavior(BindingBehavior.Optional)]
         public string Surname { get; set; }
         public string Email { get; set; }
         [BindNever]
