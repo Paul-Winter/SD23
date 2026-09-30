@@ -3,8 +3,19 @@
 *@
 @using WebAppMVC.Models
 
-<div class="text">
-    <h1>Добро пожаловать, @Model.Name @Model.Surname!</h1>
-    <p>или</p>
-    <h2>посторонним вход воспрещён!</h2>
-</div>
+
+<h1>PERSONS:</h1>
+<p><a asp-action="Add">add person</a></p>
+<table>
+    <tr><th>Name</th><th>Surname</th><th>Birth date</th><th>E-mail</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Surname</td>
+            <td>@item.BirthDate</td>
+            <td>@item.Email</td>
+        </tr>
+    }
+</table>
+

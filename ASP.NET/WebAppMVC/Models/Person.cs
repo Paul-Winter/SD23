@@ -9,7 +9,7 @@ namespace WebAppMVC.Models
         public string Surname { get; set; }
         [BindingBehavior(BindingBehavior.Optional)]
         public string Email { get; set; }
-        [BindNever]
+        //[BindNever]
         public DateOnly BirthDate { get; set; }
 
         public Person(string name, string surname)

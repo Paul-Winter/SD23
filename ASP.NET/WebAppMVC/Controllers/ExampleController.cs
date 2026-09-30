@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebAppMVC.Models;
 
 namespace WebAppMVC.Controllers
@@ -10,14 +11,25 @@ namespace WebAppMVC.Controllers
         {
             db = context;
         }
-        public IActionResult Index(Person person)
+        public async Task<IActionResult> Index()
         {
-            return View(person);
+            return View(await db.Persons.ToListAsync());
         }
-        //public string Index(Person person)
+        //public IActionResult Index(Person person)
         //{
-        //    return $"{person}";
+        //    return View(person);
         //}
+        public IActionResult Add()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(Person person)
+        {
+            db.Persons.Add(person);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
         public IActionResult Helper()
         {
             return View();
