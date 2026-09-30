@@ -5,13 +5,13 @@ namespace WebAppMVC.Controllers
 {
     public class ExampleController : Controller
     {
-        //public IActionResult Index(Person person)
-        //{
-        //    return View(person);
-        //}
-        public string Index(Person person)
+        public IActionResult Index(Person person)
         {
-            return $"{person}";
+            return View(person);
         }
+        //public string Index(Person person)
+        //{
+        //    return $"{person}";
+        //}
     }
 }
