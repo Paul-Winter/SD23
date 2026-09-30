@@ -3,10 +3,9 @@ using System.Reflection;
 
 namespace WebAppMVC.Models
 {
-    public class Depart
+    public class Depart : Human
     {
         public int Id { get; set; }
-        public string Name { get; set; }
         public string Adress { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }

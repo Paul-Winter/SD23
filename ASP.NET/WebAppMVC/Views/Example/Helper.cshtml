@@ -5,7 +5,7 @@
 }
 @using WebAppMVC.Models
 
-<h1>Студенты группы 9/4-РПО-23/1:</h1>
+<h1>Работает html-helper метод:</h1>
 @{
     string[] students = new string[]
     {
@@ -13,6 +13,25 @@
         "Золин", "Красицкий", "Кубанов", "Лушников",
         "Метелицин", "Чавычалов", "Юнусов"
     };
+
+    Depart d1 = new Depart(54321, "TestingOtdel", "street.Bogdavov", "+7 785-394-192", "testing@mail.ru");
+    Human[] humans = new Human[]
+    {
+            new Person("John", "Doe"),
+            new Person("Johny", "Walker"),
+            new Person("Jack", "Black"),
+            new Depart(54321, "TestingOtdel", "street.Bogdavov", "+7 785-394-192", "testing@mail.ru"),
+            new Depart(92643, "DevelopOtdel", "street.Pushkina", "+7 909-906-240", "develop@mail.ru"),
+            new Depart(92570, "RPO-Otdel", "street.Kulakova", "+7 420-185-934", "rpo@mail.com"),
+            new Employee(3518, "Vova Vist", new DateOnly(2001, 12, 23), d1),
+            new Employee(7412, "Dima Kurnosov", new DateOnly(1999, 06, 13), d1),
+            new Employee(6882, "Oleg Ruslanovich", new DateOnly(2003, 02, 28), d1),
+            new Employee(1287, "Arseniy Zorkin", new DateOnly(2003, 09, 06), d1),
+            new Employee(7384, "Artem Vadimovich", new DateOnly(1998, 02, 11), d1),
+            new Employee(5394, "Oleg Mongol", new DateOnly(2004, 04, 18), d1),
+            new Employee(2983, "Denis Denisovich", new DateOnly(2002, 08, 26), d1)
+    };
 }
-@Html.EnumHelp(students)
+@* @Html.EnumHelp(students) *@
+@Html.EnumHelp(humans)
 <h3>------------конец списка------------</h3>

@@ -2,10 +2,9 @@
 
 namespace WebAppMVC.Models
 {
-    public class Employee
+    public class Employee : Human
     {
         public int Id { get; set; }
-        public string Name { get; set; }
         public DateOnly BirthDate { get; set; }
         public Depart Depart { get; set; }
         public Employee(int id, string name, DateOnly birthdate, Depart departs)

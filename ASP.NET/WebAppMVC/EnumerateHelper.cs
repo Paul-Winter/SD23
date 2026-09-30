@@ -6,12 +6,12 @@ namespace WebAppMVC
 {
     public static class EnumerateHelper
     {
-        public static HtmlString EnumHelp(this IHtmlHelper html, string[] items)
+        public static HtmlString EnumHelp(this IHtmlHelper html, Human[] items)
         {
             string resultHtml = "<ul>";
             foreach (var item in items)
             {
-                resultHtml += $"<li>{item}</li>";
+                resultHtml += $"<li>{item.ToString()}</li>";
             }
             resultHtml += "</ul>";
             return new HtmlString(resultHtml);
