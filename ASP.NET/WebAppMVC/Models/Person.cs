@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Collections;
 
 namespace WebAppMVC.Models
 {

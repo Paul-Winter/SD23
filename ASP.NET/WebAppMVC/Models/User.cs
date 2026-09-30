@@ -1,4 +1,6 @@
-﻿namespace WebAppMVC.Models
+﻿using System.Collections;
+
+namespace WebAppMVC.Models
 {
     public class User
     {

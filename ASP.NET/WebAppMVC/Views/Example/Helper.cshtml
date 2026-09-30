@@ -1,0 +1,18 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using WebAppMVC.Models
+
+<h1>Студенты группы 9/4-РПО-23/1:</h1>
+@{
+    string[] students = new string[]
+    {
+        "Александрова", "Антонов", "Духина", "Землянский",
+        "Золин", "Красицкий", "Кубанов", "Лушников",
+        "Метелицин", "Чавычалов", "Юнусов"
+    };
+}
+@Html.EnumHelp(students)
+<h3>------------конец списка------------</h3>

@@ -1,4 +1,6 @@
-﻿namespace WebAppMVC.Models
+﻿using System.Collections;
+
+namespace WebAppMVC.Models
 {
     public class Employee
     {
@@ -18,6 +20,5 @@
             return $"Id: {Id};\nName: {Name};\nBirthDate: {BirthDate};\n" +
                    $"Depart: {Depart};\n";
         }
-
     }
 }
