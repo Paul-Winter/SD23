@@ -1,6 +1,30 @@
 ﻿@page
+@using RazorPages
 @model RazorPages.Pages.Test.IndexModel
 @{
+	Student[] students = new Student[]
+	{
+		new Student(1, "Кристина Владимировна", "Александрова"),
+		new Student(2, "Арсений Вадимович", "Антонов"),
+		new Student(3, "Анастасия Сергеевна", "Духина"),
+		new Student(4, "Денис Юрьевич", "Землянский"),
+		new Student(5, "Денис Львович", "Золин"),
+		new Student(6, "Кирилл Игоревич", "Красицкий"),
+		new Student(7, "Альберт Азрет-Алиевич", "Кубанов"),
+		new Student(8, "Олег Алексеевич", "Лушников"),
+		new Student(9, "Захар Дмитриевич", "Метелицин"),
+		new Student(10, "Владислав Сергеевич", "Чавычалов"),
+		new Student(11, "Юсуп Шамилевич", "Юнусов")
+	};
+}
+@functions{
+	void Print(Student[] students)
+	{
+		foreach (var student in students)
+		{
+			<p><b>@student.ToString()</b></p>
+		}
+	}
 }
 <!DOCTYPE  html>
 <html>
@@ -10,8 +34,15 @@
 </head>
 <body>
 	<h2>Index page from Test directory</h2>
-	<h3>@@DateTime.Now: @DateTime.Now.ToLongDateString()</h3>
-	<h3>2 + 2 = <text>@@(2 + 2)</text></h3>
+	<h3>Today: @DateTime.Now.ToLongDateString()</h3>
+	<h3>2 + 2 = <text>@(2 + 2)</text></h3>
 	@*комментарий к коду*@
+	<p>
+		@if (true)
+		{
+			@:Hello, World!
+		}
+	</p>
+	@{Print(students);}
 </body>
 </html>
