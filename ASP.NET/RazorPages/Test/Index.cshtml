@@ -26,7 +26,7 @@
 		}
 	}
 }
-<!DOCTYPE  html>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>IT TOP College</title>
@@ -34,7 +34,11 @@
 </head>
 <body>
 	<h2>Index page from Test directory</h2>
-	<h3>Вызов метода из модели: @Model.PrintMessage()</h3>
+	<h2>Вызов метода из модели: @Model.PrintMessage()</h2>
+	<form method="post">
+		<input type="text" name="login"/>
+		<input type="submit" value="SEND"/>
+	</form>
 	<h3>2 + 2 = <text>@(2 + 2)</text></h3>
 	<p>@Model.Message</p>
 	@{Print(students);}
