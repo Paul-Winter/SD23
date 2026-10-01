@@ -7,7 +7,7 @@ namespace RazorPages
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddRazorPages();
+            builder.Services.AddRazorPages(options => options.RootDirectory = "/Test");
 
             var app = builder.Build();
 

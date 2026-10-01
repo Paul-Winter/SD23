@@ -3,15 +3,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorPages.Pages
 {
-    public class IndexModel : PageModel
+    public class AboutModel : PageModel
     {
         public void OnGet()
         {
-
-        }
-        public void OnPost()
-        {
-
         }
     }
 }

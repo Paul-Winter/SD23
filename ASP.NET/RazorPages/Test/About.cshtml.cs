@@ -1,17 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace RazorPages.Pages
+namespace RazorPages.Pages.Test
 {
-    public class IndexModel : PageModel
+    public class AboutModel : PageModel
     {
         public void OnGet()
         {
-
-        }
-        public void OnPost()
-        {
-
         }
     }
 }
