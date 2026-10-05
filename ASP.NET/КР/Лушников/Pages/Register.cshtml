@@ -1,0 +1,32 @@
+﻿@page
+@model StavZoo.Pages.RegisterModel
+
+<div class="auth-container">
+    <h1>📝 Регистрация</h1>
+
+    @if (Model.Error != null)
+    {
+        <div class="error-message">@Model.Error</div>
+    }
+
+    <form method="post">
+        <p>
+            <strong>Имя пользователя:</strong><br />
+            <input type="text" name="username" />
+        </p>
+        <p>
+            <strong>Пароль:</strong><br />
+            <input type="password" name="password" />
+        </p>
+        <p>
+            <strong>Роль:</strong><br />
+            <select name="role">
+                <option value="Visitor">Visitor (посетитель)</option>
+                <option value="Zookeeper">Zookeeper (сотрудник)</option>
+            </select>
+        </p>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
+    <p><a href="/login">Уже есть аккаунт? Войти</a></p>
+</div>

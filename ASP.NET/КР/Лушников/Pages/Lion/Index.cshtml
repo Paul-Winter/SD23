@@ -1,0 +1,171 @@
+﻿@page "/stav-zoo/{animalName}"
+@model StavZoo.Pages.Lion.IndexModel
+
+@if (Model.Animal == null)
+{
+    <h1>Животное не найдено</h1>
+    <p><a href="/">← На главную</a></p>
+}
+else
+{
+    <h1>@Model.Animal.Name</h1>
+
+    @if (!string.IsNullOrEmpty(Model.Animal.PhotoUrl))
+    {
+        <img src="@Model.Animal.PhotoUrl" alt="@Model.Animal.Name" class="animal-photo" />
+    }
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="upload-form">
+            <form method="post" asp-page-handler="UploadPhoto" enctype="multipart/form-data">
+                <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
+                <p>
+                    <strong>Загрузить фото:</strong><br />
+                    <input type="file" name="photo" accept="image/*" style="max-width:300px;" />
+                </p>
+                <button type="submit">Загрузить</button>
+            </form>
+        </div>
+    }
+
+    <h2>История особи</h2>
+    <div class="info-block">
+        <p>@Model.Animal.Description</p>
+    </div>
+
+    <h2>Основные факты</h2>
+    <div class="info-block">
+        <p><strong>Дата рождения:</strong> @Model.Animal.BirthDate.ToString("dd.MM.yyyy")</p>
+        <p><strong>Мать:</strong> @Model.Animal.MotherName</p>
+        <p><strong>Отец:</strong> Симба</p>
+        <p><strong>Вес при рождении львят:</strong> около 1,5 кг</p>
+        <p><strong>Рацион:</strong> мясо, кости, первый прикорм — кусочки мяса на кости</p>
+    </div>
+
+    <h2>Видео</h2>
+    @if (string.IsNullOrEmpty(Model.Animal.VideoUrl))
+    {
+        <div class="info-block">
+            <p><em>Видео пока не добавлено. Сотрудники зоопарка скоро загрузят новые ролики с Киарой и её львятами.</em></p>
+        </div>
+    }
+    else
+    {
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
+            <iframe src="@Model.Animal.VideoUrl"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                    frameborder="0"
+                    allow="clipboard-write; autoplay; encrypted-media; fullscreen; picture-in-picture;"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    }
+
+    <h2>Наблюдение через веб-камеру</h2>
+    @if (string.IsNullOrEmpty(Model.Animal.WebcamUrl))
+    {
+        <p><em>Веб-камера временно недоступна.</em></p>
+    }
+    else
+    {
+        <iframe src="@Model.Animal.WebcamUrl"
+                width="640" height="360"
+                frameborder="0"
+                allowfullscreen
+                style="max-width:100%; border-radius:8px;"></iframe>
+    }
+
+    <div class="donation-block">
+        <h2 style="margin-top:0;">❤ Поддержать @Model.Animal.Name</h2>
+
+        <p>Собрано на корм и лечение: <span class="donation-amount">@Model.TotalDonated ₽</span></p>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="success-message">@TempData["Message"]</div>
+        }
+
+        @if (Model.EditDonationId != 0)
+        {
+            <h3>✏ Редактирование доната №@Model.EditDonationId</h3>
+            <form method="post" asp-page-handler="EditDonation">
+                <input type="hidden" name="id" value="@Model.EditDonationId" />
+                <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
+                <p>
+                    <strong>Сумма, ₽:</strong><br />
+                    <input type="number" name="amount" value="@Model.EditDonationAmount" min="1" style="max-width:200px;" />
+                </p>
+                <button type="submit">Сохранить</button>
+                <a href="/stav-zoo/@Model.Animal.Slug" style="margin-left:1rem;">Отмена</a>
+            </form>
+        }
+        else
+        {
+            <form method="post" asp-page-handler="Donate">
+                <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
+                <input type="number" name="amount" min="1" placeholder="Сумма, ₽" style="max-width:200px;" />
+                <button type="submit">Отправить донат</button>
+            </form>
+        }
+
+        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Zookeeper"))
+        {
+            <hr style="margin:1.5rem 0;" />
+            <h3>📋 История донатов</h3>
+
+            @if (Model.DonationList.Count == 0)
+            {
+                <p><em>Донатов пока нет.</em></p>
+            }
+            else
+            {
+                <form method="post" asp-page-handler="ClearDonations" style="margin-bottom:1rem;">
+                    <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
+                    <button type="submit"
+                            onclick="return confirm('Удалить ВСЕ донаты для @Model.Animal.Name? Это действие нельзя отменить.');"
+                            style="background:#c62828; color:white; padding:0.5rem 1rem; border-radius:6px; border:none; cursor:pointer;">
+                        🗑 Очистить все донаты
+                    </button>
+                </form>
+
+                <table class="diary-table">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Сумма</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model.DonationList)
+                        {
+                            <tr>
+                                <td>@d.DonatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                <td><strong>@d.Amount ₽</strong></td>
+                                <td>
+                                    <a class="btn-edit" href="/stav-zoo/@Model.Animal.Slug?editDonationId=@d.Id">Редактировать</a>
+                                    <form method="post" asp-page-handler="DeleteDonation" style="display:inline;">
+                                        <input type="hidden" name="id" value="@d.Id" />
+                                        <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
+                                        <button type="submit" class="btn-delete"
+                                                onclick="return confirm('Удалить этот донат?');">
+                                            Удалить
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+
+    <hr />
+    <p>
+        <a href="/stav-zoo/@Model.Animal.Slug/diary">📖 Дневник (для сотрудников)</a>
+        &nbsp;·&nbsp;
+        <a href="/login">🔐 Вход для сотрудников</a>
+    </p>
+}
