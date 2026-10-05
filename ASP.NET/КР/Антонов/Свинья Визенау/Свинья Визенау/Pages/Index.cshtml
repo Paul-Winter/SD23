@@ -1,0 +1,16 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Зоопарк";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Добро пожаловать в зоопарк!</h1>
+    <p class="lead">Наши обитатели:</p>
+</div>
+
+<ul class="list-group mt-4">
+    <li class="list-group-item">
+        <a asp-page="/Animals/Details" asp-route-slug="wizenau">Поросёнок Визенау</a>
+    </li>
+</ul>

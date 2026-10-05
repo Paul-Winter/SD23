@@ -1,0 +1,27 @@
+﻿@page "/{slug}"
+@model Свинья_Визенау.Pages.Animals.DetailsModel
+@{
+    ViewData["Title"] = Model.Animal.Name;
+}
+
+<h1>@Model.Animal.Name</h1>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <img src="/images/wizenau.jpg"
+             alt="@Model.Animal.Name"
+             class="img-fluid rounded shadow-sm"
+             style="max-height: 400px; object-fit: cover;" />
+    </div>
+    <div class="col-md-6">
+        <p>@Model.Animal.Description</p>
+        <p>
+            <strong>В зоопарке с:</strong>
+            @Model.Animal.ArrivedAt.ToString("dd.MM.yyyy")
+        </p>
+    </div>
+</div>
+
+<p class="mt-4">
+    <a asp-page="/Index" class="btn btn-secondary">← На главную</a>
+</p>
