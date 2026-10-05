@@ -1,0 +1,40 @@
+@page "/{slug}"
+@model ZooRabbit.Web.Pages.AnimalModel
+@{ ViewData["Title"] = Model.Animal?.Name; }
+
+@if (Model.Animal is { } a)
+{
+    <h1>@a.Name <small>— @a.Species</small></h1>
+
+    <section class="card">
+        <h2>История</h2>
+        <p>@a.Description</p>
+    </section>
+
+    <section class="card">
+        <h2>Фото</h2>
+        @if (a.PhotoUrl != null) { <img src="@a.PhotoUrl" alt="@a.Name" /> }
+        else { <div class="placeholder">Фото скоро появится</div> }
+    </section>
+
+    <section class="card">
+        <h2>Видео</h2>
+        @if (a.VideoUrl != null) { <video src="@a.VideoUrl" controls></video> }
+        else { <div class="placeholder">Видео скоро появится</div> }
+    </section>
+
+    <section class="card">
+        <h2>Веб-камера</h2>
+        <div class="placeholder">Трансляция будет здесь</div>
+    </section>
+
+    <section class="card">
+        <h2>Помочь питомцу</h2>
+        <div class="placeholder">Донат на корм/лечение (будет добавлен)</div>
+    </section>
+
+}
+else
+{
+    <h1>Животное не найдено</h1>
+}
