@@ -1,0 +1,10 @@
+body{font-family:system-ui,sans-serif;margin:0;background:#f6f4ee;color:#222}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#2f5d3a}
+header a{color:#fff;text-decoration:none;margin-right:16px}
+.logo{font-weight:700;font-size:1.2rem}
+main{max-width:900px;margin:24px auto;padding:0 16px}
+.card{background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px #0002}
+.placeholder{background:#eee;border:2px dashed #bbb;border-radius:6px;padding:40px;text-align:center;color:#777}
+img,video{max-width:100%;border-radius:6px}
+small{color:#666;font-weight:400;font-size:.55em}
+footer{text-align:center;color:#777;padding:24px}

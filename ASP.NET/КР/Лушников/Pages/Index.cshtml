@@ -1,0 +1,71 @@
+﻿@page
+@model IndexModel
+
+<div class="hero">
+    <h1>🦁 Ставропольский зоопарк</h1>
+    <p class="hero-subtitle">Парк Победы — один из крупнейших парков России</p>
+    <p class="hero-text">
+        Более 50 видов животных, птиц и рептилий на площади 200 гектаров.
+        Мы работаем на полной самоокупаемости — все средства идут на содержание животных.
+    </p>
+</div>
+
+<h2>Наши обитатели</h2>
+
+@if (Model.Animals.Count == 0)
+{
+    <p>В базе пока нет животных.</p>
+}
+else
+{
+    <ul class="animal-grid">
+        @foreach (var animal in Model.Animals)
+        {
+            <li class="animal-card">
+                <a href="/stav-zoo/@animal.Slug">
+                    @if (!string.IsNullOrEmpty(animal.PhotoUrl))
+                    {
+                        <img src="@animal.PhotoUrl" alt="@animal.Name" class="animal-card-photo" />
+                    }
+                    else
+                    {
+                        <div class="animal-card-placeholder">🦁</div>
+                    }
+                    <div class="animal-card-name">@animal.Name</div>
+                </a>
+            </li>
+        }
+    </ul>
+}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">@Model.Animals.Count</div>
+        <div class="stat-label">обитателей в базе</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">@Model.TotalDonated ₽</div>
+        <div class="stat-label">собрано донатов</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">1978</div>
+        <div class="stat-label">год основания</div>
+    </div>
+</div>
+
+<h2>История зоопарка</h2>
+<div class="info-block">
+    <p><strong>Ставропольский зоопарк</strong> расположен в парке Победы. Он был основан в 1978 году, когда дрессировщик Рубан подарил городу двух львов после того, как ставропольские ветеринары спасли его белую медведицу Звёздочку.</p>
+    <p>Сегодня здесь обитают более 50 видов животных, птиц и рептилий. Зоопарк работает на полной самоокупаемости — все заработанные средства идут на содержание животных и пополнение коллекции.</p>
+    <p>В мае 2025 года в зоопарке произошёл настоящий «беби-бум»: родилось 13 детёнышей, в том числе трое львят у молодой самки Киары.</p>
+</div>
+
+<h2>Как помочь зоопарку</h2>
+<div class="info-block">
+    <p>Вы можете поддержать наших животных — любой донат идёт на корм, витамины и лечение.</p>
+    <p>Перейдите на страницу любого животного, чтобы отправить донат.</p>
+</div>
+
+<hr />
+<h2>Сотрудникам</h2>
+<p><a href="/login">Вход в систему</a> · <a href="/register">Регистрация</a></p>

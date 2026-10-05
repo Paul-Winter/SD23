@@ -1,0 +1,97 @@
+﻿@page "/stav-zoo/{animalName}/diary"
+@model StavZoo.Pages.Lion.DiaryModel
+
+<h1>📖 Дневник особи: @Model.AnimalName</h1>
+
+@if (Model.EditId == 0)
+{
+    <h2>Добавить запись</h2>
+
+    <form method="post">
+        <input type="hidden" name="animalName" value="@Model.AnimalName" />
+        <p>
+            <strong>Тип записи:</strong><br />
+            <select name="entryType">
+                <option>Кормление</option>
+                <option>Спаривание</option>
+                <option>Потомство</option>
+                <option>Здоровье</option>
+            </select>
+        </p>
+        <p>
+            <strong>Заметка:</strong><br />
+            <textarea name="notes" rows="4" placeholder="Что произошло?"></textarea>
+        </p>
+        <button type="submit">Сохранить</button>
+    </form>
+}
+else
+{
+    <h2>✏ Редактирование записи №@Model.EditId</h2>
+
+    <form method="post" asp-page-handler="Edit">
+        <input type="hidden" name="id" value="@Model.EditId" />
+        <input type="hidden" name="animalName" value="@Model.AnimalName" />
+        <p>
+            <strong>Тип записи:</strong><br />
+            <select name="entryType">
+                <option selected="@(Model.EditType == "Кормление")">Кормление</option>
+                <option selected="@(Model.EditType == "Спаривание")">Спаривание</option>
+                <option selected="@(Model.EditType == "Потомство")">Потомство</option>
+                <option selected="@(Model.EditType == "Здоровье")">Здоровье</option>
+            </select>
+        </p>
+        <p>
+            <strong>Заметка:</strong><br />
+            <textarea name="notes" rows="4">@Model.EditNotes</textarea>
+        </p>
+        <button type="submit">Сохранить изменения</button>
+        <a href="/stav-zoo/@Model.AnimalName/diary" style="margin-left:1rem;">Отмена</a>
+    </form>
+}
+
+<h2>История</h2>
+
+@if (Model.Entries.Count == 0)
+{
+    <p><em>Записей пока нет.</em></p>
+}
+else
+{
+    <table class="diary-table">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th>Заметка</th>
+                <th>Автор</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model.Entries)
+            {
+                <tr>
+                    <td>@e.RecordedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@e.EntryType</td>
+                    <td>@e.Notes</td>
+                    <td>@e.RecordedBy</td>
+                    <td>
+                        <a class="btn-edit" href="/stav-zoo/@Model.AnimalName/diary?editId=@e.Id">Редактировать</a>
+                        <form method="post" asp-page-handler="Delete" style="display:inline;">
+                            <input type="hidden" name="id" value="@e.Id" />
+                            <input type="hidden" name="animalName" value="@Model.AnimalName" />
+                            <button type="submit" class="btn-delete"
+                                    onclick="return confirm('Удалить запись?');">
+                                Удалить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+<p><a href="/stav-zoo/@Model.AnimalName">← К странице животного</a></p>
