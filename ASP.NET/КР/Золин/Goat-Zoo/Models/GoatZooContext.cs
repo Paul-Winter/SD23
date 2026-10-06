@@ -6,15 +6,18 @@ namespace Goat_Zoo.Models
     {
         public GoatZooContext(DbContextOptions<GoatZooContext> options) : base(options) { }
 
-        public DbSet<User> Users => Set<User>();
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Note> Notes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.HasIndex(u => u.Login).IsUnique();
-                entity.HasIndex(u => u.Email).IsUnique();
-            });
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Login)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
     }
 }
