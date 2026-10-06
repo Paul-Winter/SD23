@@ -5,4 +5,150 @@
     ViewData["Title"] = "Камера";
 }
 
-<h2>Webcam</h2>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #fdf6ec;
+                color: #3d2b1f;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            h1 {
+                color: #8b3e2f;
+                text-align: center;
+                border-bottom: 3px solid #e0a96d;
+                padding-bottom: 10px;
+            }
+
+            h2 {
+                color: #a0432f;
+                margin-top: 0;
+            }
+
+            .goat-story, .info-block {
+                background-color: #fffaf3;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(139, 62, 47, 0.15);
+                padding: 25px;
+                margin-bottom: 30px;
+                border-left: 5px solid #c96f4a;
+            }
+
+                .goat-story p, .info-block p {
+                    line-height: 1.7;
+                    text-align: justify;
+                }
+
+                .info-block ul {
+                    line-height: 1.8;
+                    padding-left: 20px;
+                }
+
+                .info-block li {
+                    margin-bottom: 6px;
+                }
+
+            .highlight {
+                background-color: #f7d9b6;
+                color: #6b2d1e;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-weight: 600;
+            }
+
+            .stream-container {
+                background-color: #fbe8d3;
+                border-radius: 10px;
+                padding: 15px;
+                box-shadow: 0 2px 6px rgba(139, 62, 47, 0.12);
+                margin: 30px 0;
+            }
+
+                .stream-container iframe {
+                    width: 100%;
+                    height: 480px;
+                    border: none;
+                    border-radius: 8px;
+                    background-color: #000;
+                }
+
+            .source-note {
+                font-size: 0.8em;
+                color: #8a6f5c;
+                margin-top: 5px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐐 Камерунские козы — прямая трансляция</h1>
+
+        <div class="goat-story">
+            <h2>Live-трансляция с фермы Syman Says Farms</h2>
+            <p>
+                Прямая трансляция ведётся с семейной молочной фермы
+                <span class="highlight">Syman Says Farms</span> в городе Сейлем,
+                штат Коннектикут, США. Камера установлена в главном амбаре
+                (Cassie’s Castle) и работает <strong>круглосуточно, 365 дней в году</strong>.
+            </p>
+            <p>
+                Вы можете наблюдать за повседневной жизнью стада молочных коз:
+                как они играют, едят, отдыхают и общаются друг с другом. Ферма
+                также известна тем, что в сезон отёла проводит прямые трансляции
+                рождения козлят и позволяет зрителям следить за их ростом[reference:4].
+            </p>
+        </div>
+
+        <div class="stream-container">
+            <h2>📺 Прямой эфир</h2>
+            <iframe src="https://player.twitch.tv/?channel=thegoatchick&parent=@Context.Request.Host.Host&muted=true&autoplay=true"
+                    title="TheGoatChick — Twin Willows Farm goat cam"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+            <p class="source-note">
+                Источник: Twitch-канал
+                <a href="https://www.twitch.tv/thegoatchick" target="_blank" rel="noopener">TheGoatChick</a>
+                (Twin Willows Farm, Индиана, США)
+            </p>
+        </div>
+
+        <div class="info-block">
+            <h2>📖 О трансляции и её обитателях</h2>
+            <p>
+                <strong>Syman Says Farms</strong> — это небольшая семейная ферма,
+                специализирующаяся на разведении молочных коз. Их канал на YouTube
+                стал популярен благодаря круглосуточным трансляциям из амбара,
+                которые позволяют зрителям со всего мира наблюдать за животными
+                в режиме реального времени.
+            </p>
+            <ul>
+                <li><strong>Время работы камеры:</strong> 24/7, без выходных.</li>
+                <li><strong>Разрешение:</strong> HD, с возможностью полноэкранного просмотра.</li>
+                <li><strong>Ночной режим:</strong> инфракрасная подсветка для съёмки в темноте.</li>
+                <li><strong>Порода:</strong> смешанное стадо молочных коз.</li>
+                <li><strong>Особенность:</strong> возможность наблюдать за рождением козлят в прямом эфире в сезон отёла.</li>
+            </ul>
+            <p>
+                Если вы хотите узнать больше о камерунских козах и их содержании в
+                Ставропольском зоопарке, вернитесь на <a href="/">главную страницу</a>
+                — там собрана подробная информация об истории Яши и Бяши, а также
+                справочные сведения о породе.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

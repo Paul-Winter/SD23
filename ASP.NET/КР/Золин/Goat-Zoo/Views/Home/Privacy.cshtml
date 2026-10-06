@@ -1,6 +1,58 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Политика конфиденциальности";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #fdf6ec;
+                color: #3d2b1f;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            h1 {
+                color: #8b3e2f;
+                text-align: center;
+                border-bottom: 3px solid #e0a96d;
+                padding-bottom: 10px;
+            }
+
+            .info-block {
+                background-color: #fffaf3;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(139, 62, 47, 0.15);
+                padding: 25px;
+                margin-bottom: 30px;
+                border-left: 5px solid #c96f4a;
+            }
+
+                .info-block p {
+                    line-height: 1.7;
+                    text-align: justify;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Политика конфиденциальности</h1>
+
+        <div class="info-block">
+            <p>Мы безопасно храним ваши данные и не передаём их третьим лицам.</p>
+            <p>Если у вас есть вопросы, свяжитесь с администрацией зоопарка.</p>
+        </div>
+    </div>
+</body>
+</html>
