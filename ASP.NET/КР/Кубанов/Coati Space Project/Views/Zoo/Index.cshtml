@@ -1,0 +1,40 @@
+@model Coati_Space_Project.Models.Coati
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm border">
+    <div class="container-fluid py-2">
+        <div class="text-success fw-semibold text-uppercase small mb-2">Ставропольский зоопарк</div>
+        <h1 class="display-5 fw-bold text-dark">Интерактивный портал обитателей зоопарка</h1>
+        <p class="col-md-9 fs-5 text-secondary">
+            Наш зоопарк знакомит жителей и гостей региона с удивительными представителями фауны со всего мира.
+            В рамках цифровой платформы зоопарка открыт специальный раздел, посвящённый нашему обаятельному обитателю сектора «Южная Америка» — носухе по кличке Хахатуха.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <a asp-controller="Zoo" asp-action="Coati" class="btn btn-success btn-lg px-4 shadow-sm">
+                Перейти к наблюдению за носухой
+            </a>
+            <a href="#about-zoo" class="btn btn-outline-secondary btn-lg px-4">
+                О зоопарке
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row align-items-md-stretch mb-4" id="about-zoo">
+    <div class="col-md-6 mb-3">
+        <div class="h-100 p-4 text-white bg-dark rounded-3 shadow-sm">
+            <h3 class="text-white">Сектор «Южная Америка»</h3>
+            <p class="text-white-50">Уникальный климатический павильон, воссоздающий атмосферу влажных лесов и саванн. Здесь вы можете в режиме реального времени наблюдать за повадками носух, их играми и исследованием среды обитания.</p>
+            <a asp-controller="Zoo" asp-action="Coati" asp-fragment="webcam-section" class="btn btn-outline-light">Камера наблюдения</a>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="h-100 p-4 bg-white border rounded-3 shadow-sm">
+            <h3 class="text-success">Программа опеки и поддержки</h3>
+            <p class="text-secondary">Каждый посетитель может внести свой вклад в заботу о животных: поддержать любимого питомца взносом на свежие фрукты, игрушки или лакомства.</p>
+            <a asp-controller="Zoo" asp-action="Coati" asp-fragment="donation-section" class="btn btn-outline-success">Поддержать Хахатуху</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Авторизация администратора";
+}
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border rounded-3 bg-white">
+            <div class="card-header bg-dark text-white text-center py-4">
+                <h4 class="mb-0 fw-bold text-white">Вход для администратора</h4>
+            </div>
+            <div class="card-body p-4">
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Ошибка:</strong> @ViewBag.Error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form method="post" asp-controller="Account" asp-action="Login">
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark">Имя пользователя:</label>
+                        <input type="text" id="usernameInput" name="username" class="form-control form-control-lg" placeholder="Введите имя пользователя" required autofocus />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-dark">Пароль:</label>
+                        <input type="password" id="passwordInput" name="password" class="form-control form-control-lg" placeholder="Введите пароль" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-3 fw-bold shadow-sm">
+                        Войти в систему
+                    </button>
+                </form>
+
+                <div class="text-center mt-4 pt-3 border-top">
+                    <a href="/stav-zoo/coati" class="text-decoration-none text-secondary small">
+                        Вернуться на страницу носухи
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

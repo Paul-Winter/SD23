@@ -1,0 +1,64 @@
+@model Coati_Space_Project.Models.DiaryEntry
+@{
+    ViewData["Title"] = "Новая запись в журнал";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border bg-white">
+            <div class="card-header bg-dark text-white py-3">
+                <h4 class="mb-0 fw-bold text-white">Новая запись: Журнал наблюдений за носухой</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <input type="hidden" asp-for="CoatiId" value="1" />
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="EventDate" class="form-label fw-semibold text-dark">Дата и время фиксации:</label>
+                            <input asp-for="EventDate" type="datetime-local" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
+                            <span asp-validation-for="EventDate" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EventType" class="form-label fw-semibold text-dark">Категория события:</label>
+                            <select asp-for="EventType" class="form-select" required>
+                                <option value="Кормление">Кормление (рацион / лакомства)</option>
+                                <option value="Медосмотр">Медосмотр (ветеринарный осмотр / вес)</option>
+                                <option value="Спаривание">Спаривание (знакомство / адаптация)</option>
+                                <option value="Потомство">Потомство (наблюдение / уход)</option>
+                                <option value="Активность">Активность (поведение / игры)</option>
+                                <option value="Уборка">Уборка и обустройство вольера</option>
+                            </select>
+                            <span asp-validation-for="EventType" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label fw-semibold text-dark">Тема события:</label>
+                        <input asp-for="Title" class="form-control" placeholder="Например: Утренний осмотр или Кормление фруктами" required />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold text-dark">Описание наблюдения:</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Опишите поведение питомца, состояние или проведённую процедуру..." required></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Author" class="form-label fw-semibold text-dark">Сотрудник, зафиксировавший запись:</label>
+                        <input asp-for="Author" class="form-control" value="@User.Identity?.Name" required />
+                        <span asp-validation-for="Author" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Назад к списку</a>
+                        <button type="submit" class="btn btn-success px-4 fw-semibold shadow-sm">
+                            Сохранить запись
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

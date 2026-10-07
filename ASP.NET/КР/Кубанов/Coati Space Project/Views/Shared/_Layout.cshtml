@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Ставропольский зоопарк</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Coati_Space_Project.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom shadow-sm mb-4 py-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-success fs-5" href="/stav-zoo">Ставропольский зоопарк</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fw-medium px-3" href="/stav-zoo">Зоопарк</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-success fw-semibold px-3" href="/stav-zoo/coati">Носуха Хахатуха</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fw-medium px-3" href="/stav-zoo/coati#webcam-section">Камера наблюдения</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fw-medium px-3" href="/stav-zoo/coati#donation-section">Поддержка питомца</a>
+                        </li>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-primary fw-semibold px-3" href="/diary">Панель администратора</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav align-items-center">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item me-3">
+                                <span class="text-dark small fw-medium">Администратор: @User.Identity.Name</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-danger btn-sm px-3" href="/account/logout">Выйти</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-secondary btn-sm px-3" href="/account/login">Вход для администратора</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top py-4 bg-white mt-auto">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center">
+            <div class="text-secondary small">
+                &copy; 2026 Ставропольский зоопарк. Сектор «Южная Америка». Все права защищены.
+            </div>
+            <div class="d-flex flex-wrap gap-4 small">
+                <a href="/stav-zoo" class="text-decoration-none text-secondary">О зоопарке</a>
+                <a href="/stav-zoo/coati" class="text-decoration-none text-secondary">Носуха Хахатуха</a>
+                <a href="/account/login" class="text-decoration-none text-secondary">Служебный вход</a>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

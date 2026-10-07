@@ -1,0 +1,235 @@
+@model Coati_Space_Project.Models.CoatiViewModel
+@{
+    ViewData["Title"] = "Носуха Хахатуха";
+    string healthStatus = string.IsNullOrWhiteSpace(Model.Coati.HealthStatus) || Model.Coati.HealthStatus.Contains("Отличное")
+        ? "Клинически здоров"
+        : Model.Coati.HealthStatus;
+}
+
+<!-- Главная карточка особи носухи -->
+<div class="card shadow-sm border mb-4 overflow-hidden bg-white">
+    <div class="row g-0">
+        <div class="col-lg-5 position-relative">
+            <img src="@Model.Coati.PhotoUrl" class="img-fluid h-100 w-100 object-fit-cover" alt="@Model.Coati.Name" style="min-height: 380px;" />
+        </div>
+        <div class="col-lg-7">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+                    <div>
+                        <h1 class="card-title display-6 fw-bold text-dark mb-1">@Model.Coati.Name</h1>
+                        <p class="text-secondary fst-italic mb-2">@Model.Coati.Species</p>
+                    </div>
+                    <span class="text-success fw-semibold">
+                        @healthStatus
+                    </span>
+                </div>
+
+                <hr class="my-3 text-muted" />
+
+                <div class="row g-2 mb-3">
+                    <div class="col-sm-6">
+                        <strong class="text-dark">Пол:</strong> <span class="text-secondary">@Model.Coati.Gender</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <strong class="text-dark">Дата рождения:</strong> <span class="text-secondary">@Model.Coati.BirthDate.ToString("dd.MM.yyyy")</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <strong class="text-dark">Сектор:</strong> <span class="text-secondary">@Model.Coati.Habitat</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <strong class="text-dark">Рацион:</strong> <span class="text-secondary">@Model.Coati.Diet</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-semibold text-dark">История и характер:</h5>
+                    <p class="text-secondary mb-0">
+                        @Model.Coati.Biography
+                    </p>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 pt-1">
+                    <a href="#webcam-section" class="btn btn-dark shadow-sm">
+                        Камера наблюдения
+                    </a>
+                    <a href="#gallery-section" class="btn btn-outline-secondary">
+                        Фотогалерея
+                    </a>
+                    <a href="#donation-section" class="btn btn-success shadow-sm">
+                        Поддержать питомца
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Секция прямой трансляции (Строго одна камера, зацикленное видео, лаконичная плашка) -->
+<div class="card shadow-sm border mb-4 overflow-hidden" id="webcam-section">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 fw-bold text-dark">Прямая трансляция из вольера</h4>
+        <span class="text-secondary small">Камера наблюдения</span>
+    </div>
+    <div class="card-body p-0 bg-black">
+        <div class="live-stream-container position-relative" style="min-height: 440px; max-height: 600px;">
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                <span>В ЭФИРЕ</span>
+            </div>
+            <video id="coatiLiveVideo" class="w-100 h-100 object-fit-cover" autoplay muted loop playsinline controls preload="auto" poster="/images/webcam-placeholder.jpg">
+                <source src="/videos/coati-stream.mp4" type="video/mp4" />
+                Ваш браузер не поддерживает видео HTML5.
+            </video>
+        </div>
+    </div>
+</div>
+
+<!-- Фотогалерея (Все новые фотографии, чистая аккуратная сетка без технических подписей) -->
+<div class="card shadow-sm border mb-4 bg-white" id="gallery-section">
+    <div class="card-header bg-white py-3 border-bottom">
+        <h4 class="mb-0 fw-bold text-dark">Фотогалерея</h4>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-3">
+            @foreach (var imgPath in Model.GalleryImages)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100 border shadow-sm overflow-hidden bg-light">
+                        <img src="@imgPath" class="img-fluid rounded" alt="Фотография носухи Хахатухи" style="height: 220px; width: 100%; object-fit: cover; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Дневник наблюдений (заметки зоологов) -->
+<div class="card shadow-sm border mb-4 bg-white">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 fw-bold text-dark">Заметки зоологов</h4>
+        <span class="text-secondary small fw-medium">Журнал куратора</span>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            @if (Model.RecentDiaryEntries.Any())
+            {
+                @foreach (var entry in Model.RecentDiaryEntries)
+                {
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 h-100 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-dark fw-semibold small">@entry.EventType</span>
+                                <small class="text-secondary">@entry.EventDate.ToString("dd.MM.yyyy HH:mm")</small>
+                            </div>
+                            <h6 class="fw-bold mb-1 text-dark">@entry.Title</h6>
+                            <p class="small text-secondary mb-2">@entry.Description</p>
+                            <small class="text-secondary">Куратор: @entry.Author</small>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-secondary">Записей пока нет.</div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Форма пожертвований -->
+<div class="card shadow-sm border mb-4 bg-white" id="donation-section">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap">
+        <h4 class="mb-0 fw-bold text-dark">Поддержать носуху Хахатуху</h4>
+        <span class="text-secondary fw-semibold">
+            Собрано: @Model.TotalDonations.ToString("N0") ₽ (@Model.DonationsCount взносов)
+        </span>
+    </div>
+    <div class="card-body p-4">
+        <p class="text-secondary mb-4">
+            Добровольные взносы направляются на закупку свежих фруктов, витаминных добавок, игрушек и улучшение вольера носухи.
+        </p>
+
+        @if (TempData["DonationSuccess"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["DonationSuccess"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form asp-controller="Zoo" asp-action="Donate" method="post">
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Выберите или введите сумму (руб.):</label>
+                <div class="btn-group w-100 mb-2" role="group">
+                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(100)">100 ₽</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(300)">300 ₽</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(500)">500 ₽</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(1000)">1 000 ₽</button>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">₽</span>
+                    <input type="number" id="donationAmount" name="amount" class="form-control form-control-lg" min="10" max="100000" value="300" required />
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark">Ваше имя:</label>
+                    <input type="text" name="donorName" class="form-control" placeholder="Имя или псевдоним" value="Посетитель зоопарка" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark">Электронная почта (для квитанции):</label>
+                    <input type="email" name="email" class="form-control" placeholder="user@example.com" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Назначение взноса:</label>
+                <select name="target" class="form-select">
+                    <option value="На свежие фрукты и лакомства">На свежие фрукты и лакомства</option>
+                    <option value="На витамины и уход">На витамины и ветеринарный уход</option>
+                    <option value="На игрушки и обогащение вольера">На игрушки и обустройство вольера</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-dark">Пожелание питомцу:</label>
+                <textarea name="message" class="form-control" rows="2" placeholder="Ваше сообщение..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-3">
+                Подтвердить пожертвование
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function setAmount(val) {
+            document.getElementById('donationAmount').value = val;
+        }
+
+        // Автоматический старт и непрерывное зацикливание видео
+        document.addEventListener('DOMContentLoaded', function () {
+            var video = document.getElementById('coatiLiveVideo');
+            if (video) {
+                video.muted = true;
+                video.loop = true;
+                video.preload = 'auto';
+
+                video.addEventListener('ended', function () {
+                    video.currentTime = 0;
+                    video.play();
+                });
+
+                var playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(function (error) {
+                        console.log('Автовоспроизведение ожидает действия пользователя:', error);
+                    });
+                }
+            }
+        });
+    </script>
+}
