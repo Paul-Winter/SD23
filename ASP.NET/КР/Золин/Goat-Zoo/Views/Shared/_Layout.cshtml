@@ -243,6 +243,10 @@
                     <!-- Основное меню -->
                     <ul class="navbar-nav flex-grow-1 goat-nav">
                         <li class="nav-item">
+                            <a class="nav-link @IsActive("MainPage", "Index")"
+                               asp-area="" asp-controller="MainPage" asp-action="Index">На главную</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link @IsActive("Home", "Index")"
                                asp-area="" asp-controller="Home" asp-action="Index">Инфо</a>
                         </li>
