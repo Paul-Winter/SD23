@@ -1,0 +1,116 @@
+@page "/{slug}"
+@model AnimalModel
+@{ ViewData["Title"] = Model.Animal.Name; }
+
+<h1>@Model.Animal.Name <small>@Model.Animal.Species</small></h1>
+
+<section class="grid2">
+    <img class="photo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9hmKNmeHy4LVRqvuu9YoOETSDGvdMdHVVbS1YGkEsbZxPPwKlVKFaWMw&s=10" alt="@Model.Animal.Name" />
+  <div>
+    <h2>История</h2>
+    <p>@Model.Animal.Biography</p>
+  </div>
+</section>
+
+<section>
+  <h2>Видео</h2>
+  @if (!string.IsNullOrWhiteSpace(Model.Animal.VideoUrl))
+  {
+    <div class="video"><iframe src="@Model.Animal.VideoUrl" allowfullscreen loading="lazy"></iframe></div>
+  }
+  else { <p class="muted">Видео пока не добавлено.</p> }
+</section>
+
+<section>
+  <h2>Веб-камера</h2>
+  @if (!string.IsNullOrWhiteSpace(Model.Animal.WebcamUrl))
+  {
+    <div class="video"><iframe src="@Model.Animal.WebcamUrl" allowfullscreen loading="lazy"></iframe></div>
+  }
+  else { <p class="muted">Трансляция сейчас недоступна.</p> }
+</section>
+
+<section>
+  <h2>Поддержать</h2>
+  <p>Собрано: <b>@Model.Total.ToString("N0") ₽</b> (корм — @Model.Food.ToString("N0") ₽, лечение — @Model.Treatment.ToString("N0") ₽)</p>
+  <div class="form-row">
+    <input id="d-amount" type="number" min="1" step="1" placeholder="Сумма, ₽" />
+    <input id="d-name" maxlength="60" placeholder="Ваше имя (необязательно)" />
+    <select id="d-purpose"><option value="Food">На корм</option><option value="Treatment">На лечение</option></select>
+    <button id="d-send">Отправить</button>
+  </div>
+  <p id="d-msg" class="muted"></p>
+</section>
+
+@if (User.IsInRole("Keeper") || User.IsInRole("Admin"))
+{
+  <section class="diary">
+    <h2>Дневник (для работников)</h2>
+    <div class="form-row">
+      <select id="e-type">
+        @foreach (var t in Enum.GetValues<DiaryType>())
+        {
+          <option value="@t">@t.Ru()</option>
+        }
+      </select>
+      <input id="e-subject" placeholder="Особь (пусто = всё стадо)" />
+      <input id="e-text" placeholder="Запись" style="flex:1" />
+      <button id="e-send">Добавить</button>
+    </div>
+    <p id="e-msg" class="muted"></p>
+    <table>
+      <thead><tr><th>Дата (UTC)</th><th>Тип</th><th>Особь</th><th>Запись</th><th>Автор</th>@if (User.IsInRole("Admin")) {<th></th>}</tr></thead>
+      <tbody>
+      @foreach (var e in Model.Diary)
+      {
+        <tr>
+          <td>@e.OccurredAt.ToString("yyyy-MM-dd HH:mm")</td>
+          <td>@e.Type.Ru()</td>
+          <td>@(e.SubjectName ?? "стадо")</td>
+          <td>@e.Text</td>
+          <td>@e.Author</td>
+          @if (User.IsInRole("Admin")) {<td><button class="link del" data-id="@e.Id">✕</button></td>}
+        </tr>
+      }
+      </tbody>
+    </table>
+  </section>
+}
+
+@section Scripts {
+<script>
+  const slug = "@Model.Animal.Slug";
+  async function post(url, body) {
+    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" },
+                                 credentials: "same-origin", body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    return { ok: r.ok, data: j };
+  }
+
+  document.getElementById("d-send").onclick = async () => {
+    const amount = parseFloat(document.getElementById("d-amount").value);
+    const res = await post(`/api/animals/${slug}/donations`, {
+      amount, donorName: document.getElementById("d-name").value,
+      purpose: document.getElementById("d-purpose").value });
+    document.getElementById("d-msg").textContent = res.ok ? res.data.message : (res.data.error || "Ошибка");
+    if (res.ok) setTimeout(() => location.reload(), 800);
+  };
+
+  const send = document.getElementById("e-send");
+  if (send) {
+    send.onclick = async () => {
+      const res = await post(`/api/animals/${slug}/diary`, {
+        type: document.getElementById("e-type").value,
+        subjectName: document.getElementById("e-subject").value,
+        text: document.getElementById("e-text").value });
+      if (res.ok) location.reload();
+      else document.getElementById("e-msg").textContent = res.data.error || "Ошибка";
+    };
+    document.querySelectorAll(".del").forEach(b => b.onclick = async () => {
+      if (!confirm("Удалить запись?")) return;
+      await fetch(`/api/diary/${b.dataset.id}`, { method: "DELETE", credentials: "same-origin" });
+      location.reload();
+    });
+  }
+</script>
+}

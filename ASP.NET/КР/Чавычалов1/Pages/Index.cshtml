@@ -1,0 +1,15 @@
+@page "/"
+@model IndexModel
+@{ ViewData["Title"] = "Главная"; }
+<h1>Добро пожаловать в зоопарк!</h1>
+<p>Выберите животное, чтобы узнать его историю, посмотреть видео и веб-камеру.</p>
+<div class="cards">
+  @foreach (var a in Model.Animals)
+  {
+    <a class="card" href="/@a.Slug">
+      <img src="@a.PhotoUrl" alt="@a.Name" />
+      <h3>@a.Name</h3>
+      <small>@a.Species</small>
+    </a>
+  }
+</div>

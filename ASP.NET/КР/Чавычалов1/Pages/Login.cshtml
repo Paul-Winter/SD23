@@ -1,0 +1,11 @@
+@page
+@model LoginModel
+@{ ViewData["Title"] = "Вход"; }
+<h1>Вход для работников</h1>
+<form method="post" class="login">
+  <input type="hidden" asp-for="ReturnUrl" />
+  <label>Логин <input asp-for="UserName" autocomplete="username" /></label>
+  <label>Пароль <input asp-for="Password" type="password" autocomplete="current-password" /></label>
+  <button>Войти</button>
+  @if (Model.Error is not null) { <p class="err">@Model.Error</p> }
+</form>
