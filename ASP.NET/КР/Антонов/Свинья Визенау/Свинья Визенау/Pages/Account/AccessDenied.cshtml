@@ -1,0 +1,38 @@
+﻿@page
+@model Свинья_Визенау.Pages.Account.AccessDeniedModel
+@{
+    ViewData["Title"] = "Требуется вход";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h1 class="display-6 mb-3">Требуется авторизация</h1>
+
+                    <p class="lead">
+                        Чтобы сделать донат, нужно войти в аккаунт.
+                    </p>
+
+                    <p class="text-muted">
+                        Пожалуйста, войдите или зарегистрируйтесь —
+                        это займёт меньше минуты.
+                    </p>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <a asp-page="/Account/Login" class="btn btn-primary">
+                            Войти
+                        </a>
+                        <a asp-page="/Account/Register" class="btn btn-outline-primary">
+                            Зарегистрироваться
+                        </a>
+                        <a asp-page="/Index" class="btn btn-secondary">
+                            ← Вернуться на главную
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

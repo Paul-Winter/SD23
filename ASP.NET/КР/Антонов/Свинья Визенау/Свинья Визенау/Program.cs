@@ -19,6 +19,13 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ZooContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
+
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/Diary", "ZooWorker");
@@ -58,8 +65,8 @@ using (var scope = app.Services.CreateScope())
         {
             Slug = "wizenau",
             Name = "Поросёнок Визенау",
-            Description = "Свинья породы Визенау. Вес взрослой особи 20–25 кг. " +
-                          "Окрас чёрно-серый. Отличается высоким интеллектом.",
+            Description = "Свинья породы Визенау вьетнамская. Вес взрослой особи 120–140 кг. " +
+                          "Внешний вид: Черный или черно-пестрый окрас, короткие ноги и большой висячий живот.",
             PhotoUrl = "/images/wizenau.jpg",
             VideoUrl = null,
             WebcamUrl = null,
@@ -121,6 +128,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+
 
 app.Use(async (context, next) =>
 {
