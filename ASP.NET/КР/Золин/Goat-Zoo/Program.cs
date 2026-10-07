@@ -22,8 +22,9 @@ namespace Goat_Zoo
                 options.Cookie.IsEssential = true;
             });
 
-
             var app = builder.Build();
+            
+            app.UsePathBase("/goat");
 
             using (var scope = app.Services.CreateScope())
             {

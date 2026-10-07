@@ -95,5 +95,27 @@ namespace Goat_Zoo.Controllers
             public string Title { get; set; } = "";
             public string Content { get; set; } = "";
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var userId = CurrentUserId;
+            if (userId == null)
+                return Unauthorized(new { error = "Не авторизован" });
+
+            var notes = await db.Notes.OrderByDescending(n => n.CreatedAt).Join(db.Users, n => n.UserId, u => u.Id, (n, u) => new
+            {
+                n.Id,
+                n.UserId,
+                n.Type,
+                n.Title,
+                n.Content,
+                n.CreatedAt,
+                UserName = u.Login
+            })
+            .ToListAsync();
+
+            return Json(notes);
+        }
     }
 }
