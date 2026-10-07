@@ -1,0 +1,437 @@
+﻿@{
+    ViewData["Title"] = "Дневник козовода";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Камерунские козы</title>
+    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #fdf6ec;
+                color: #3d2b1f;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            h1 {
+                color: #8b3e2f;
+                text-align: center;
+                border-bottom: 3px solid #e0a96d;
+                padding-bottom: 10px;
+            }
+
+            h2 {
+                color: #a0432f;
+                margin-top: 0;
+            }
+
+            .auth-block {
+                background-color: #fffaf3;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(139, 62, 47, 0.15);
+                padding: 30px;
+                margin-bottom: 30px;
+                border-left: 5px solid #c96f4a;
+                max-width: 640px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+                .auth-block p {
+                    line-height: 1.7;
+                }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+                .form-group label {
+                    display: block;
+                    margin-bottom: 6px;
+                    font-weight: 600;
+                    color: #6b2d1e;
+                    font-size: 0.95em;
+                }
+
+            .form-control {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px 12px;
+                border: 2px solid #e0a96d;
+                border-radius: 8px;
+                background-color: #fffaf3;
+                color: #3d2b1f;
+                font-size: 1em;
+                font-family: inherit;
+                transition: border-color 0.2s, box-shadow 0.2s;
+            }
+
+                .form-control:focus {
+                    outline: none;
+                    border-color: #c96f4a;
+                    box-shadow: 0 0 0 3px rgba(201, 111, 74, 0.2);
+                }
+
+            textarea.form-control {
+                resize: vertical;
+                min-height: 80px;
+            }
+
+            .btn-primary {
+                background-color: #c96f4a;
+                color: #fffaf3;
+                border: none;
+                border-radius: 8px;
+                padding: 12px 24px;
+                font-size: 1em;
+                font-weight: 600;
+                cursor: pointer;
+                width: 100%;
+                transition: background-color 0.2s, transform 0.1s;
+                font-family: inherit;
+            }
+
+                .btn-primary:hover {
+                    background-color: #8b3e2f;
+                }
+
+                .btn-primary:active {
+                    transform: translateY(1px);
+                }
+
+            .form-footer {
+                margin-top: 18px;
+                text-align: center;
+                font-size: 0.9em;
+                color: #6b4a3a;
+            }
+
+                .form-footer a {
+                    color: #a0432f;
+                    font-weight: 600;
+                    text-decoration: none;
+                }
+
+                    .form-footer a:hover {
+                        text-decoration: underline;
+                    }
+
+            /* --- Фильтры --- */
+            .filter-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 18px;
+            }
+
+            .filter-btn {
+                background-color: #fffaf3;
+                color: #8b3e2f;
+                border: 2px solid #e0a96d;
+                border-radius: 20px;
+                padding: 6px 14px;
+                font-size: 0.9em;
+                cursor: pointer;
+                font-family: inherit;
+                transition: all 0.15s;
+            }
+
+                .filter-btn:hover {
+                    background-color: #fbe8d3;
+                }
+
+                .filter-btn.active {
+                    background-color: #c96f4a;
+                    color: #fffaf3;
+                    border-color: #c96f4a;
+                }
+
+            /* --- Список заметок --- */
+            .note-card {
+                background-color: #fffaf3;
+                border-radius: 10px;
+                border-left: 4px solid #c96f4a;
+                box-shadow: 0 2px 8px rgba(139, 62, 47, 0.1);
+                padding: 14px 18px;
+                margin-bottom: 12px;
+                position: relative;
+            }
+
+            .note-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.85em;
+                color: #6b4a3a;
+                margin-bottom: 6px;
+            }
+
+            .note-type {
+                font-weight: 700;
+                color: #8b3e2f;
+            }
+
+            .note-title {
+                font-weight: 600;
+                color: #6b2d1e;
+                font-size: 1.05em;
+                margin-bottom: 4px;
+            }
+
+            .note-content {
+                color: #3d2b1f;
+                line-height: 1.55;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+
+            .note-delete {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: transparent;
+                border: none;
+                color: #b23b2c;
+                font-size: 0.85em;
+                cursor: pointer;
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-family: inherit;
+            }
+
+                .note-delete:hover {
+                    background-color: #fbe8d3;
+                }
+
+            .empty {
+                text-align: center;
+                color: #8a6a58;
+                padding: 20px;
+                font-style: italic;
+            }
+
+            .status-msg {
+                font-size: 0.9em;
+                min-height: 1.2em;
+                margin-top: 10px;
+                text-align: center;
+            }
+
+                .status-msg.error {
+                    color: #b23b2c;
+                }
+
+                .status-msg.ok {
+                    color: #3f7d3f;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Дневник козовода</h1>
+
+        <!-- Форма добавления -->
+        <div class="auth-block">
+            <h2>Привет, @ViewBag.UserName! 🐐</h2>
+            <p>Фиксируйте кормёжку, спаривание, потомство и другие события.</p>
+
+            <form id="note-form" novalidate>
+                <div class="form-group">
+                    <label for="type">Категория</label>
+                    <select id="type" class="form-control" required>
+                        <option value="Кормёжка">🥕 Кормёжка</option>
+                        <option value="Спаривание">💕 Спаривание</option>
+                        <option value="Потомство">🐐 Потомство</option>
+                        <option value="Здоровье">💊 Здоровье</option>
+                        <option value="Прочее" selected>📝 Прочее</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Заголовок</label>
+                    <input id="title" class="form-control" placeholder="Например: Утренняя кормёжка" maxlength="200" />
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Описание</label>
+                    <textarea id="content" class="form-control" rows="3" placeholder="Подробности события..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Добавить запись</button>
+
+                <div id="form-status" class="status-msg"></div>
+
+                <div class="form-footer">
+                    <a href="/Account/Logout">Выйти из аккаунта</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Список заметок -->
+        <div class="auth-block">
+            <h2>Мои записи</h2>
+
+            <div class="filter-group">
+                <button class="filter-btn active" data-type="Все">Все</button>
+                <button class="filter-btn" data-type="Кормёжка">🥕 Кормёжка</button>
+                <button class="filter-btn" data-type="Спаривание">💕 Спаривание</button>
+                <button class="filter-btn" data-type="Потомство">🐐 Потомство</button>
+                <button class="filter-btn" data-type="Здоровье">💊 Здоровье</button>
+                <button class="filter-btn" data-type="Прочее">📝 Прочее</button>
+            </div>
+
+            <div id="notes-list">
+                <p class="empty">Загрузка…</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const typeIcons = {
+            "Кормёжка": "🥕",
+            "Спаривание": "💕",
+            "Потомство": "🐐",
+            "Здоровье": "💊",
+            "Прочее": "📝"
+        };
+
+        let allNotes = [];
+        let activeFilter = "Все";
+
+        const listEl   = document.getElementById('notes-list');
+        const statusEl = document.getElementById('form-status');
+
+        function escapeHtml(s) {
+            return (s || "").replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        function renderNotes() {
+            const filtered = activeFilter === "Все"
+                ? allNotes
+                : allNotes.filter(n => n.type === activeFilter);
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = '<p class="empty">Записей пока нет.</p>';
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(n => {
+                const icon = typeIcons[n.type] || "📝";
+                const date = new Date(n.createdAt).toLocaleString('ru-RU');
+                return `
+                    <div class="note-card">
+                        <button class="note-delete" data-id="${n.id}" title="Удалить">✕</button>
+                        <div class="note-header">
+                            <span class="note-type">${icon} ${escapeHtml(n.type)}</span>
+                            <span>${date}</span>
+                        </div>
+                        ${n.title ? `<div class="note-title">${escapeHtml(n.title)}</div>` : ""}
+                        ${n.content ? `<div class="note-content">${escapeHtml(n.content)}</div>` : ""}
+                    </div>`;
+            }).join('');
+
+            listEl.querySelectorAll('.note-delete').forEach(btn => {
+                btn.addEventListener('click', () => deleteNote(Number(btn.dataset.id)));
+            });
+        }
+
+        async function loadNotes() {
+            try {
+                const res = await fetch('/NotesApi/GetAll', { credentials: 'same-origin' });
+                if (res.status === 401) {
+                    window.location.href = '/Account/Login';
+                    return;
+                }
+                if (!res.ok) throw new Error('Ошибка загрузки');
+                allNotes = await res.json();
+                renderNotes();
+            } catch (e) {
+                listEl.innerHTML = '<p class="empty">Не удалось загрузить записи.</p>';
+            }
+        }
+
+        async function deleteNote(id) {
+            if (!confirm('Удалить запись?')) return;
+
+            const res = await fetch('/NotesApi/Delete', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id=' + encodeURIComponent(id)
+            });
+
+            if (res.ok) {
+                allNotes = allNotes.filter(n => n.id !== id);
+                renderNotes();
+            }
+        }
+
+        document.getElementById('note-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            statusEl.className = 'status-msg';
+            statusEl.textContent = '';
+
+            const payload = {
+                type: document.getElementById('type').value,
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value
+            };
+
+            if (!payload.title.trim() && !payload.content.trim()) {
+                statusEl.classList.add('error');
+                statusEl.textContent = 'Заполните заголовок или описание.';
+                return;
+            }
+
+            try {
+                const res = await fetch('/NotesApi/Create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.error || 'Не удалось сохранить');
+                }
+
+                const saved = await res.json();
+                allNotes.unshift(saved);
+                renderNotes();
+                e.target.reset();
+
+                statusEl.classList.add('ok');
+                statusEl.textContent = 'Запись добавлена ✓';
+                setTimeout(() => { statusEl.textContent = ''; }, 2000);
+            } catch (err) {
+                statusEl.classList.add('error');
+                statusEl.textContent = err.message;
+            }
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeFilter = btn.dataset.type;
+                renderNotes();
+            });
+        });
+
+        loadNotes();
+    </script>
+</body>
+</html>

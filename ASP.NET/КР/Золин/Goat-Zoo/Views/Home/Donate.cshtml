@@ -5,4 +5,156 @@
     ViewData["Title"] = "Донат";
 }
 
-<h2>Donate</h2>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #fdf6ec;
+                color: #3d2b1f;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            h1 {
+                color: #8b3e2f;
+                text-align: center;
+                border-bottom: 3px solid #e0a96d;
+                padding-bottom: 10px;
+            }
+
+            h2 {
+                color: #a0432f;
+                margin-top: 0;
+            }
+
+            .goat-story, .info-block {
+                background-color: #fffaf3;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(139, 62, 47, 0.15);
+                padding: 25px;
+                margin-bottom: 30px;
+                border-left: 5px solid #c96f4a;
+            }
+
+                .goat-story p, .info-block p {
+                    line-height: 1.7;
+                    text-align: justify;
+                }
+
+                .info-block ul {
+                    line-height: 1.8;
+                    padding-left: 20px;
+                }
+
+                .info-block li {
+                    margin-bottom: 6px;
+                }
+
+            .highlight {
+                background-color: #f7d9b6;
+                color: #6b2d1e;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-weight: 600;
+            }
+
+            .donation-container {
+                background-color: #fbe8d3;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 2px 6px rgba(139, 62, 47, 0.12);
+                margin: 30px 0;
+            }
+
+                .donation-container iframe {
+                    width: 100%;
+                    height: 620px;
+                    border: none;
+                    border-radius: 8px;
+                    background-color: #fff;
+                }
+
+            .source-note {
+                font-size: 0.8em;
+                color: #8a6f5c;
+                margin-top: 5px;
+            }
+
+            .thank-you {
+                text-align: center;
+                font-size: 1.05em;
+                color: #6b4a3a;
+                margin-top: 25px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐐 Поддержать камерунских коз</h1>
+
+        <!-- Зачем нужны пожертвования -->
+        <div class="goat-story">
+            <h2>Почему важна ваша помощь</h2>
+            <p>
+                Камерунские козы в Ставропольском зоопарке — <span class="highlight">Яша</span> и
+                <span class="highlight">Бяша</span>, а также их потомство — нуждаются в постоянной
+                заботе. Ваши пожертвования помогают обеспечить животных качественным сеном, свежими
+                овощами, витаминными добавками и поддерживать комфортные условия в вольерах.
+            </p>
+            <p>
+                Кроме того, средства идут на развитие контактного зоопарка, образовательные
+                программы для детей и улучшение инфраструктуры. Каждый вклад, даже небольшой,
+                делает жизнь наших коз еще лучше.
+            </p>
+        </div>
+
+        <!-- Форма для пожертвования -->
+        <div class="donation-container">
+            <h2>💛 Сделать пожертвование</h2>
+            <p>
+                Вы можете перевести любую сумму с помощью безопасной страницы CloudTips.
+                Козлики и козочки будут рады любой копейке.
+            </p>
+
+            <a href="https://pay.cloudtips.ru/p/f96bfc44"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="donate-button">
+                🐐 Поддержать коз
+            </a>
+
+            <p class="source-note">
+                Безопасная оплата через сервис
+                <a href="https://cloudtips.ru" target="_blank" rel="noopener">CloudTips</a>.
+            </p>
+        </div>
+
+        <!-- Благодарность и ссылки -->
+        <div class="info-block">
+            <h2>🙏 Спасибо за вашу поддержку!</h2>
+            <p>
+                Мы и наши козы искренне благодарим каждого, кто откликается. Благодаря вам
+                животные получают всё необходимое, а зоопарк становится ещё уютнее.
+            </p>
+            <p>
+                Хотите узнать больше о наших подопечных? Вернитесь на
+                <a href="/">главную страницу</a> — там собрана история Яши и Бяши,
+                справочная информация о породе и галерея. А если вы хотите понаблюдать
+                за козами в реальном времени, перейдите на страницу
+                <a href="/Home/Webcam">прямой трансляции</a>.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
