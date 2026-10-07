@@ -15,14 +15,42 @@ else
         <img src="@Model.Animal.PhotoUrl" alt="@Model.Animal.Name" class="animal-photo" />
     }
 
+    @if (Model.Photos.Count > 0)
+    {
+        <h2>Фотогалерея</h2>
+        <div class="photo-gallery">
+            @foreach (var p in Model.Photos)
+            {
+                <div class="gallery-item">
+                    <a href="@p.PhotoUrl" target="_blank">
+                        <img src="@p.PhotoUrl" alt="@Model.Animal.Name" class="gallery-thumb" />
+                    </a>
+
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Zookeeper"))
+                    {
+                        <form method="post" asp-page-handler="DeletePhoto" class="delete-photo-form">
+                            <input type="hidden" name="id" value="@p.Id" />
+                            <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
+                            <button type="submit"
+                                    class="btn-delete-photo"
+                                    onclick="return confirm('Удалить это фото?');">
+                                ✕ Удалить
+                            </button>
+                        </form>
+                    }
+                </div>
+            }
+        </div>
+    }
+
     @if (User.Identity?.IsAuthenticated == true)
     {
         <div class="upload-form">
             <form method="post" asp-page-handler="UploadPhoto" enctype="multipart/form-data">
                 <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
                 <p>
-                    <strong>Загрузить фото:</strong><br />
-                    <input type="file" name="photo" accept="image/*" style="max-width:300px;" />
+                    <strong>Загрузить фото (можно несколько):</strong><br />
+                    <input type="file" name="photos" accept="image/*" multiple style="max-width:300px;" />
                 </p>
                 <button type="submit">Загрузить</button>
             </form>
@@ -31,7 +59,7 @@ else
 
     <h2>История особи</h2>
     <div class="info-block">
-        <p>@Model.Animal.Description</p>
+        <p style="white-space: pre-line;">@Model.Animal.Description</p>
     </div>
 
     <h2>Основные факты</h2>
@@ -47,7 +75,7 @@ else
     @if (string.IsNullOrEmpty(Model.Animal.VideoUrl))
     {
         <div class="info-block">
-            <p><em>Видео пока не добавлено. Сотрудники зоопарка скоро загрузят новые ролики с Киарой и её львятами.</em></p>
+            <p><em>Видео пока не добавлено.</em></p>
         </div>
     }
     else
@@ -107,6 +135,14 @@ else
                 <input type="number" name="amount" min="1" placeholder="Сумма, ₽" style="max-width:200px;" />
                 <button type="submit">Отправить донат</button>
             </form>
+
+            <p style="margin-top:1rem;">
+                <a href="https://pay.cloudtips.ru/p/2e7c4e19"
+                   target="_blank"
+                   style="display:inline-block; background:#8e24aa; color:white; padding:0.7rem 1.5rem; border-radius:6px; font-weight:600; text-decoration:none;">
+                    💳 Реальный донат через CloudTips
+                </a>
+            </p>
         }
 
         @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Zookeeper"))
@@ -123,7 +159,7 @@ else
                 <form method="post" asp-page-handler="ClearDonations" style="margin-bottom:1rem;">
                     <input type="hidden" name="animalName" value="@Model.Animal.Slug" />
                     <button type="submit"
-                            onclick="return confirm('Удалить ВСЕ донаты для @Model.Animal.Name? Это действие нельзя отменить.');"
+                            onclick="return confirm('Удалить ВСЕ донаты для @Model.Animal.Name?');"
                             style="background:#c62828; color:white; padding:0.5rem 1rem; border-radius:6px; border:none; cursor:pointer;">
                         🗑 Очистить все донаты
                     </button>

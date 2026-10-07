@@ -17,6 +17,7 @@ public class IndexModel : PageModel
     public Models.Lion? Animal { get; set; }
     public int TotalDonated { get; set; }
     public List<Models.Donation> DonationList { get; set; } = new();
+    public List<Models.LionPhoto> Photos { get; set; } = new();
 
     public int EditDonationId { get; set; }
     public int EditDonationAmount { get; set; }
@@ -33,6 +34,11 @@ public class IndexModel : PageModel
                 .ToList();
 
             TotalDonated = DonationList.Sum(d => d.Amount);
+
+            Photos = db.LionPhotos
+                .Where(p => p.LionId == Animal.Id)
+                .OrderByDescending(p => p.UploadedAt)
+                .ToList();
 
             if (editDonationId != null)
             {
@@ -100,24 +106,59 @@ public class IndexModel : PageModel
         return Redirect($"/stav-zoo/{animalName}");
     }
 
-    public IActionResult OnPostUploadPhoto(string animalName, IFormFile photo)
+    public IActionResult OnPostUploadPhoto(string animalName, List<IFormFile> photos)
     {
         var lion = db.Lions.FirstOrDefault(l => l.Slug == animalName);
-        if (lion == null || photo == null || photo.Length == 0) return NotFound();
+        if (lion == null || photos == null || photos.Count == 0) return NotFound();
 
         var folder = Path.Combine("wwwroot", "images", "lion");
         if (!Directory.Exists(folder))
             Directory.CreateDirectory(folder);
 
-        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
-        var fullPath = Path.Combine(folder, fileName);
-
-        using (var stream = new FileStream(fullPath, FileMode.Create))
+        foreach (var photo in photos)
         {
-            photo.CopyTo(stream);
+            if (photo.Length == 0) continue;
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+            var fullPath = Path.Combine(folder, fileName);
+
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                photo.CopyTo(stream);
+            }
+
+            db.LionPhotos.Add(new Models.LionPhoto
+            {
+                LionId = lion.Id,
+                PhotoUrl = "/images/lion/" + fileName,
+                UploadedAt = DateTime.UtcNow
+            });
+
+            if (string.IsNullOrEmpty(lion.PhotoUrl))
+                lion.PhotoUrl = "/images/lion/" + fileName;
         }
 
-        lion.PhotoUrl = "/images/lion/" + fileName;
+        db.SaveChanges();
+        return Redirect($"/stav-zoo/{animalName}");
+    }
+
+    public IActionResult OnPostDeletePhoto(int id, string animalName)
+    {
+        if (User.Identity?.IsAuthenticated != true || !User.IsInRole("Zookeeper"))
+            return Forbid();
+
+        var photo = db.LionPhotos.FirstOrDefault(p => p.Id == id);
+        if (photo == null) return NotFound();
+
+        var relativePath = photo.PhotoUrl.TrimStart('/');
+        var fullPath = Path.Combine("wwwroot", relativePath.Replace('/', Path.DirectorySeparatorChar));
+
+        if (System.IO.File.Exists(fullPath))
+        {
+            System.IO.File.Delete(fullPath);
+        }
+
+        db.LionPhotos.Remove(photo);
         db.SaveChanges();
 
         return Redirect($"/stav-zoo/{animalName}");
