@@ -12,8 +12,16 @@
     <nav>
         <a href="/">Главная</a>
         <a href="/rabbit">Кролик</a>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form method="post" asp-page="/Logout" class="inline">
+                <button type="submit">Выйти (@User.Identity.Name)</button>
+            </form>
+        }
+        else { <a href="/Login">Вход</a> }
     </nav>
 </header>
 <main>@RenderBody()</main>
+<footer>© @DateTime.Now.Year Stav-Zoo</footer>
 </body>
 </html>

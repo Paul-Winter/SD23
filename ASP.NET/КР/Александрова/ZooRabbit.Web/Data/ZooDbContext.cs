@@ -9,4 +9,6 @@ public class ZooDbContext : DbContext
 
     public DbSet<Animal> Animals => Set<Animal>();
     public DbSet<DiaryEntry> DiaryEntries => Set<DiaryEntry>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Donation> Donations => Set<Donation>();
 }

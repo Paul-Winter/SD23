@@ -1,38 +1,87 @@
 @page "/{slug}"
 @model ZooRabbit.Web.Pages.AnimalModel
+@functions {
+    static string Ru(DiaryEntryType t) => t switch
+    {
+        DiaryEntryType.Feeding => "Кормление",
+        DiaryEntryType.Mating => "Спаривание",
+        DiaryEntryType.Offspring => "Потомство",
+        DiaryEntryType.Health => "Здоровье",
+        _ => "Другое"
+    };
+}
 @{ ViewData["Title"] = Model.Animal?.Name; }
 
 @if (Model.Animal is { } a)
 {
     <h1>@a.Name <small>— @a.Species</small></h1>
+    @if (Model.Message != null) { <p class="ok">@Model.Message</p> }
 
-    <section class="card">
-        <h2>История</h2>
-        <p>@a.Description</p>
-    </section>
+    <section class="card"><h2>История</h2><p>@a.Description</p></section>
 
-    <section class="card">
-        <h2>Фото</h2>
+    <section class="card"><h2>Фото</h2>
         @if (a.PhotoUrl != null) { <img src="@a.PhotoUrl" alt="@a.Name" /> }
         else { <div class="placeholder">Фото скоро появится</div> }
     </section>
 
-    <section class="card">
-        <h2>Видео</h2>
+    <section class="card"><h2>Видео</h2>
         @if (a.VideoUrl != null) { <video src="@a.VideoUrl" controls></video> }
         else { <div class="placeholder">Видео скоро появится</div> }
     </section>
 
-    <section class="card">
-        <h2>Веб-камера</h2>
-        <div class="placeholder">Трансляция будет здесь</div>
+    <section class="card"><h2>Веб-камера</h2>
+        @if (a.WebcamUrl != null) { <iframe src="@a.WebcamUrl" width="100" height="400" allowfullscreen></iframe> }
+        else { <div class="placeholder">Трансляция будет здесь</div> }
     </section>
 
-    <section class="card">
-        <h2>Помочь питомцу</h2>
-        <div class="placeholder">Донат на корм/лечение (будет добавлен)</div>
+    <section class="card"><h2>Помочь питомцу</h2>
+        <p>Собрано: <b>@Model.TotalDonations ₽</b></p>
+        <form method="post" asp-page="/Animal" asp-route-slug="@a.Slug" asp-page-handler="Donate">
+            <label>Сумма, ₽ <input name="amount" type="number" min="1" value="100" /></label>
+            <label>На что <select name="purpose"><option>Корм</option><option>Лечение</option></select></label>
+            <label>Ваше имя <input name="donorName" placeholder="Аноним" /></label>
+            <button type="submit">Отправить</button>
+        </form>
     </section>
 
+    @if (Model.IsEmployee)
+    {
+        <section class="card"><h2>Редактировать страницу (работник)</h2>
+            <form method="post" enctype="multipart/form-data" asp-page="/Animal" asp-route-slug="@a.Slug" asp-page-handler="Edit">
+                <label>Имя <input name="name" value="@a.Name" /></label>
+                <label>Вид <input name="species" value="@a.Species" size="40" /></label>
+                <label>История<br /><textarea name="description" rows="5" style="width:100%">@a.Description</textarea></label>
+                <label>Новое фото <input name="photo" type="file" accept="image/*" /></label>
+                <label>Ссылка на видео (.mp4) <input name="videoUrl" value="@a.VideoUrl" size="40" /></label>
+                <label>Ссылка на веб-камеру <input name="webcamUrl" value="@a.WebcamUrl" size="40" /></label>
+                <button type="submit">Сохранить</button>
+            </form>
+        </section>
+
+        <section class="card"><h2>Дневник (только для работников)</h2>
+            <form method="post" asp-page="/Animal" asp-route-slug="@a.Slug" asp-page-handler="AddDiary">
+                <select name="type">
+                    @foreach (var t in Enum.GetValues<DiaryEntryType>()) { <option value="@t">@Ru(t)</option> }
+                </select>
+                <input name="note" placeholder="Запись..." required />
+                <button type="submit">Добавить</button>
+            </form>
+            <table>
+                @foreach (var e in Model.Diary)
+                {
+                    <tr>
+                        <td>@e.Date.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@Ru(e.Type)</td><td>@e.Note</td><td>@e.Author</td>
+                        <td>
+                            <form method="post" asp-page="/Animal" asp-route-slug="@a.Slug" asp-page-handler="DeleteDiary" asp-route-id="@e.Id">
+                                <button type="submit">✕</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </section>
+    }
 }
 else
 {

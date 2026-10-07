@@ -8,3 +8,20 @@ main{max-width:900px;margin:24px auto;padding:0 16px}
 img,video{max-width:100%;border-radius:6px}
 small{color:#666;font-weight:400;font-size:.55em}
 footer{text-align:center;color:#777;padding:24px}
+form.inline{display:inline}
+header button{background:none;border:0;color:#fff;cursor:pointer;font:inherit}
+label{display:block;margin:8px 0}
+input,select{padding:6px;margin-left:6px}
+button{padding:6px 12px;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+td{border-top:1px solid #ddd;padding:6px}
+.ok{background:#dff3e0;padding:10px;border-radius:6px}
+.error{color:#b00020}
+.hint{color:#777;font-size:.85em}
+iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+    border: 0;
+    border-radius: 6px
+}
