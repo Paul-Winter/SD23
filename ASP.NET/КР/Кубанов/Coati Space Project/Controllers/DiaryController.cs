@@ -5,7 +5,7 @@ using Coati_Space_Project.Models;
 
 namespace Coati_Space_Project.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class DiaryController : Controller
     {
         ApplicationContext db;

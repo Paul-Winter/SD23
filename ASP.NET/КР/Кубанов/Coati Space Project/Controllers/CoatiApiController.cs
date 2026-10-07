@@ -57,7 +57,7 @@ namespace Coati_Space_Project.Controllers
 
             var sb = new StringBuilder();
             sb.AppendLine("==================================================");
-            sb.AppendLine("ЖУРНАЛ НАБЛЮДЕНИЙ ЗООЛОГОВ И КИПЕРОВ (НОСУХА ХАХАТУХА)");
+            sb.AppendLine("ЖУРНАЛ НАБЛЮДЕНИЙ ЗООЛОГОВ И КИПЕРОВ (НОСУХА Хахатуха)");
             sb.AppendLine("==================================================");
             sb.AppendLine($"Всего записей в журнале: {entries.Count}");
             sb.AppendLine();

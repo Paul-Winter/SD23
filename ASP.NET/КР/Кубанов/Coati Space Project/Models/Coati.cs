@@ -4,7 +4,7 @@ namespace Coati_Space_Project.Models
     {
         public int Id { get; set; }
         public string Species { get; set; } = "Южноамериканская носуха (Nasua nasua)";
-        public string Gender { get; set; } = "Самка";
+        public string Gender { get; set; } = "Самец";
         public DateOnly BirthDate { get; set; } = new DateOnly(2021, 5, 14);
         public string Biography { get; set; } = string.Empty;
         public string Diet { get; set; } = string.Empty;

@@ -6,11 +6,21 @@
         : Model.Coati.HealthStatus;
 }
 
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Zoo" asp-action="Index" class="text-decoration-none text-secondary">Ставропольский зоопарк</a></li>
+        <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">Носуха (@Model.Coati.Name)</li>
+    </ol>
+</nav>
+
 <!-- Главная карточка особи носухи -->
 <div class="card shadow-sm border mb-4 overflow-hidden bg-white">
     <div class="row g-0">
         <div class="col-lg-5 position-relative">
             <img src="@Model.Coati.PhotoUrl" class="img-fluid h-100 w-100 object-fit-cover" alt="@Model.Coati.Name" style="min-height: 380px;" />
+            <span class="position-absolute top-0 start-0 m-3 badge bg-success px-3 py-2 fs-6 shadow-sm">
+                Обитатель зоопарка
+            </span>
         </div>
         <div class="col-lg-7">
             <div class="card-body p-4">
@@ -19,7 +29,7 @@
                         <h1 class="card-title display-6 fw-bold text-dark mb-1">@Model.Coati.Name</h1>
                         <p class="text-secondary fst-italic mb-2">@Model.Coati.Species</p>
                     </div>
-                    <span class="text-success fw-semibold">
+                    <span class="badge bg-light text-success border border-success px-3 py-2 fs-6 rounded-pill">
                         @healthStatus
                     </span>
                 </div>
@@ -68,13 +78,12 @@
 <div class="card shadow-sm border mb-4 overflow-hidden" id="webcam-section">
     <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
         <h4 class="mb-0 fw-bold text-dark">Прямая трансляция из вольера</h4>
-        <span class="text-secondary small">Камера наблюдения</span>
     </div>
     <div class="card-body p-0 bg-black">
         <div class="live-stream-container position-relative" style="min-height: 440px; max-height: 600px;">
             <div class="live-indicator">
                 <span class="live-dot"></span>
-                <span>В ЭФИРЕ</span>
+                <span class = "text-white">В ЭФИРЕ</span>
             </div>
             <video id="coatiLiveVideo" class="w-100 h-100 object-fit-cover" autoplay muted loop playsinline controls preload="auto" poster="/images/webcam-placeholder.jpg">
                 <source src="/videos/coati-stream.mp4" type="video/mp4" />
@@ -95,7 +104,7 @@
             {
                 <div class="col-6 col-md-4 col-lg-3">
                     <div class="card h-100 border shadow-sm overflow-hidden bg-light">
-                        <img src="@imgPath" class="img-fluid rounded" alt="Фотография носухи Хахатухи" style="height: 220px; width: 100%; object-fit: cover; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" />
+                        <img src="@imgPath" class="img-fluid rounded" alt="Фотография Носухи Хахатухи" style="height: 220px; width: 100%; object-fit: cover; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'" />
                     </div>
                 </div>
             }
@@ -107,7 +116,7 @@
 <div class="card shadow-sm border mb-4 bg-white">
     <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
         <h4 class="mb-0 fw-bold text-dark">Заметки зоологов</h4>
-        <span class="text-secondary small fw-medium">Журнал куратора</span>
+        <span class="badge bg-light text-secondary border">Журнал куратора</span>
     </div>
     <div class="card-body">
         <div class="row g-3">
@@ -118,12 +127,12 @@
                     <div class="col-md-6">
                         <div class="border rounded p-3 h-100 bg-light">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="text-dark fw-semibold small">@entry.EventType</span>
+                                <span class="badge bg-secondary">@entry.EventType</span>
                                 <small class="text-secondary">@entry.EventDate.ToString("dd.MM.yyyy HH:mm")</small>
                             </div>
                             <h6 class="fw-bold mb-1 text-dark">@entry.Title</h6>
                             <p class="small text-secondary mb-2">@entry.Description</p>
-                            <small class="text-secondary">Куратор: @entry.Author</small>
+                            <small class="text-secondary">Сотрудник: @entry.Author</small>
                         </div>
                     </div>
                 }
@@ -140,9 +149,6 @@
 <div class="card shadow-sm border mb-4 bg-white" id="donation-section">
     <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap">
         <h4 class="mb-0 fw-bold text-dark">Поддержать носуху Хахатуху</h4>
-        <span class="text-secondary fw-semibold">
-            Собрано: @Model.TotalDonations.ToString("N0") ₽ (@Model.DonationsCount взносов)
-        </span>
     </div>
     <div class="card-body p-4">
         <p class="text-secondary mb-4">
@@ -158,47 +164,9 @@
         }
 
         <form asp-controller="Zoo" asp-action="Donate" method="post">
-            <div class="mb-3">
-                <label class="form-label fw-semibold text-dark">Выберите или введите сумму (руб.):</label>
-                <div class="btn-group w-100 mb-2" role="group">
-                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(100)">100 ₽</button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(300)">300 ₽</button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(500)">500 ₽</button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="setAmount(1000)">1 000 ₽</button>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-text">₽</span>
-                    <input type="number" id="donationAmount" name="amount" class="form-control form-control-lg" min="10" max="100000" value="300" required />
-                </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark">Ваше имя:</label>
-                    <input type="text" name="donorName" class="form-control" placeholder="Имя или псевдоним" value="Посетитель зоопарка" required />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark">Электронная почта (для квитанции):</label>
-                    <input type="email" name="email" class="form-control" placeholder="user@example.com" />
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold text-dark">Назначение взноса:</label>
-                <select name="target" class="form-select">
-                    <option value="На свежие фрукты и лакомства">На свежие фрукты и лакомства</option>
-                    <option value="На витамины и уход">На витамины и ветеринарный уход</option>
-                    <option value="На игрушки и обогащение вольера">На игрушки и обустройство вольера</option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label fw-semibold text-dark">Пожелание питомцу:</label>
-                <textarea name="message" class="form-control" rows="2" placeholder="Ваше сообщение..."></textarea>
-            </div>
-
+            
             <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-3">
-                Подтвердить пожертвование
+                Пожертвовать носухе
             </button>
         </form>
     </div>

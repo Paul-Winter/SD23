@@ -6,8 +6,8 @@ namespace Coati_Space_Project.Models
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
-        public string Role { get; set; } = "Admin";
-        public string Position { get; set; } = "Администратор";
+        public string Role { get; set; } = "Employee";
+        public string Position { get; set; } = "Кипер";
 
         public StaffUser() { }
 

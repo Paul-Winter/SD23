@@ -35,15 +35,15 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-primary fw-semibold px-3" href="/diary">Панель администратора</a>
+                                <a class="nav-link text-primary fw-semibold px-3" href="/diary">Дневник наблюдений</a>
                             </li>
                         }
                     </ul>
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item me-3">
-                                <span class="text-dark small fw-medium">Администратор: @User.Identity.Name</span>
+                            <li class="nav-item me-2">
+                                <span class="badge bg-light text-dark border px-3 py-2">Сотрудник: @User.Identity.Name</span>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-outline-danger btn-sm px-3" href="/account/logout">Выйти</a>
@@ -52,7 +52,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="btn btn-outline-secondary btn-sm px-3" href="/account/login">Вход для администратора</a>
+                                <a class="btn btn-outline-secondary btn-sm px-3" href="/account/login">Вход для персонала</a>
                             </li>
                         }
                     </ul>

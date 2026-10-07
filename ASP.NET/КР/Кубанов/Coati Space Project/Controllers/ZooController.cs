@@ -27,10 +27,9 @@ namespace Coati_Space_Project.Controllers
                 coati = new Coati
                 {
                     Name = "Хахатуха",
-                    Species = "Южноамериканская носуха (Nasua nasua)",
-                    Gender = "Самка",
+                    Gender = "Самец",
                     BirthDate = new DateOnly(2021, 5, 14),
-                    Biography = "Хахатуха — всеобщий любимец зоопарка. Активная, любознательная и дружелюбная обитательница вольера.",
+                    Biography = "Хахатуха — всеобщий любимец зоопарка. Активный, любознательный и дружелюбный обитатель вольера.",
                     Diet = "Фрукты, перепелиные яйца, насекомые, нежирное мясо.",
                     Habitat = "Вольер №7, Сектор «Южная Америка».",
                     HealthStatus = "Клинически здоров",
@@ -87,26 +86,7 @@ namespace Coati_Space_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> Donate(string donorName, string? email, decimal amount, string target, string? message)
         {
-            if (amount <= 0)
-            {
-                amount = 100;
-            }
-
-            var donation = new Donation
-            {
-                DonorName = string.IsNullOrWhiteSpace(donorName) ? "Анонимный друг" : donorName,
-                Email = email,
-                Amount = amount,
-                Target = string.IsNullOrWhiteSpace(target) ? "На лакомства и фрукты" : target,
-                Message = message,
-                CreatedAt = DateTime.Now
-            };
-
-            db.Donations.Add(donation);
-            await db.SaveChangesAsync();
-
-            TempData["DonationSuccess"] = $"Благодарим за поддержку, {donation.DonorName}! Ваше пожертвование на сумму {donation.Amount:N0} ₽ («{donation.Target}») успешно принято.";
-            return Redirect("/stav-zoo/coati#donation-section");
+            return Redirect("https://pay.cloudtips.ru/p/cceba1a9");
         }
     }
 }
