@@ -19,6 +19,12 @@ namespace Свинья_Визенау.Models
 
         public string? PhotoUrl { get; set; }
 
+        public string? VideoUrl { get; set; }
+        public string? WebcamUrl { get; set; }
+
         public DateTime ArrivedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<DiaryEntry> DiaryEntries { get; set; } = new List<DiaryEntry>();
     }
 }
+

@@ -1,0 +1,29 @@
+﻿@page
+@model Свинья_Визенау.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<h1>Регистрация</h1>
+
+<form method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Input.Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Пароль</label>
+        <input asp-for="Input.Password" type="password" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Отображаемое имя</label>
+        <input asp-for="Input.DisplayName" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    <a asp-page="/Account/Login" class="btn btn-link">Уже есть аккаунт?</a>
+</form>

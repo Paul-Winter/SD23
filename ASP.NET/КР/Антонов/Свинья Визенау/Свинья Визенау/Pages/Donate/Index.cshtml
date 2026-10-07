@@ -1,0 +1,67 @@
+﻿@page
+@model Свинья_Визенау.Pages.Donate.IndexModel
+@{
+    ViewData["Title"] = "Донат";
+}
+
+<h1>Поддержать зоопарк</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label>Сумма, ₽</label>
+        <input asp-for="Input.Amount" type="number" min="1" step="1" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Назначение</label>
+        <select asp-for="Input.Purpose" class="form-select">
+            <option value="Корм">Корм</option>
+            <option value="Лечение">Лечение</option>
+            <option value="Free donation">Свободный донат</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Имя (необязательно)</label>
+        <input asp-for="Input.DonorName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Сообщение (необязательно)</label>
+        <textarea asp-for="Input.Message" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Отправить</button>
+</form>
+
+<h3 class="mt-5">Последние донаты</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Имя</th>
+            <th>Сумма</th>
+            <th>Назначение</th>
+            <th>Сообщение</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model.RecentDonations)
+        {
+            <tr>
+                <td>@d.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@(d.DonorName ?? "Аноним")</td>
+                <td>@d.Amount ₽</td>
+                <td>@d.Purpose</td>
+                <td>@d.Message</td>
+            </tr>
+        }
+    </tbody>
+</table>

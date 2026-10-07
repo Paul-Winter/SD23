@@ -1,1 +1,382 @@
-Здесь будет будущая документация
+================================================================
+   ПРОЕКТ: Веб-приложение «Свинья_Визенау»
+   Технологии: ASP.NET Core Razor Pages (.NET 8), EF Core,
+               SQL Server LocalDB, ASP.NET Core Identity
+   Вариант: поросёнок «Визенау»
+================================================================
+
+СОДЕРЖАНИЕ
+----------
+1. Назначение
+2. Архитектура
+3. Структура проекта
+4. Модели данных
+5. Контекст базы данных
+6. Аутентификация и авторизация
+7. Основные страницы (Razor Pages)
+8. API-контроллеры
+9. Настройка поддомена
+10. Seed-данные (первичное заполнение)
+11. Запуск и проверка
+12. Тестовые аккаунты
+13. Что можно улучшить
+
+
+================================================================
+1. НАЗНАЧЕНИЕ
+================================================================
+
+Веб-приложение представляет собой сайт зоопарка с одной
+страницей животного — поросёнка «Визенау».
+
+Функции:
+  • Просмотр информации о животном (описание, фото, видео,
+    веб-камера) — для всех посетителей.
+  • Донат на корм/лечение — для авторизованных пользователей.
+  • Ведение дневника животного (кормление, спаривание,
+    потомство, наблюдения, медосмотры) — для работников.
+  • Доступ к информации и дневнику через REST API.
+  • Роутинг по поддомену: wizenau.stav-zoo.local → /wizenau.
+
+
+================================================================
+2. АРХИТЕКТУРА
+================================================================
+
+• ASP.NET Core Razor Pages — серверный рендеринг страниц.
+• ASP.NET Core Identity — аутентификация и роли.
+• Entity Framework Core — ORM для работы с БД.
+• SQL Server LocalDB — хранилище данных.
+• REST API на контроллерах — для программного доступа.
+
+Уровни:
+  Presentation  → Razor Pages (.cshtml), Controllers
+  Application   → PageModels, бизнес-логика
+  Data          → ZooContext (EF Core DbContext)
+  Database      → SQL Server LocalDB, БД ZooDb
+
+
+================================================================
+3. СТРУКТУРА ПРОЕКТА
+================================================================
+
+Свинья_Визенау/
+├── Data/
+│   └── ZooContext.cs           — EF Core DbContext
+├── Models/
+│   ├── Animal.cs               — модель животного
+│   ├── DiaryEntry.cs           — запись дневника + enum типов
+│   ├── Donation.cs             — донат
+│   └── ApplicationUser.cs      — пользователь (расширение IdentityUser)
+├── Pages/
+│   ├── Index.cshtml            — главная зоопарка
+│   ├── Account/
+│   │   ├── Login.cshtml        — вход
+│   │   ├── Register.cshtml     — регистрация
+│   │   └── Logout.cshtml       — выход
+│   ├── Animals/
+│   │   └── Details.cshtml      — страница животного (/{slug})
+│   ├── Diary/
+│   │   └── Index.cshtml        — дневник (только Worker/Admin)
+│   ├── Donate/
+│   │   └── Index.cshtml        — форма доната
+│   └── Shared/
+│       └── _Layout.cshtml      — общий макет
+├── Controllers/
+│   ├── AnimalsController.cs    — API /api/animals
+│   ├── DiaryController.cs      — API /api/animals/{id}/diary
+│   └── DonationsController.cs  — API /api/donations
+├── wwwroot/
+│   ├── images/                 — фото животных
+│   └── Videos/                 — видео и «веб-камера»
+├── appsettings.json            — конфигурация и строка подключения
+└── Program.cs                  — точка входа, настройка сервисов
+
+
+================================================================
+4. МОДЕЛИ ДАННЫХ
+================================================================
+
+4.1. Animal (Models/Animal.cs)
+------------------------------
+Поля:
+  Id           int              — первичный ключ
+  Slug         string(50)       — URL-идентификатор (уникальный)
+  Name         string(100)      — отображаемое имя
+  Description  string(2000)     — текстовое описание особи
+  PhotoUrl     string?          — путь к фото
+  VideoUrl     string?          — путь к видеофайлу
+  WebcamUrl    string?          — путь/embed веб-камеры
+  ArrivedAt    DateTime         — дата прибытия в зоопарк
+  DiaryEntries ICollection      — навигационное свойство
+
+Связь: 1 Animal → много DiaryEntry.
+
+4.2. DiaryEntry (Models/DiaryEntry.cs)
+--------------------------------------
+Поля:
+  Id               int
+  AnimalId         int          — FK на Animal
+  Animal           Animal       — навигация
+  Type             DiaryEntryType — тип записи
+  Notes            string(2000) — текст заметки
+  RecordedAt       DateTime     — дата записи
+  RecordedByUserId string?      — FK на ApplicationUser
+  RecordedBy       ApplicationUser? — навигация
+
+Enum DiaryEntryType (переведён на русский через [Display]):
+  Feeding      → «Кормление»
+  Mating       → «Спаривание»
+  Offspring    → «Потомство»
+  Observation  → «Наблюдение»
+  Medical      → «Медицинский осмотр»
+
+Связи:
+  DiaryEntry → Animal       (каскадное удаление)
+  DiaryEntry → ApplicationUser (SetNull при удалении автора)
+
+4.3. Donation (Models/Donation.cs)
+----------------------------------
+Поля:
+  Id         int
+  Amount     decimal(18,2)      — сумма (диапазон 1..1 000 000)
+  Purpose    string(200)        — назначение (Корм/Лечение/Free)
+  DonorName  string(100)?       — имя донора
+  Message    string(500)?       — сообщение
+  CreatedAt  DateTime           — дата создания
+  UserId     string?            — FK на пользователя
+
+4.4. ApplicationUser (Models/ApplicationUser.cs)
+------------------------------------------------
+Наследник IdentityUser. Дополнительное поле:
+  DisplayName string? — отображаемое имя.
+
+
+================================================================
+5. КОНТЕКСТ БАЗЫ ДАННЫХ
+================================================================
+
+Файл: Data/ZooContext.cs
+
+Наследует IdentityDbContext<ApplicationUser> — это даёт все
+таблицы Identity (AspNetUsers, AspNetRoles, AspNetUserRoles и др.)
+плюс собственные DbSet:
+
+  DbSet<Animal>     Animals
+  DbSet<DiaryEntry> DiaryEntries
+  DbSet<Donation>   Donations
+
+OnModelCreating настраивает:
+  • Уникальный индекс на Animal.Slug.
+  • Связь DiaryEntry → Animal (каскадное удаление).
+  • Связь DiaryEntry → ApplicationUser (SetNull).
+
+База данных: ZooDb, LocalDB.
+Строка подключения в appsettings.json:
+  "Server=(localdb)\\mssqllocaldb;Database=ZooDb;Trusted_Connection=True"
+
+
+================================================================
+6. АУТЕНТИФИКАЦИЯ И АВТОРИЗАЦИЯ
+================================================================
+
+Способ: cookie-аутентификация на базе ASP.NET Core Identity.
+(JWT не используется — по ТЗ допустимо любое решение.)
+
+Роли:
+  Admin    — полный доступ, управление животными и ролями.
+  Worker   — ведение дневника, доступ к /Diary.
+  Visitor  — просмотр + донат. Выдаётся по умолчанию при регистрации.
+
+Политики (Program.cs):
+  ZooWorker      — требуются роли Worker или Admin.
+  Authenticated  — требуется аутентификация.
+
+Правила доступа:
+  /Diary         — только ZooWorker (AuthorizeFolder).
+  /Donate        — только Authenticated (AuthorizePage).
+  /api/animals/*/diary — только Worker/Admin ([Authorize(Roles=...)]).
+  /api/donations (POST) — только авторизованные.
+
+Настройки пароля (в Program.cs, ослаблены для удобства лабы):
+  RequireDigit              = false
+  RequireNonAlphanumeric    = false
+  RequireUppercase          = false
+  RequiredLength            = 4
+  RequireConfirmedAccount   = false
+
+
+================================================================
+7. ОСНОВНЫЕ СТРАНИЦЫ (Razor Pages)
+================================================================
+
+7.1. Pages/Index.cshtml
+-----------------------
+Главная зоопарка. Список ссылок на страницы животных.
+Доступна всем.
+
+7.2. Pages/Animals/Details.cshtml (@page "/{slug}")
+---------------------------------------------------
+Карточка животного. Открывается по адресу /{slug},
+например /wizenau. Показывает:
+  • имя, фото, описание, дату прибытия;
+  • видео (если VideoUrl заполнен);
+  • веб-камеру (если WebcamUrl заполнен);
+  • кнопку «Помочь животному» → /Donate/Index;
+  • дневник наблюдений — ТОЛЬКО для Worker/Admin.
+
+Details.cshtml.cs:
+  OnGetAsync(slug) загружает Animal с Include(DiaryEntries)
+  и ThenInclude(RecordedBy). Если не найдено — 404.
+
+7.3. Pages/Diary/Index.cshtml
+-----------------------------
+Доступ: [Authorize(Roles = "Worker,Admin")].
+Форма добавления записи + таблица всех записей.
+Типы записей в выпадающем списке — на русском
+(через [Display] и Html.GetEnumSelectList).
+
+7.4. Pages/Donate/Index.cshtml
+------------------------------
+Доступ: [Authorize].
+Форма доната + таблица последних 20 донатов.
+
+7.5. Pages/Account/Login.cshtml, Register.cshtml, Logout.cshtml
+---------------------------------------------------------------
+Стандартные формы входа/регистрации/выхода.
+Регистрация автоматически выдаёт роль Visitor.
+
+
+================================================================
+8. API-КОНТРОЛЛЕРЫ
+================================================================
+
+8.1. AnimalsController — /api/animals
+-------------------------------------
+GET /api/animals                 — список всех животных (публично)
+GET /api/animals/{slug}          — одно животное по slug (публично)
+
+Возвращает поля: Id, Slug, Name, Description, PhotoUrl,
+VideoUrl, WebcamUrl, ArrivedAt.
+
+8.2. DiaryController — /api/animals/{animalId}/diary
+-----------------------------------------------------
+Доступ: [Authorize(Roles = "Worker,Admin")].
+
+GET  /api/animals/{animalId}/diary
+     — список записей дневника по животному.
+POST /api/animals/{animalId}/diary
+     — добавить запись (JSON: { "type": 0, "notes": "..." }).
+
+8.3. DonationsController — /api/donations
+-----------------------------------------
+GET  /api/donations              — последние 50 донатов (публично)
+POST /api/donations              — создать донат ([Authorize])
+     JSON: { "amount": 500, "purpose": "Корм", "donorName": "...",
+             "message": "..." }
+
+
+================================================================
+9. НАСТРОЙКА ПОДДОМЕНА
+================================================================
+
+Цель: страница животного доступна по адресу
+      wizenau.stav-zoo.local — как поддомен зоопарка stav-zoo.
+
+Механизм:
+  Middleware в Program.cs перехватывает HTTP-запрос, читает
+  заголовок Host, извлекает поддомен и переписывает путь:
+    wizenau.stav-zoo.local/  →  /wizenau
+  Служебные пути (/api, /Account, /Donate, /Diary,
+  /images, /css, /js, /lib, /favicon) не переписываются.
+
+Шаги настройки:
+  1) В файл C:\Windows\System32\drivers\etc\hosts (от админа)
+     добавить:
+        127.0.0.1   stav-zoo.local
+        127.0.0.1   wizenau.stav-zoo.local
+
+  2) В Properties/launchSettings.json в applicationUrl
+     добавить хосты:
+        "https://localhost:7123;https://stav-zoo.local:7123;
+         https://wizenau.stav-zoo.local:7123"
+
+  3) Запустить приложение, открыть в браузере:
+        https://stav-zoo.local:7123/
+        https://wizenau.stav-zoo.local:7123/
+
+
+================================================================
+10. SEED-ДАННЫЕ (первичное заполнение)
+================================================================
+
+В Program.cs при первом запуске:
+  • Создаются роли: Admin, Worker, Visitor.
+  • Создаётся животное «Поросёнок Визенау» со slug = wizenau,
+    фото /images/wizenau.jpg.
+  • Создаются пользователи:
+      worker@zoo.local / Worker123 (роль Worker)
+      admin@zoo.local  / Admin123  (роль Admin)
+  • Обновляются пути к видео и веб-камере:
+      VideoUrl  = /Videos/Wizenau.mp4
+      WebcamUrl = /Videos/WebCamWizenau.mp4
+
+Файлы видео должны лежать в wwwroot/Videos/.
+(Внимание: в Linux-хостинге регистр важен — /Videos/ ≠ /videos/.)
+
+
+================================================================
+11. ЗАПУСК И ПРОВЕРКА
+================================================================
+
+Требования:
+  • Visual Studio 2022 (17.8+)
+  • .NET 8 SDK
+  • SQL Server Express LocalDB
+
+Запуск:
+  1) Открыть решение в Visual Studio.
+  2) Нажать F5 (или Ctrl+F5 без отладки).
+  3) Браузер откроется на https://localhost:{порт}/.
+
+Проверка:
+  1) Главная / — ссылка «Поросёнок Визенау».
+  2) /wizenau — фото, видео, «веб-камера», кнопка доната.
+  3) /Account/Login — вход под worker@zoo.local.
+  4) /Diary — добавить запись дневника.
+  5) /Donate — отправить донат.
+  6) /api/animals — JSON со списком.
+  7) /api/animals/1/diary (под Worker) — JSON дневника.
+  8) https://wizenau.stav-zoo.local:{порт}/ — карточка.
+
+
+================================================================
+12. ТЕСТОВЫЕ АККАУНТЫ
+================================================================
+
+  Роль     | Email              | Пароль
+  ---------|--------------------|-----------
+  Worker   | worker@zoo.local   | Worker123
+  Admin    | admin@zoo.local    | Admin123
+  Visitor  | регистрируется сам | (любой)
+
+Новый пользователь через /Account/Register автоматически
+получает роль Visitor.
+
+
+================================================================
+13. ЧТО МОЖНО УЛУЧШИТЬ
+================================================================
+
+• Перейти с EnsureCreated() на EF Core Migrations.
+• Добавить админ-панель для CRUD животных.
+• Реализовать JWT для API-доступа.
+• Добавить пагинацию в списках дневника и донатов.
+• Загрузка фото/видео через IFormFile (без ручного пути).
+• Расширить модель Animal: возраст, вес, вакцинации.
+• Тесты (xUnit) для контроллеров и PageModel.
+
+
+================================================================
+   КОНЕЦ ДОКУМЕНТА
+================================================================

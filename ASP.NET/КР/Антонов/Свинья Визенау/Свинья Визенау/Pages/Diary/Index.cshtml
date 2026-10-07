@@ -1,0 +1,60 @@
+﻿@page
+@model Свинья_Визенау.Pages.Diary.IndexModel
+@{
+    ViewData["Title"] = "Дневник наблюдений";
+}
+
+<h1>Дневник наблюдений</h1>
+
+<form method="post" class="col-md-8 mb-5">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label>Животное</label>
+        <select asp-for="Input.AnimalId" class="form-select">
+            @foreach (var a in Model.Animals)
+            {
+                <option value="@a.Id">@a.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Тип записи</label>
+        <select asp-for="Input.Type" class="form-select"
+                asp-items="Html.GetEnumSelectList<Свинья_Визенау.Models.DiaryEntryType>()">
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Заметка</label>
+        <textarea asp-for="Input.Notes" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Добавить запись</button>
+</form>
+
+<h3>Все записи</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Животное</th>
+            <th>Тип</th>
+            <th>Заметка</th>
+            <th>Автор</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model.Entries)
+        {
+            <tr>
+                <td>@e.RecordedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@e.Animal.Name</td>
+                <td>@e.Type</td>
+                <td>@e.Notes</td>
+                <td>@(e.RecordedBy?.DisplayName ?? e.RecordedBy?.Email ?? "—")</td>
+            </tr>
+        }
+    </tbody>
+</table>

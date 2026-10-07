@@ -1,6 +1,9 @@
-﻿namespace Свинья_Визенау.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Свинья_Визенау.Models
 {
-    public class ApplicationUser
+    public class ApplicationUser : IdentityUser
     {
+        public string? DisplayName { get; set; }
     }
 }
