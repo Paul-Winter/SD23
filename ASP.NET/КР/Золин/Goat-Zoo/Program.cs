@@ -23,8 +23,6 @@ namespace Goat_Zoo
             });
 
             var app = builder.Build();
-            
-            app.UsePathBase("/goat");
 
             using (var scope = app.Services.CreateScope())
             {

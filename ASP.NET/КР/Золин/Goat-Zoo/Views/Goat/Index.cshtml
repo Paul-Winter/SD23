@@ -1,0 +1,326 @@
+﻿@{
+    ViewData["Title"] = "Камерунские козы Ставропольского зоопарка";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fdf6ec;
+            color: #3d2b1f;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #8b3e2f;
+            text-align: center;
+            border-bottom: 3px solid #e0a96d;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #a0432f;
+            margin-top: 0;
+        }
+        .goat-story, .info-block {
+            background-color: #fffaf3;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(139, 62, 47, 0.15);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #c96f4a;
+        }
+        .goat-story p, .info-block p {
+            line-height: 1.7;
+            text-align: justify;
+        }
+        .info-block ul {
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        .info-block li {
+            margin-bottom: 6px;
+        }
+        .highlight {
+            background-color: #f7d9b6;
+            color: #6b2d1e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .media-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 25px;
+            margin-bottom: 30px;
+        }
+        .media-item {
+            flex: 1 1 300px;
+            background-color: #fbe8d3;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(139, 62, 47, 0.12);
+            margin: 30px 0;
+        }
+        .media-item h3 {
+            color: #8b3e2f;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+        .media-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .media-item iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+            border-radius: 8px;
+        }
+        .source-note {
+            font-size: 0.8em;
+            color: #8a6f5c;
+            margin-top: 5px;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+        .gallery-item {
+            background-color: #fbe8d3;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(139, 62, 47, 0.12);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .gallery-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(139, 62, 47, 0.22);
+        }
+        .gallery-item a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-item .caption {
+            padding: 8px 10px;
+            font-size: 0.85em;
+            color: #6b4a3a;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐐 Камерунские козы в Ставропольском зоопарке</h1>
+
+        <!-- История  -->
+        <div class="goat-story">
+            <h2>История одной семьи: Яша и Бяша</h2>
+            <p>
+                В контактном зоопарке Ставрополя живёт семейная пара камерунских козлов — 
+                <span class="highlight">Яша</span> и <span class="highlight">Бяша</span>. 
+                Яша прибыл из Калининградского зоопарка первым, но на новом месте он 
+                чувствовал себя одиноко: отказывался от еды и не шёл на контакт с людьми. 
+                Сотрудникам зоопарка пришлось снова отправиться в Калининград, чтобы 
+                привезти его подругу Бяшу.
+            </p>
+            <p>
+                После воссоединения пара быстро освоилась, и теперь они — любимцы 
+                посетителей. Камерунские козы отличаются небольшим размером и длинными 
+                плоскоокруглыми рогами, загнутыми назад. Они очень ласковые, приветливые 
+                и хорошо поддаются дрессировке.
+            </p>
+            <p>
+                Весной 2024 года в семействе камерунских коз Ставропольского зоопарка 
+                произошло пополнение: на свет появились <span class="highlight">пятеро козлят</span> 
+                и трое ягнят. Первые детёныши родились 20 января, а самый младший — 
+                29 февраля. Управляющий зоопарком Фёдор Тримбалюк отметил, что 
+                малыши быстро развиваются: уже через пару часов после рождения они 
+                уверенно встают на ножки и следуют за мамой, а вскоре начинают пробовать 
+                сено и сухой корм.
+            </p>
+            <p>
+                В марте 2026 года зоопарк снова пережил бэби-бум: родились четверо 
+                камерунских козлят, четверо ягнят и три муфлона. Сотрудники 
+                отмечают, что регулярное пополнение — лучший показатель комфортных условий 
+                содержания животных.
+            </p>
+        </div>
+
+        <!-- Инфа о виде -->
+        <div class="info-block">
+            <div class="info-block__head">
+            <h2>📖 Камерунская коза: краткая справка о виде</h2>
+            </div>
+
+            <p class="info-block__lead">
+            <strong>Камерунская коза</strong> (также известная как африканская карликовая
+            коза или пигмей) — одна из самых миниатюрных пород домашних коз в мире.
+            Порода была выведена в Европе в конце XIX века на основе западноафриканских
+            карликовых коз, которых традиционно разводили в Камеруне и Нигерии.
+            </p>
+
+            <dl class="fact-grid">
+            <div class="fact">
+                <dt><span class="fact__icon">🌍</span>Родина</dt>
+                <dd>
+                Центр Западной Африки — Камерун, Нигерия. Позже порода распространилась
+                по всей Африке, Евразии и Северной Америке.
+                </dd>
+            </div>
+
+            <div class="fact">
+                <dt><span class="fact__icon">📏</span>Размеры</dt>
+                <dd>
+                Высота в холке 40–60 см, вес самок 10–17 кг, самцов 17–25 кг. Туловище
+                компактное, бочкообразное, ноги короткие.
+                </dd>
+            </div>
+
+            <div class="fact">
+                <dt><span class="fact__icon">🏞️</span>Среда обитания</dt>
+                <dd>
+                В природе — кустарниковые и травянистые равнины, редколесье. Отлично
+                адаптируется к разным климатическим условиям, включая холодный климат,
+                благодаря плотному подшёрстку.
+                </dd>
+            </div>
+
+            <div class="fact">
+                <dt><span class="fact__icon">🥕</span>Питание</dt>
+                <dd>
+                Трава, молодые побеги деревьев и кустарников, листья, зерно, овощи.
+                В зоопарке рацион включает сено, ветки, веники, морковь, яблоки и свёклу.
+                Камерунские козы — отличные верхолазы: в поисках пищи могут забираться
+                на деревья, за что их шутливо называют «африканскими древесными козами».
+                </dd>
+            </div>
+
+            <div class="fact">
+                <dt><span class="fact__icon">🌤️</span>Образ жизни</dt>
+                <dd>
+                Активны в светлое время суток. Держатся небольшими группами, в которых
+                лидерами становятся самые старшие и опытные самки. Плохо переносят
+                одиночество.
+                </dd>
+            </div>
+
+            <div class="fact">
+                <dt><span class="fact__icon">🐐</span>Размножение</dt>
+                <dd>
+                Половая зрелость наступает в 3–6 месяцев. Беременность длится около
+                5 месяцев, обычно рождается 1–2 детёныша (иногда до 4). Козлята весом
+                около 360 г уже через несколько минут после рождения могут стоять,
+                а через 4 часа — бегать и прыгать.
+                </dd>
+            </div>
+
+            <div class="fact">
+                <dt><span class="fact__icon">⏳</span>Продолжительность жизни</dt>
+                <dd>
+                15–20 лет, в некоторых источниках — до 24 лет.
+                </dd>
+            </div>
+
+            <div class="fact fact--highlight">
+                <dt><span class="fact__icon">💡</span>Интересный факт</dt>
+                <dd>
+                Камерунских коз брали на корабли как источник свежего молока и мяса
+                в длительных плаваниях. Молоко отличается высокой жирностью (4,5–6%)
+                и не имеет специфического «козьего» запаха.
+                </dd>
+            </div>
+            </dl>
+        </div>
+
+        <!-- Медиа -->
+        <div class="media-section">
+            <div class="media-item">
+                <h3>📸 Главное фото</h3>
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/African_Pygmy_Goat_001.jpg" 
+                     alt="Камерунская карликовая коза" />
+            </div>
+
+            <div class="media-item">
+                <h3>🎥 Видео</h3>
+                <iframe src="https://rutube.ru/play/embed/567affc7bd15459fe8e33b122a83e500/" 
+                        allowfullscreen>
+                </iframe>
+                <p class="source-note">Видео: «Ставропольский зоопарк принимает новых жильцов» (Rutube)</p>
+            </div>
+        </div>
+
+        <!-- Галерея -->
+        <div class="info-block">
+            <h2>🖼️ Галерея: камерунские козы</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <a href="https://commons.wikimedia.org/wiki/File:African_Pygmy_Goat_001.jpg" target="_blank">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/African_Pygmy_Goat_001.jpg" 
+                             alt="Камерунская коза 1" />
+                        <div class="caption">Камерунская коза</div>
+                    </a>
+                </div>
+                <div class="gallery-item">
+                    <a href="https://commons.wikimedia.org/wiki/File:African_Pygmy_Goat_002.jpg" target="_blank">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/African_Pygmy_Goat_002.jpg" 
+                             alt="Камерунская коза 2" />
+                        <div class="caption">Коричневая камерунская коза</div>
+                    </a>
+                </div>
+                <div class="gallery-item">
+                    <a href="https://commons.wikimedia.org/wiki/File:African_Pygmy_Goat_003.jpg" target="_blank">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/African_Pygmy_Goat_003.jpg" 
+                             alt="Камерунская коза 3" />
+                        <div class="caption">Старая камерунская коза</div>
+                    </a>
+                </div>
+                <div class="gallery-item">
+                    <a href="https://commons.wikimedia.org/wiki/File:African_Pygmy_Goat_005.jpg" target="_blank">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/African_Pygmy_Goat_005.jpg" 
+                             alt="Камерунская коза 4" />
+                        <div class="caption">Карликовая камерунская коза</div>
+                    </a>
+                </div>
+                <div class="gallery-item">
+                    <a href="https://commons.wikimedia.org/wiki/File:African_Pygmy_Goat_head.jpg" target="_blank">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/African_Pygmy_Goat_head.jpg" 
+                             alt="Голова камерунской козы" />
+                        <div class="caption">Бяша</div>
+                    </a>
+                </div>
+                <div class="gallery-item">
+                    <a href="https://commons.wikimedia.org/wiki/File:African_Pygmy_Goat.jpg" target="_blank">
+                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/African_Pygmy_Goat.jpg" 
+                             alt="Камерунская коза" />
+                        <div class="caption">Яша</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
