@@ -25,8 +25,16 @@
                         </li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
+                            @* <li class="nav-item">
                                 <a class="nav-link text-dark" asp-page="/Donate">Донат</a>
+                            </li> *@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   href="https://pay.cloudtips.ru/p/c7a80e09"
+                                   target="_blank"
+                                   rel="noopener">
+                                    Донат
+                                </a>
                             </li>
                             @if (User.IsInRole("Worker") || User.IsInRole("Admin"))
                             {

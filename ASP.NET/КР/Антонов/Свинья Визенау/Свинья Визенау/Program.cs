@@ -117,6 +117,20 @@ using (var scope = app.Services.CreateScope())
 
         db.SaveChanges();
     }
+
+    if (wizenau != null && !db.AnimalPhotos.Any(p => p.AnimalId == wizenau.Id))
+    {
+        db.AnimalPhotos.AddRange(
+            new AnimalPhoto { AnimalId = wizenau.Id, Url = "/Images/Wizenau.jpg", Caption = "Визенау в вольере", SortOrder = 1 },
+            new AnimalPhoto { AnimalId = wizenau.Id, Url = "/Images/svinia2.jpg", Caption = "Старый поросенок", SortOrder = 2 },
+            new AnimalPhoto { AnimalId = wizenau.Id, Url = "/Images/svinia3.jpg", Caption = "Поросенок со своей семьей", SortOrder = 3 },
+            new AnimalPhoto { AnimalId = wizenau.Id, Url = "/Images/svinia4.jpg", Caption = "кормление молоком маленького поросенка", SortOrder = 4 },
+            new AnimalPhoto { AnimalId = wizenau.Id, Url = "/Images/svinia5.jpg", Caption = "Семейное фото", SortOrder = 5 }
+        );
+        db.SaveChanges();
+    }
+
+
 }
 
 if (!app.Environment.IsDevelopment())
