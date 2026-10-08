@@ -228,7 +228,7 @@
     <header class="goat-header">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm goat-navbar">
             <div class="container">
-                <a class="navbar-brand goat-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand goat-brand" asp-area="" asp-controller="Goat" asp-action="Index">
                     <span class="goat-brand__icon">🐐</span>
                     <span>Камерунские козы</span>
                 </a>
@@ -244,19 +244,19 @@
                     <ul class="navbar-nav flex-grow-1 goat-nav">
                         <li class="nav-item">
                             <a class="nav-link @IsActive("MainPage", "Index")"
-                               asp-area="" asp-controller="MainPage" asp-action="Index">На главную</a>
+                               asp-area="" asp-controller="Home" asp-action="Index">На главную</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @IsActive("Home", "Index")"
-                               asp-area="" asp-controller="Home" asp-action="Index">Инфо</a>
+                            <a class="nav-link @IsActive("Goat", "Index")"
+                               asp-area="" asp-controller="Goat" asp-action="Index">Инфо</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @IsActive("Home", "Webcam")"
-                               asp-area="" asp-controller="Home" asp-action="Webcam">Камера</a>
+                            <a class="nav-link @IsActive("Goat", "Webcam")"
+                               asp-area="" asp-controller="Goat" asp-action="Webcam">Камера</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @IsActive("Home", "Donate")"
-                               asp-area="" asp-controller="Home" asp-action="Donate">Донат</a>
+                            <a class="nav-link @IsActive("Goat", "Donate")"
+                               asp-area="" asp-controller="Goat" asp-action="Donate">Донат</a>
                         </li>
                     </ul>
 
