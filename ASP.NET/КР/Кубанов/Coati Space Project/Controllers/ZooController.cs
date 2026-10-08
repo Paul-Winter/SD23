@@ -84,7 +84,7 @@ namespace Coati_Space_Project.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Donate(string donorName, string? email, decimal amount, string target, string? message)
+        public async Task<IActionResult> Donate()
         {
             return Redirect("https://pay.cloudtips.ru/p/cceba1a9");
         }
