@@ -21,6 +21,7 @@ else
     <ul class="animal-grid">
         @foreach (var animal in Model.Animals)
         {
+            @* Карточка 1 — главное фото *@
             <li class="animal-card">
                 <a href="/stav-zoo/@animal.Slug">
                     @if (!string.IsNullOrEmpty(animal.PhotoUrl))
@@ -34,6 +35,28 @@ else
                     <div class="animal-card-name">@animal.Name</div>
                 </a>
             </li>
+
+            @* Карточка 2 — второе фото *@
+            @if (!string.IsNullOrEmpty(animal.PhotoUrl2))
+            {
+                <li class="animal-card">
+                    <a href="/stav-zoo/@animal.Slug">
+                        <img src="@animal.PhotoUrl2" alt="@animal.Name" class="animal-card-photo" />
+                        <div class="animal-card-name">@animal.Name</div>
+                    </a>
+                </li>
+            }
+
+            @* Карточка 3 — третье фото *@
+            @if (!string.IsNullOrEmpty(animal.PhotoUrl3))
+            {
+                <li class="animal-card">
+                    <a href="/stav-zoo/@animal.Slug">
+                        <img src="@animal.PhotoUrl3" alt="@animal.Name" class="animal-card-photo" />
+                        <div class="animal-card-name">@animal.Name</div>
+                    </a>
+                </li>
+            }
         }
     </ul>
 }
