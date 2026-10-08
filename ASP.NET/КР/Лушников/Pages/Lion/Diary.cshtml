@@ -16,11 +16,17 @@
                 <option>Спаривание</option>
                 <option>Потомство</option>
                 <option>Здоровье</option>
+                <option>Наблюдение</option>
+                <option>Ветеринарный осмотр</option>
             </select>
         </p>
         <p>
+            <strong>Автор записи:</strong><br />
+            <input type="text" name="recordedBy" placeholder="Например: д-р Иванов, ветеринар" />
+        </p>
+        <p>
             <strong>Заметка:</strong><br />
-            <textarea name="notes" rows="4" placeholder="Что произошло?"></textarea>
+            <textarea name="notes" rows="4" placeholder="Подробности наблюдения..."></textarea>
         </p>
         <button type="submit">Сохранить</button>
     </form>
@@ -39,7 +45,13 @@ else
                 <option selected="@(Model.EditType == "Спаривание")">Спаривание</option>
                 <option selected="@(Model.EditType == "Потомство")">Потомство</option>
                 <option selected="@(Model.EditType == "Здоровье")">Здоровье</option>
+                <option selected="@(Model.EditType == "Наблюдение")">Наблюдение</option>
+                <option selected="@(Model.EditType == "Ветеринарный осмотр")">Ветеринарный осмотр</option>
             </select>
+        </p>
+        <p>
+            <strong>Автор записи:</strong><br />
+            <input type="text" name="recordedBy" value="@Model.EditRecordedBy" />
         </p>
         <p>
             <strong>Заметка:</strong><br />
@@ -52,12 +64,90 @@ else
 
 <h2>История</h2>
 
+@* ===== Фильтр по типу ===== *@
+<div class="filter-buttons">
+    <a href="/stav-zoo/@Model.AnimalName/diary@(Model.From.HasValue || Model.To.HasValue ? $"?from={Model.From:yyyy-MM-dd}&to={Model.To:yyyy-MM-dd}" : "")"
+       class="filter-btn @(string.IsNullOrEmpty(Model.Filter) ? "active" : "")">
+        Все
+    </a>
+    <a href="/stav-zoo/@Model.AnimalName/diary?filter=Кормление@(Model.From.HasValue ? $"&from={Model.From:yyyy-MM-dd}" : "")@(Model.To.HasValue ? $"&to={Model.To:yyyy-MM-dd}" : "")"
+       class="filter-btn @(Model.Filter == "Кормление" ? "active" : "")">
+        🍖 Кормление
+    </a>
+    <a href="/stav-zoo/@Model.AnimalName/diary?filter=Спаривание@(Model.From.HasValue ? $"&from={Model.From:yyyy-MM-dd}" : "")@(Model.To.HasValue ? $"&to={Model.To:yyyy-MM-dd}" : "")"
+       class="filter-btn @(Model.Filter == "Спаривание" ? "active" : "")">
+        💕 Спаривание
+    </a>
+    <a href="/stav-zoo/@Model.AnimalName/diary?filter=Потомство@(Model.From.HasValue ? $"&from={Model.From:yyyy-MM-dd}" : "")@(Model.To.HasValue ? $"&to={Model.To:yyyy-MM-dd}" : "")"
+       class="filter-btn @(Model.Filter == "Потомство" ? "active" : "")">
+        👶 Потомство
+    </a>
+    <a href="/stav-zoo/@Model.AnimalName/diary?filter=Здоровье@(Model.From.HasValue ? $"&from={Model.From:yyyy-MM-dd}" : "")@(Model.To.HasValue ? $"&to={Model.To:yyyy-MM-dd}" : "")"
+       class="filter-btn @(Model.Filter == "Здоровье" ? "active" : "")">
+        💊 Здоровье
+    </a>
+    <a href="/stav-zoo/@Model.AnimalName/diary?filter=Наблюдение@(Model.From.HasValue ? $"&from={Model.From:yyyy-MM-dd}" : "")@(Model.To.HasValue ? $"&to={Model.To:yyyy-MM-dd}" : "")"
+       class="filter-btn @(Model.Filter == "Наблюдение" ? "active" : "")">
+        👀 Наблюдение
+    </a>
+    <a href="/stav-zoo/@Model.AnimalName/diary?filter=Ветеринарный осмотр@(Model.From.HasValue ? $"&from={Model.From:yyyy-MM-dd}" : "")@(Model.To.HasValue ? $"&to={Model.To:yyyy-MM-dd}" : "")"
+       class="filter-btn @(Model.Filter == "Ветеринарный осмотр" ? "active" : "")">
+        🩺 Ветеринарный осмотр
+    </a>
+</div>
+
+@* ===== Фильтр по дате ===== *@
+<form method="get" class="date-filter-form">
+    <input type="hidden" name="animalName" value="@Model.AnimalName" />
+    @if (!string.IsNullOrEmpty(Model.Filter))
+    {
+        <input type="hidden" name="filter" value="@Model.Filter" />
+    }
+
+    <div class="date-filter-row">
+        <div class="date-field">
+            <label for="from"><strong>С даты:</strong></label>
+            <input type="date" id="from" name="from"
+                   value="@(Model.From?.ToString("yyyy-MM-dd"))" />
+        </div>
+
+        <div class="date-field">
+            <label for="to"><strong>По дату:</strong></label>
+            <input type="date" id="to" name="to"
+                   value="@(Model.To?.ToString("yyyy-MM-dd"))" />
+        </div>
+
+        <button type="submit" class="filter-btn">🔍 Применить</button>
+        <a href="/stav-zoo/@Model.AnimalName/diary@(!string.IsNullOrEmpty(Model.Filter) ? $"?filter={Model.Filter}" : "")"
+           class="filter-btn">✕ Сбросить даты</a>
+    </div>
+</form>
+
 @if (Model.Entries.Count == 0)
 {
-    <p><em>Записей пока нет.</em></p>
+    <p><em>Записей пока нет@(string.IsNullOrEmpty(Model.Filter) ? "" : $" по типу «{Model.Filter}»")@((Model.From.HasValue || Model.To.HasValue) ? " в выбранном диапазоне дат" : "").</em></p>
 }
 else
 {
+    <p style="color:#555; font-size:0.9rem;">
+        Найдено записей: <strong>@Model.Entries.Count</strong>
+        @if (!string.IsNullOrEmpty(Model.Filter))
+        {
+            <span> · тип: <strong>@Model.Filter</strong></span>
+        }
+        @if (Model.From.HasValue || Model.To.HasValue)
+        {
+            <span>
+                · период:
+                <strong>
+                    @(Model.From?.ToString("dd.MM.yyyy") ?? "…")
+                    —
+                    @(Model.To?.ToString("dd.MM.yyyy") ?? "…")
+                </strong>
+            </span>
+        }
+    </p>
+
     <table class="diary-table">
         <thead>
             <tr>
