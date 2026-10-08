@@ -1,5 +1,6 @@
 ﻿@page
 @model Свинья_Визенау.Pages.Diary.IndexModel
+@using Свинья_Визенау.Extensions
 @{
     ViewData["Title"] = "Дневник наблюдений";
 }
@@ -51,7 +52,7 @@
             <tr>
                 <td>@e.RecordedAt.ToString("dd.MM.yyyy HH:mm")</td>
                 <td>@e.Animal.Name</td>
-                <td>@e.Type</td>
+                <td>@e.Type.GetDisplayName()</td>
                 <td>@e.Notes</td>
                 <td>@(e.RecordedBy?.DisplayName ?? e.RecordedBy?.Email ?? "—")</td>
             </tr>
