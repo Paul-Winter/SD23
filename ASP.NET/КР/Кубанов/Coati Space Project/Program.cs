@@ -56,7 +56,7 @@ namespace Coati_Space_Project
             app.MapControllerRoute(
                 name: "zoo_main",
                 pattern: "stav-zoo",
-                defaults: new { controller = "Zoo", action = "Index" })
+                defaults: new { controller = "Zoo", action = "Coati" })
                 .WithStaticAssets();
 
             app.MapControllerRoute(
@@ -73,7 +73,7 @@ namespace Coati_Space_Project
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Zoo}/{action=Index}/{id?}")
+                pattern: "{controller=Zoo}/{action=Coati}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
