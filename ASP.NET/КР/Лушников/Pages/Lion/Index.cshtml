@@ -10,10 +10,24 @@ else
 {
     <h1>@Model.Animal.Name</h1>
 
-    @if (!string.IsNullOrEmpty(Model.Animal.PhotoUrl))
-    {
-        <img src="@Model.Animal.PhotoUrl" alt="@Model.Animal.Name" class="animal-photo" />
-    }
+    <p style="margin-bottom:1.5rem;">
+        <a href="/" class="btn-home">← На главную страницу</a>
+    </p>
+
+    <div class="top-photos">
+        @if (!string.IsNullOrEmpty(Model.Animal.PhotoUrl))
+        {
+            <img src="@Model.Animal.PhotoUrl" alt="@Model.Animal.Name" class="animal-photo" />
+        }
+        @if (!string.IsNullOrEmpty(Model.Animal.PhotoUrl2))
+        {
+            <img src="@Model.Animal.PhotoUrl2" alt="@Model.Animal.Name" class="animal-photo" />
+        }
+        @if (!string.IsNullOrEmpty(Model.Animal.PhotoUrl3))
+        {
+            <img src="@Model.Animal.PhotoUrl3" alt="@Model.Animal.Name" class="animal-photo" />
+        }
+    </div>
 
     @if (Model.Photos.Count > 0)
     {

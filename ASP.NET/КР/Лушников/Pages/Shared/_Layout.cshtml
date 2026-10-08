@@ -5,6 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — Ставропольский зоопарк</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+            .animal-grid {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                gap: 16px !important;
+                padding: 0 !important;
+                margin-top: 1.5rem !important;
+                list-style: none !important;
+            }
+
+            .animal-card {
+                background: white !important;
+                border: 2px solid #c8e6c9 !important;
+                border-radius: 12px !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                width: 220px !important;
+                transition: transform 0.2s, box-shadow 0.2s !important;
+            }
+
+                .animal-card:hover {
+                    transform: translateY(-4px) !important;
+                    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.15) !important;
+                    border-color: #2e7d32 !important;
+                }
+
+                .animal-card a {
+                    display: block !important;
+                    color: inherit !important;
+                    text-decoration: none !important;
+                }
+
+            .animal-card-photo {
+                width: 100% !important;
+                height: 180px !important;
+                object-fit: cover !important;
+                display: block !important;
+            }
+
+            .animal-card-placeholder {
+                width: 100% !important;
+                height: 180px !important;
+                background: #f1f8e9 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 4rem !important;
+                color: #a5d6a7 !important;
+            }
+
+            .animal-card-name {
+                padding: 1rem !important;
+                text-align: center !important;
+                font-size: 1.15rem !important;
+                font-weight: 600 !important;
+                color: #2e7d32 !important;
+            }
+    </style>
 </head>
 <body>
 

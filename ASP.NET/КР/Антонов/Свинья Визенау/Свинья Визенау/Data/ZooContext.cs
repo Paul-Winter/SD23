@@ -31,6 +31,16 @@ namespace Свинья_Визенау.Data
                 .WithMany()
                 .HasForeignKey(d => d.RecordedByUserId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AnimalPhoto>()
+                .HasOne(p => p.Animal)
+                .WithMany(a => a.Photos)
+                .HasForeignKey(p => p.AnimalId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
         }
+
+        public DbSet<AnimalPhoto> AnimalPhotos => Set<AnimalPhoto>();
     }
 }

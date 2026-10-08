@@ -7,8 +7,8 @@
 }
 
 <nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-controller="Zoo" asp-action="Index" class="text-decoration-none text-secondary">Ставропольский зоопарк</a></li>
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a asp-controller="Zoo" asp-action="Index" class="text-decoration-none text-success fw-medium">← Главная страница зоопарка</a></li>
         <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">Носуха (@Model.Coati.Name)</li>
     </ol>
 </nav>
@@ -150,25 +150,36 @@
     <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap">
         <h4 class="mb-0 fw-bold text-dark">Поддержать носуху Хахатуху</h4>
     </div>
-    <div class="card-body p-4">
-        <p class="text-secondary mb-4">
-            Добровольные взносы направляются на закупку свежих фруктов, витаминных добавок, игрушек и улучшение вольера носухи.
+    <div class="card-body p-4 p-md-5">
+        <p class="text-secondary fs-5 mb-3 leading-relaxed">
+            Сейчас зоопарк переживает непростой период: из-за кризиса и роста цен возникли серьёзные трудности со снабжением и закупкой специализированного корма. Нашей носухе каждый день требуются свежие фрукты, перепелиные яйца, витаминные комплексы и качественное питание, и в данный момент средств на полноценное обеспечение питомца катастрофически не хватает.
+        </p>
+        <p class="text-secondary fs-5 mb-4 leading-relaxed">
+            Мы делаем всё возможное, чтобы сохранить привычные условия для Хахатухи, но без вашей помощи нам не обойтись. Было бы просто замечательно, если бы вы поддержали нашу любимицу любой посильной суммой — каждый взнос напрямую идёт на закупку еды, лакомств и необходимый уход.
         </p>
 
         @if (TempData["DonationSuccess"] != null)
         {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show fs-5" role="alert">
                 @TempData["DonationSuccess"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
 
         <form asp-controller="Zoo" asp-action="Donate" method="post">
-            
-            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-3">
+            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-3 fs-5">
                 Пожертвовать носухе
             </button>
         </form>
+
+        <div class="text-center mt-4 pt-2">
+            <p class="text-dark fs-5 fw-semibold mb-2">
+                Искренне благодарим каждого неравнодушного посетителя за отзывчивость, теплоту и помощь в трудную минуту!
+            </p>
+            <p class="text-secondary fs-6 mb-0">
+                Благодаря вашей поддержке Хахатуха остаётся сытой, активной и радостной. Спасибо, что не остаётесь в стороне!
+            </p>
+        </div>
     </div>
 </div>
 

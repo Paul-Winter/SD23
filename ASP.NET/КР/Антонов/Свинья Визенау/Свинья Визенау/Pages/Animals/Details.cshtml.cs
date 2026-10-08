@@ -23,7 +23,8 @@ namespace Свинья_Визенау.Pages.Animals
 
             var animal = await context.Animals
                 .Include(a => a.DiaryEntries)
-                    .ThenInclude(d => d.RecordedBy)
+                .ThenInclude(d => d.RecordedBy)
+                .Include(a => a.Photos)                   
                 .FirstOrDefaultAsync(a => a.Slug == slug);
 
             if (animal == null) return NotFound();

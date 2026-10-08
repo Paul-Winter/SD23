@@ -39,9 +39,9 @@ namespace Coati_Space_Project.Controllers
 
             var staffUser = await db.StaffUsers.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
 
-            if (staffUser == null)
+            if (staffUser == null || staffUser.Role != "Admin")
             {
-                ViewBag.Error = "Неверный логин или пароль. Попробуйте еще раз.";
+                ViewBag.Error = "Неверный логин или пароль администратора.";
                 ViewBag.ReturnUrl = returnUrl;
                 return View();
             }

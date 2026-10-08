@@ -6,12 +6,65 @@
 
 <h1>@Model.Animal.Name</h1>
 
+<p>
+    <a asp-page="/Index" class="btn btn-sm btn-outline-secondary">← На главную зоопарка</a>
+</p>
+
 <div class="row mt-4">
     <div class="col-md-6">
-        <img src="@Model.Animal.PhotoUrl"
-             alt="@Model.Animal.Name"
-             class="img-fluid rounded shadow-sm"
-             style="max-height: 400px; object-fit: cover;" />
+
+        @* ─── Галерея фото ─────────────────────────────────────── *@
+        @if (Model.Animal.Photos.Any())
+        {
+            <div id="photoCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    @for (int i = 0; i < Model.Animal.Photos.Count; i++)
+                    {
+                        <button type="button"
+                                data-bs-target="#photoCarousel"
+                                data-bs-slide-to="@i"
+                                class="@(i == 0 ? "active" : "")"
+                                aria-label="Фото @(i + 1)"></button>
+                    }
+                </div>
+                <div class="carousel-inner rounded shadow-sm">
+                    @{ var orderedPhotos = Model.Animal.Photos.OrderBy(p => p.SortOrder).ToList(); }
+                    @for (int i = 0; i < orderedPhotos.Count; i++)
+                    {
+                        var photo = orderedPhotos[i];
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <img src="@photo.Url"
+                                 class="d-block w-100"
+                                 style="max-height: 400px; object-fit: cover;"
+                                 alt="@(photo.Caption ?? Model.Animal.Name)" />
+                            @if (!string.IsNullOrEmpty(photo.Caption))
+                            {
+                                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                                    <p class="mb-0">@photo.Caption</p>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button"
+                        data-bs-target="#photoCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button"
+                        data-bs-target="#photoCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(Model.Animal.PhotoUrl))
+        {
+            @* fallback: если галерея пустая, показываем старое одиночное фото *@
+            <img src="@Model.Animal.PhotoUrl"
+                 alt="@Model.Animal.Name"
+                 class="img-fluid rounded shadow-sm"
+                 style="max-height: 400px; object-fit: cover;" />
+        }
+        @* ─── /Галерея фото ────────────────────────────────────── *@
 
         @if (!string.IsNullOrEmpty(Model.Animal.VideoUrl))
         {
@@ -31,13 +84,14 @@
             </div>
         }
     </div>
+
     <div class="col-md-6">
         <p>@Model.Animal.Description</p>
         <p>
             <strong>В зоопарке с:</strong>
             @Model.Animal.ArrivedAt.ToString("dd.MM.yyyy")
         </p>
-        <a asp-page="/Donate/Index" class="btn btn-success">Помочь животному</a>
+        <a href="https://pay.cloudtips.ru/p/c7a80e09" target="_blank" class="btn btn-success">Помочь животному</a>
     </div>
 </div>
 
@@ -60,7 +114,6 @@
             {
                 <tr>
                     <td>@e.RecordedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@e.Type</td>
                     <td>@e.Notes</td>
                     <td>@(e.RecordedBy?.DisplayName ?? "—")</td>
                 </tr>

@@ -104,7 +104,7 @@ namespace Coati_Space_Project.Models
                 }
             );
 
-            // Тестовые аккаунты сотрудников зоопарка
+            // Тестовый аккаунт администратора зоопарка
             modelBuilder.Entity<StaffUser>().HasData(
                 new StaffUser
                 {
@@ -113,34 +113,7 @@ namespace Coati_Space_Project.Models
                     Password = "admin2026",
                     FullName = "Иван Романов",
                     Role = "Admin",
-                    Position = "Руководитель зоологической службы"
-                },
-                new StaffUser
-                {
-                    Id = 2,
-                    Username = "keeper",
-                    Password = "password123",
-                    FullName = "Алексей Смирнов",
-                    Role = "Employee",
-                    Position = "Старший кипер сектора млекопитающих"
-                },
-                new StaffUser
-                {
-                    Id = 3,
-                    Username = "vet",
-                    Password = "password123",
-                    FullName = "Елена Васильева",
-                    Role = "Employee",
-                    Position = "Главный ветеринарный врач"
-                },
-                new StaffUser
-                {
-                    Id = 4,
-                    Username = "operator",
-                    Password = "operator2026",
-                    FullName = "Дмитрий Ковалев",
-                    Role = "Worker",
-                    Position = "Оператор видеонаблюдения"
+                    Position = "Администратор зоопарка"
                 }
             );
         }

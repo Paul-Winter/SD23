@@ -11,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 
-// === SQLite вместо SQL Server ===
 builder.Services.AddDbContext<ZooDbContext>(options =>
     options.UseSqlite("Data Source=StavZoo.db"));
 
@@ -44,21 +43,18 @@ builder.Services.AddScoped<JwtService>();
 
 var app = builder.Build();
 
-// === Инициализация БД и начальные данные ===
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ZooDbContext>();
     db.Database.EnsureCreated();
 
-    // Создаём папку для фото
     var imageFolder = Path.Combine("wwwroot", "images", "lion");
     if (!Directory.Exists(imageFolder))
         Directory.CreateDirectory(imageFolder);
 
-    // Начальные данные: Киара
     if (!db.Lions.Any())
     {
-        db.Lions.Add(new Lion
+        var kiara = new Lion
         {
             Name = "Киара",
             Slug = "kiara",
@@ -74,16 +70,53 @@ using (var scope = app.Services.CreateScope())
                           "Отец семейства, самец Симба, с интересом наблюдает за своим потомством из соседнего вольера, " +
                           "оберегая свою семью. Гости зоопарка могут наблюдать за играми подросших львят, " +
                           "которые уже демонстрируют свой характер и хищный оскал, резвясь на солнышке рядом с матерью.",
-            PhotoUrl = "/images/lion/kiara.jpg",
+            PhotoUrl = "/images/lion/049e90d1-8e6c-4b24-9114-14b5d9426fa8.jpg",
+            PhotoUrl2 = "/images/lion/kiara-photo2.jpg",
+            PhotoUrl3 = "/images/lion/kiara-photo3.jpg",
             VideoUrl = "https://rutube.ru/play/embed/3ed11db18df99ffeac65768194a5fb0f/",
             WebcamUrl = "",
             BirthDate = new DateTime(2023, 3, 15),
             MotherName = "Неизвестна"
-        });
+        };
+
+        db.Lions.Add(kiara);
+        db.SaveChanges();
+
+        db.LionPhotos.AddRange(
+            new LionPhoto
+            {
+                LionId = kiara.Id,
+                PhotoUrl = "/images/lion/7e3ca5bd-81f9-4d5c-b1d0-ecf89a657e38.jpg",
+                UploadedAt = DateTime.UtcNow.AddMinutes(-50)
+            },
+            new LionPhoto
+            {
+                LionId = kiara.Id,
+                PhotoUrl = "/images/lion/ad513d4c-79d2-4215-9eea-b140f4b8a6ed.jpg",
+                UploadedAt = DateTime.UtcNow.AddMinutes(-40)
+            },
+            new LionPhoto
+            {
+                LionId = kiara.Id,
+                PhotoUrl = "/images/lion/c12b5d49-00f2-4401-b75c-095ab62d12fb.jpg",
+                UploadedAt = DateTime.UtcNow.AddMinutes(-30)
+            },
+            new LionPhoto
+            {
+                LionId = kiara.Id,
+                PhotoUrl = "/images/lion/c54c957a-90b9-4d48-be5f-84dcb873186b.jpg",
+                UploadedAt = DateTime.UtcNow.AddMinutes(-20)
+            },
+            new LionPhoto
+            {
+                LionId = kiara.Id,
+                PhotoUrl = "/images/lion/daa4f10f-b578-4dbc-8503-474c1324aae5.jpg",
+                UploadedAt = DateTime.UtcNow.AddMinutes(-10)
+            }
+        );
         db.SaveChanges();
     }
 
-    // Начальные данные: сотрудник по умолчанию
     if (!db.Users.Any())
     {
         db.Users.Add(new User
@@ -95,7 +128,6 @@ using (var scope = app.Services.CreateScope())
         db.SaveChanges();
     }
 
-    // Начальные заметки зоологов в дневнике
     if (!db.LionDiaryEntries.Any())
     {
         var kiara = db.Lions.FirstOrDefault(l => l.Slug == "kiara");

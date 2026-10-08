@@ -6,7 +6,11 @@ public class Lion
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public string? PhotoUrl { get; set; }
+
+    public string? PhotoUrl { get; set; }       
+    public string? PhotoUrl2 { get; set; }      
+    public string? PhotoUrl3 { get; set; }      
+
     public string? VideoUrl { get; set; }
     public string? WebcamUrl { get; set; }
     public DateTime BirthDate { get; set; }

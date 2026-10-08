@@ -25,6 +25,8 @@ namespace Свинья_Визенау.Models
         public DateTime ArrivedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<DiaryEntry> DiaryEntries { get; set; } = new List<DiaryEntry>();
+
+        public ICollection<AnimalPhoto> Photos { get; set; } = new List<AnimalPhoto>();
     }
 }
 
