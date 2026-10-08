@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     <style>
+            /* Три отдельные карточки в ряд */
             .animal-grid {
                 display: flex !important;
                 flex-direction: row !important;
@@ -27,17 +28,17 @@
                 transition: transform 0.2s, box-shadow 0.2s !important;
             }
 
-                .animal-card:hover {
-                    transform: translateY(-4px) !important;
-                    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.15) !important;
-                    border-color: #2e7d32 !important;
-                }
+            .animal-card:hover {
+                transform: translateY(-4px) !important;
+                box-shadow: 0 8px 20px rgba(46, 125, 50, 0.15) !important;
+                border-color: #2e7d32 !important;
+            }
 
-                .animal-card a {
-                    display: block !important;
-                    color: inherit !important;
-                    text-decoration: none !important;
-                }
+            .animal-card a {
+                display: block !important;
+                color: inherit !important;
+                text-decoration: none !important;
+            }
 
             .animal-card-photo {
                 width: 100% !important;
@@ -75,6 +76,7 @@
                 <li><a href="/">Главная</a></li>
                 <li><a href="/login">Вход</a></li>
                 <li><a href="/register">Регистрация</a></li>
+                <li><a href="https://zoostav.ru" target="_blank" rel="noopener">🌐 Сайт зоопарка</a></li>
             </ul>
         </div>
     </header>
