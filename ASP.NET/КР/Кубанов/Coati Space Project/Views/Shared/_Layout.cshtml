@@ -21,7 +21,7 @@
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark fw-medium px-3" href="/stav-zoo">Зоопарк</a>
+                            <a class="nav-link text-dark fw-medium px-3" href="/stav-zoo">Главная зоопарка</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-success fw-semibold px-3" href="/stav-zoo/coati">Носуха Хахатуха</a>
@@ -35,7 +35,7 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-primary fw-semibold px-3" href="/diary">Дневник наблюдений</a>
+                                <a class="nav-link text-primary fw-semibold px-3" href="/diary">Панель администратора</a>
                             </li>
                         }
                     </ul>
@@ -43,7 +43,7 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item me-2">
-                                <span class="badge bg-light text-dark border px-3 py-2">Сотрудник: @User.Identity.Name</span>
+                                <span class="text-dark small fw-medium">Администратор: @User.Identity.Name</span>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-outline-danger btn-sm px-3" href="/account/logout">Выйти</a>
@@ -52,7 +52,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="btn btn-outline-secondary btn-sm px-3" href="/account/login">Вход для персонала</a>
+                                <a class="btn btn-outline-secondary btn-sm px-3" href="/account/login">Вход для администратора</a>
                             </li>
                         }
                     </ul>
@@ -74,7 +74,7 @@
             <div class="d-flex flex-wrap gap-4 small">
                 <a href="/stav-zoo" class="text-decoration-none text-secondary">О зоопарке</a>
                 <a href="/stav-zoo/coati" class="text-decoration-none text-secondary">Носуха Хахатуха</a>
-                <a href="/account/login" class="text-decoration-none text-secondary">Служебный вход</a>
+                <a href="/account/login" class="text-decoration-none text-secondary">Вход для администратора</a>
             </div>
         </div>
     </footer>
