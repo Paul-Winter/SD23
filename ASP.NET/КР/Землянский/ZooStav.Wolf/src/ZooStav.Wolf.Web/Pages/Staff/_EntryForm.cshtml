@@ -1,0 +1,115 @@
+@model ZooStav.Wolf.Web.Infrastructure.DiaryEntryInput
+@{
+    ViewData.TemplateInfo.HtmlFieldPrefix = "Input";
+    var animals = ViewData["Animals"] as List<ZooStav.Wolf.Web.Models.Animal> ?? new();
+}
+
+<label asp-for="AnimalId"></label>
+<select asp-for="AnimalId">
+    @foreach (var a in animals)
+    {
+        <option value="@a.Id" selected="@(Model.AnimalId == a.Id)">@a.Name — @a.Enclosure</option>
+    }
+</select>
+
+<div class="form-row">
+    <div>
+        <label asp-for="Type"></label>
+        <select asp-for="Type" data-entry-type>
+            @foreach (var t in Enum.GetValues<ZooStav.Wolf.Web.Models.DiaryEntryType>())
+            {
+                <option value="@t" selected="@(Model.Type == t)">@t.ToRussian()</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label asp-for="OccurredAt"></label>
+        <input asp-for="OccurredAt" type="datetime-local" data-now-default />
+        <div class="field-hint">Время, когда событие произошло (например, когда фактически кормили).</div>
+    </div>
+</div>
+
+<label asp-for="Title"></label>
+<input asp-for="Title" placeholder="Например: Утренняя кормёжка" />
+<span asp-validation-for="Title" style="color:#ffb3b3"></span>
+
+<label asp-for="Details"></label>
+<textarea asp-for="Details" placeholder="Как прошло: аппетит, поведение, реакции стаи, остатки корма…"></textarea>
+
+<div data-field-group="Feeding">
+    <div class="form-row">
+        <div>
+            <label asp-for="FoodType"></label>
+            <input asp-for="FoodType" id="FoodType" placeholder="Оленина, рыба, субпродукты" />
+            <div class="field-hint">
+                Быстрый выбор:
+                <button type="button" class="btn btn-ghost btn-sm" data-preset="Оленина, говяжьи субпродукты, витаминный премикс" data-preset-target="#FoodType">рацион №1</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-preset="Говядина, морская рыба (минтай), яйцо" data-preset-target="#FoodType">рацион №2</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-preset="Замороженная рыба во льду (обогащение среды)" data-preset-target="#FoodType">лёд с рыбой</button>
+            </div>
+        </div>
+        <div>
+            <label asp-for="FoodAmountKg"></label>
+            <input asp-for="FoodAmountKg" type="number" step="0.1" min="0" placeholder="2.4" />
+        </div>
+    </div>
+</div>
+
+<div data-field-group="Vaccination,Treatment">
+    <div class="form-row">
+        <div>
+            <label asp-for="Medication"></label>
+            <input asp-for="Medication" placeholder="Нобивак Rabies / Хлоргексидин 0,05%" />
+        </div>
+        <div>
+            <label asp-for="Dosage"></label>
+            <input asp-for="Dosage" placeholder="1,0 мл п/к / 2 раза в день, 5 дней" />
+        </div>
+    </div>
+</div>
+
+<div data-field-group="Mating">
+    <div class="form-row">
+        <div>
+            <label asp-for="PartnerName"></label>
+            <input asp-for="PartnerName" placeholder="Таймыр" />
+        </div>
+    </div>
+</div>
+
+<div data-field-group="Offspring">
+    <div class="form-row">
+        <div>
+            <label asp-for="OffspringCount"></label>
+            <input asp-for="OffspringCount" type="number" min="0" max="30" placeholder="3" />
+        </div>
+        <div>
+            <label asp-for="PartnerName"></label>
+            <input asp-for="PartnerName" placeholder="Второй родитель: Таймыр" />
+        </div>
+    </div>
+</div>
+
+<div data-field-group="Weighing,Examination">
+    <div class="form-row">
+        <div>
+            <label asp-for="WeightKg"></label>
+            <input asp-for="WeightKg" type="number" step="0.1" min="0" placeholder="42.5" />
+        </div>
+        <div>
+            <label asp-for="TemperatureC"></label>
+            <input asp-for="TemperatureC" type="number" step="0.1" min="30" max="45" placeholder="38.4" />
+        </div>
+    </div>
+</div>
+
+<div data-field-group="Illness,Treatment,Examination">
+    <label asp-for="Diagnosis"></label>
+    <input asp-for="Diagnosis" placeholder="Поверхностная травма подушечки лапы" />
+    <div class="field-hint">Служебное поле: посетителям не показывается, доступно работникам и в API с токеном.</div>
+</div>
+
+<div class="checkbox-row">
+    <input asp-for="IsPublic" />
+    <label asp-for="IsPublic" style="margin:0">Показывать запись посетителям на публичной странице (иначе — только для работников)</label>
+</div>

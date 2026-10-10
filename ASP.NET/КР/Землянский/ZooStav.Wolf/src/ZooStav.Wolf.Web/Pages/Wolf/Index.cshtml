@@ -1,0 +1,209 @@
+@page "/wolf/{slug}"
+@model ZooStav.Wolf.Web.Pages.Wolf.IndexModel
+@inject IConfiguration Configuration
+@{
+    var a = Model.Vm.Animal;
+    var age = a.BirthDate.HasValue ? (int)((DateTime.Now - a.BirthDate.Value).TotalDays / 365.25) : (int?)null;
+    var f = Model.Vm.Feeding;
+    var webcam = Model.Vm.Webcam;
+}
+<section class="hero">
+    <img class="hero-img" src="@a.HeroImageUrl" alt="@a.Name — @a.Species" />
+    <div class="hero-overlay"></div>
+    <div class="hero-body">
+        <div class="badges">
+            <span class="badge"><b>@a.Species</b></span>
+            <span class="badge">@a.LatinName</span>
+            <span class="badge">@a.Gender@(age.HasValue ? $", {age} лет" : "")</span>
+            <span class="badge">@a.Enclosure</span>
+            <span class="badge">@a.Status</span>
+        </div>
+        <h1>@a.Name</h1>
+        <p class="hero-sub">@a.ShortDescription</p>
+        <div class="hero-actions">
+            <a class="btn" href="#gallery">Фото и видео</a>
+            <a class="btn btn-ghost" href="@Url.Page("/Wolf/Webcam", new { slug = a.SubdomainSlug })">Смотреть веб-камеру</a>
+            <a class="btn btn-ok" href="@Url.Page("/Wolf/Donate", new { slug = a.SubdomainSlug })">Донат на корм и лечение</a>
+        </div>
+    </div>
+</section>
+
+@if (!string.IsNullOrEmpty(Model.Vm.RequestedSubdomain))
+{
+    <div class="alert alert-info">
+        Страница открыта по поддомену <b>@Model.Vm.RequestedSubdomain.@(Configuration["Zoo:PrimaryDomain"])</b> —
+        маршрутизация настроена: поддомен сопоставляется со слагом особи в базе данных.
+    </div>
+}
+
+<div class="grid grid-4" style="margin-bottom:18px">
+    <div class="stat @(f.IsOverdue ? "stat-warn" : "stat-ok")">
+        <div class="stat-label">Последняя кормёжка</div>
+        <div class="stat-value">@(f.LastFeeding?.OccurredAt.ToString("dd.MM HH:mm") ?? "нет данных")</div>
+        <div class="stat-note">
+            @if (f.TimeSinceLastFeeding is TimeSpan ts)
+            {
+                <text>@((int)ts.TotalHours) ч @ts.Minutes мин назад · @f.LastFeedingSpecialist</text>
+            }
+            else
+            {
+                <text>записи о кормлении отсутствуют</text>
+            }
+        </div>
+    </div>
+    <div class="stat">
+        <div class="stat-label">Вес</div>
+        <div class="stat-value">@(a.WeightKg?.ToString("0.#") ?? "—") кг</div>
+        <div class="stat-note">рост @(a.HeightCm?.ToString("0") ?? "—") см · @f.LastFoodType</div>
+    </div>
+    <div class="stat">
+        <div class="stat-label">Кормлений за 7 дней</div>
+        <div class="stat-value">@f.FeedingsLast7Days</div>
+        <div class="stat-note">включая обогащение среды</div>
+    </div>
+    <div class="stat">
+        <div class="stat-label">Донаты стае</div>
+        <div class="stat-value">@Model.Vm.Donations.Total.ToString("N0") ₽</div>
+        <div class="stat-note">от @Model.Vm.Donations.Count дарителей</div>
+    </div>
+</div>
+
+<div class="split">
+    <div>
+        <section class="card">
+            <h2>История особи</h2>
+            @foreach (var paragraph in a.History.Split("\n\n", StringSplitOptions.RemoveEmptyEntries))
+            {
+                <p>@paragraph.Trim()</p>
+            }
+            <p><small>Охраняемый статус: @a.ConservationStatus. Программа сохранения вида северного волка, зоопарк ZooStav.</small></p>
+        </section>
+
+        <section class="card" id="gallery">
+            <div class="card-head">
+                <h2>Фотогалерея</h2>
+                <small>Нажмите на снимок, чтобы увеличить</small>
+            </div>
+            @if (Model.Vm.Photos.Any())
+            {
+                <div class="gallery">
+                    @foreach (var p in Model.Vm.Photos)
+                    {
+                        <figure>
+                            <img src="@p.Url" alt="@p.Title" loading="lazy" />
+                            <figcaption>@p.Title@(string.IsNullOrEmpty(p.Description) ? "" : $" · {p.Description}")</figcaption>
+                        </figure>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>Фотографии пока не загружены.</p>
+            }
+        </section>
+
+        <section class="card">
+            <h2>Видео из вольера</h2>
+            @if (Model.Vm.Videos.Any())
+            {
+                <div class="grid grid-2">
+                    @foreach (var v in Model.Vm.Videos)
+                    {
+                        <div>
+                            <video controls preload="metadata" poster="@v.PosterUrl" src="@v.Url"></video>
+                            <p><b>@v.Title</b><br /><small>@v.Description</small></p>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>Видеозаписи пока не загружены.</p>
+            }
+        </section>
+
+        @if (webcam != null)
+        {
+            <section class="card">
+                <div class="card-head">
+                    <h2>Наблюдение через веб-камеру</h2>
+                    <a class="btn btn-sm" href="@Url.Page("/Wolf/Webcam", new { slug = a.SubdomainSlug })">Открыть на весь экран</a>
+                </div>
+                <div class="webcam-frame">
+                    <img data-webcam-frame data-rotate="true"
+                         data-frames="@(webcam.PosterUrl);/images/wolf-pack.jpg;/images/wolf-feeding.jpg"
+                         src="@webcam.PosterUrl" alt="Веб-камера вольера" />
+                    <div class="webcam-badge"><span class="live-dot"></span> LIVE · @webcam.Title</div>
+                    <div class="webcam-clock" data-webcam-clock>--:--:--</div>
+                </div>
+                <p><small>@webcam.Description. Сейчас наблюдают: <b data-webcam-viewers>0</b> чел.</small></p>
+            </section>
+        }
+    </div>
+
+    <aside>
+        <section class="card">
+            <h3>Стая вольера «Северная тундра»</h3>
+            <p><small>Каждая особь имеет свою страницу на отдельном поддомене.</small></p>
+            @if (a.Partner != null)
+            {
+                <div class="entry">
+                    <div class="entry-title">@a.Partner.Name, @a.Partner.Gender.ToLower()</div>
+                    <div class="entry-meta">@a.Partner.Species · @((int)((DateTime.Now - (a.Partner.BirthDate ?? DateTime.Now)).TotalDays / 365.25)) лет</div>
+                    <p style="margin:8px 0 0"><a href="@Url.Page("/Wolf/Index", new { slug = a.Partner.SubdomainSlug })">Открыть страницу →</a></p>
+                </div>
+            }
+            @foreach (var m in Model.Vm.PackMembers.Where(x => x.Id != a.PartnerAnimalId))
+            {
+                <div class="entry">
+                    <div class="entry-title">@m.Name, @m.Gender.ToLower()</div>
+                    <div class="entry-meta">@m.Enclosure</div>
+                    <p style="margin:8px 0 0"><a href="@Url.Page("/Wolf/Index", new { slug = m.SubdomainSlug })">Открыть страницу →</a></p>
+                </div>
+            }
+        </section>
+
+        <section class="card">
+            <h3>Последние события</h3>
+            @if (Model.Vm.RecentPublicEntries.Any())
+            {
+                @foreach (var e in Model.Vm.RecentPublicEntries)
+                {
+                    <div class="entry">
+                        <span class="@e.Type.CssClass()">@e.Type.ToRussian()</span>
+                        <div class="entry-title">@e.Title</div>
+                        <div class="entry-meta">
+                            <span>@e.OccurredAt.ToString("dd.MM.yyyy HH:mm")</span>
+                            <span>@(e.Author?.DisplayName ?? "—")</span>
+                        </div>
+                    </div>
+                }
+                <p><a class="btn btn-ghost btn-sm" href="@Url.Page("/Wolf/Diary", new { slug = a.SubdomainSlug })">Весь дневник стаи →</a></p>
+            }
+            else
+            {
+                <p><small>Публичных записей пока нет.</small></p>
+            }
+        </section>
+
+        <section class="card">
+            <h3>Донат на корм и лечение</h3>
+            <p><small>Средства идут на оленину, рыбу, витамины и ветеринарные процедуры.</small></p>
+            <div class="stat-label">Корм: @Model.Vm.Donations.Food.ToString("N0") ₽</div>
+            <div class="progress"><div class="progress-bar" style="width:@(Model.Vm.Donations.PercentFood)%"></div></div>
+            <div class="stat-label">Лечение: @Model.Vm.Donations.Treatment.ToString("N0") ₽</div>
+            <div class="progress"><div class="progress-bar" style="width:@(Model.Vm.Donations.PercentTreatment)%"></div></div>
+            <p style="margin-top:10px">
+                <a class="btn btn-ok" href="@Url.Page("/Wolf/Donate", new { slug = a.SubdomainSlug })">Поддержать @a.Name</a>
+            </p>
+            <p><small>Free donation: любую сумму, в том числе 0 ₽ — просто слова поддержки.</small></p>
+        </section>
+
+        <section class="card">
+            <h3>Адрес страницы</h3>
+            <p class="mono">@(Configuration["Zoo:PublicBaseUrl"])/</p>
+            <p><small>Поддомен настроен на этот же сервер; карточка животного подставляется из базы по слагу. Главная страница зоопарка —
+                <a href="@Model.Vm.MainSiteUrl">zoostav.ru</a>.</small></p>
+        </section>
+    </aside>
+</div>

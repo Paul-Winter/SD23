@@ -1,0 +1,174 @@
+@page "/wolf/{slug}/webcam"
+@model ZooStav.Wolf.Web.Pages.Wolf.WebcamModel
+@{
+    var a = Model.Animal;
+    var c = Model.Camera;
+    var live = c.IsLive;
+}
+<h1>Веб-камера: @a.Name и стая</h1>
+<p>
+    Наблюдайте за вольером «Северная тундра» в реальном времени. Камера закреплена у кормовой платформы:
+    лучше всего волков видно в часы кормления — около 09:00 и 18:00 (МСК).
+</p>
+
+<section class="card">
+    <div class="card-head">
+        <h2 style="margin:0">@(Model.Webcam?.Title ?? "Камера вольера")</h2>
+        <span class="badge">@c.Location</span>
+    </div>
+
+    @if (c.Mode == "hls")
+    {
+        @* Реальный поток камеры: HLS (.m3u8) — либо отданный камерой напрямую, либо созданный ffmpeg из RTSP *@
+        <div class="webcam-frame">
+            <video id="webcam-live" data-hls-src="@c.StreamUrl" data-poster="@c.PosterPath"
+                   controls autoplay muted playsinline poster="@c.PosterPath"></video>
+            <div class="webcam-badge"><span class="live-dot"></span> LIVE · поток камеры</div>
+            <div class="webcam-clock" data-webcam-clock>--:--:--</div>
+        </div>
+        <p style="margin-top:12px">
+            Поток: <span class="mono">@c.StreamUrl</span><br />
+            Сейчас наблюдают: <b data-webcam-viewers>0</b> чел. · <span data-webcam-live-state>@c.SourceDescription</span>
+        </p>
+    }
+    else if (c.Mode == "mjpeg")
+    {
+        @* Камера отдаёт MJPEG — поток проксируется приложением без перекодирования *@
+        <div class="webcam-frame">
+            <img src="@c.MjpegProxyUrl" alt="MJPEG-поток камеры вольера @a.Name" />
+            <div class="webcam-badge"><span class="live-dot"></span> LIVE · MJPEG</div>
+            <div class="webcam-clock" data-webcam-clock>--:--:--</div>
+        </div>
+        <p style="margin-top:12px">
+            Сейчас наблюдают: <b data-webcam-viewers>0</b> чел. · <span data-webcam-live-state>@c.SourceDescription</span>
+        </p>
+    }
+    else if (c.Mode == "snapshot")
+    {
+        @* Камера отдаёт одиночный JPEG — обновляем кадр каждые N секунд *@
+        <div class="webcam-frame">
+            <img data-webcam-frame data-live-src="@c.SnapshotProxyUrl" data-live-interval="@(c.PollSeconds * 1000)"
+                 src="@c.SnapshotProxyUrl" alt="Кадры камеры вольера @a.Name" />
+            <div class="webcam-badge"><span class="live-dot"></span> LIVE · кадры раз в @c.PollSeconds с</div>
+            <div class="webcam-clock" data-webcam-clock>--:--:--</div>
+        </div>
+        <p style="margin-top:12px">
+            Кадр обновляется каждые @c.PollSeconds с · Сейчас наблюдают: <b data-webcam-viewers>0</b> чел. · <span data-webcam-live-state>@c.SourceDescription</span>
+        </p>
+    }
+    else
+    {
+        @* Камера не подключена: показываем демонстрационные кадры *@
+        <div class="webcam-frame">
+            <img data-webcam-frame data-live-src="/api/webcam/snapshot" data-live-interval="4000"
+                 src="@c.PosterPath" alt="Демонстрационные кадры вольера @a.Name" />
+            <div class="webcam-badge"><span class="tag tag-observation">ДЕМО</span> камера не подключена</div>
+            <div class="webcam-clock" data-webcam-clock>--:--:--</div>
+        </div>
+        <p style="margin-top:12px">
+            Пока показываются демонстрационные кадры. Сейчас наблюдают: <b data-webcam-viewers>0</b> чел.
+        </p>
+    }
+
+    @if (c.Transcoding)
+    {
+        <div class="alert @(c.TranscodeError == null ? "alert-ok" : "alert-warn")" style="margin-top:14px">
+            <b>Транскодирование потока камеры (ffmpeg):</b>
+            @if (c.TranscodeError == null)
+            {
+                <text>работает, HLS-плейлист обновляется.</text>
+            }
+            else
+            {
+                <text>@c.TranscodeError</text>
+            }
+        </div>
+    }
+
+    @if (c.LastError != null)
+    {
+        <div class="alert alert-warn" style="margin-top:10px">Последняя ошибка связи с камерой: @c.LastError</div>
+    }
+
+    <details style="margin-top:14px">
+        <summary style="cursor:pointer">Как подключить реальную камеру вольера</summary>
+        <div style="margin-top:12px">
+            <p><small>
+                Режим выбирается автоматически по заполненным настройкам (<code>appsettings.json</code>, секция <code>Webcam</code>),
+                либо жёстко через <code>Webcam:Mode</code> = <code>hls</code> | <code>mjpeg</code> | <code>snapshot</code> | <code>demo</code>.
+            </small></p>
+            <ol style="font-size:.9rem">
+                <li>
+                    <b>Камера уже отдаёт HLS</b> (медиасервер, NVR, облако):
+                    <div class="mono" style="background:#0d1c2c;border:1px solid var(--line);border-radius:10px;padding:10px;margin:6px 0">
+                        "Webcam": { "StreamUrl": "https://camera.zoostav.ru/wolf/index.m3u8" }
+                    </div>
+                </li>
+                <li>
+                    <b>RTSP-камера (ONVIF, Hikvision, Dahua и т.п.)</b> — приложение само поднимет ffmpeg и отдаст HLS
+                    (плейлист <span class="mono">/hls/wolf.m3u8</span>):
+                    <div class="mono" style="background:#0d1c2c;border:1px solid var(--line);border-radius:10px;padding:10px;margin:6px 0">
+                        "Webcam": {<br />
+                        &nbsp;&nbsp;"CameraInput": "rtsp://admin:пароль@@192.168.1.64:554/Streaming/Channels/101",<br />
+                        &nbsp;&nbsp;"CameraInputArguments": "-rtsp_transport tcp -stimeout 5000000",<br />
+                        &nbsp;&nbsp;"TranscodeFallback": true<br />
+                        }
+                    </div>
+                    <small>Требуется установленный ffmpeg (в PATH или полный путь в <code>Webcam:FfmpegPath</code>).</small>
+                </li>
+                <li>
+                    <b>HTTP/MJPEG-камера</b> — поток проксируется без перекодирования (экономит CPU):
+                    <div class="mono" style="background:#0d1c2c;border:1px solid var(--line);border-radius:10px;padding:10px;margin:6px 0">
+                        "Webcam": { "MjpegUrl": "http://192.168.1.64/video", "HttpUser": "admin", "HttpPassword": "пароль" }
+                    </div>
+                </li>
+                <li>
+                    <b>Камера с одиночным кадром</b> (например, уличные IP-камеры с /snapshot.jpg):
+                    <div class="mono" style="background:#0d1c2c;border:1px solid var(--line);border-radius:10px;padding:10px;margin:6px 0">
+                        "Webcam": { "SnapshotUrl": "http://192.168.1.64/snapshot.jpg", "PollSeconds": 3 }
+                    </div>
+                </li>
+            </ol>
+            <p><small>
+                Проверка без правки файла — переменные окружения (удобно для теста и Docker):
+                <span class="mono">Webcam__CameraInput=rtsp://…</span>, <span class="mono">Webcam__StreamUrl=https://…/index.m3u8</span>.
+                Текущее состояние камеры — <a href="/api/webcam/status">/api/webcam/status</a>,
+                кадр — <a href="/api/webcam/snapshot">/api/webcam/snapshot</a>.
+            </small></p>
+        </div>
+    </details>
+
+    <div class="alert alert-info" style="margin-top:14px">
+        Реализовано четыре источника: <b>HLS-поток</b> (плеер hls.js, файл лежит локально в <span class="mono">wwwroot/lib/hls.min.js</span>),
+        <b>RTSP → HLS</b> (встроенное транскодирование ffmpeg, служба <span class="mono">WebcamStreamService</span>),
+        <b>MJPEG-прокси</b> (<span class="mono">/api/webcam/mjpeg</span>) и <b>кадры JPEG</b>
+        (<span class="mono">/api/webcam/snapshot</span>). При сбое связи страница автоматически показывает последний кадр.
+    </div>
+</section>
+
+@if (Model.Videos.Any())
+{
+    <section class="card">
+        <h2>Записи из вольера</h2>
+        <div class="grid grid-2">
+            @foreach (var v in Model.Videos)
+            {
+                <div>
+                    <video controls preload="metadata" poster="@v.PosterUrl" src="@v.Url"></video>
+                    <p><b>@v.Title</b><br /><small>@v.Description</small></p>
+                </div>
+            }
+        </div>
+    </section>
+}
+
+<p>
+    <a class="btn btn-ghost" href="@Url.Page("/Wolf/Index", new { slug = a.SubdomainSlug })">← Карточка животного</a>
+    <a class="btn btn-ok" href="@Url.Page("/Wolf/Donate", new { slug = a.SubdomainSlug })">Поддержать кормление</a>
+    <a class="btn btn-ghost" href="/api/webcam/status" target="_blank" rel="noopener">Состояние камеры (API)</a>
+</p>
+
+@section Scripts {
+    @* hls.js лежит локально — внешний CDN не нужен, работает и в закрытой сети *@
+    <script src="/lib/hls.min.js"></script>
+}

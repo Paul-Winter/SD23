@@ -1,0 +1,94 @@
+@inject IConfiguration Configuration
+@{
+    var slug = ViewData["AnimalSlug"] as string ?? "wolf";
+    var animalName = ViewData["AnimalName"] as string ?? "Северный волк";
+    var onSubdomain = Context.Items.ContainsKey("ZooSubdomain");
+    var animalBase = onSubdomain ? "" : $"/wolf/{slug}";
+    var root = animalBase == "" ? "/" : animalBase;
+    var mainSite = Configuration["Zoo:MainSiteUrl"] ?? "https://zoostav.ru";
+    var publicBase = Configuration["Zoo:PublicBaseUrl"] ?? "https://wolf.zoostav.ru";
+    var isStaff = User?.Identity?.IsAuthenticated == true;
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — @animalName, зоопарк ZooStav</title>
+    <meta name="description" content="Страница северного волка @animalName в зоопарке ZooStav: история особи, фото, видео, веб-камера, публичный дневник и донаты." />
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="icon" href="/images/wolf-hero.jpg" />
+</head>
+<body class="theme-arctic">
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="@root">
+            <span class="brand-mark">🐺</span>
+            <span class="brand-text">
+                <strong>ZooStav</strong>
+                <small>Северный волк · вольер «Северная тундра»</small>
+            </span>
+        </a>
+        <nav class="site-nav">
+            <a href="@root">Обзор</a>
+            <a href="@(animalBase)/diary">Дневник стаи</a>
+            <a href="@(animalBase)/webcam">Веб-камера</a>
+            <a href="@(animalBase)/donate">Донаты</a>
+            @if (isStaff)
+            {
+                <a class="nav-staff" href="/staff">Кабинет работника</a>
+            }
+            else
+            {
+                <a class="nav-staff" href="/staff/login">Вход для работников</a>
+            }
+        </nav>
+        <a class="btn btn-ghost main-site-link" href="@mainSite" title="Главная страница зоопарка">
+            ← На главную зоопарка
+        </a>
+    </div>
+</header>
+
+@if (!onSubdomain)
+{
+    <div class="domain-hint">
+        <div class="container">
+            Демонстрационный запуск: страница открыта по резервному адресу.
+            В рабочей среде она доступна как <b>@publicBase.Replace("https://", "")</b>
+            (поддомен основного сайта <b>@mainSite.Replace("https://", "")</b>).
+        </div>
+    </div>
+}
+else
+{
+    <div class="domain-hint domain-hint-ok">
+        <div class="container">
+            Вы находитесь на поддомене животного: <b>@Context.Request.Host</b> → карточка «@animalName»
+        </div>
+    </div>
+}
+
+<main class="container page">
+    @RenderBody()
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div>
+            <strong>ZooStav</strong> — государственный зоопарк, г. Ставрополь<br />
+            Страница северного волка: <a href="@publicBase">@publicBase.Replace("https://", "")</a>
+        </div>
+        <div>
+            <a class="btn btn-ghost" href="@mainSite">Главная страница зоопарка →</a>
+        </div>
+        <div class="footer-note">
+            Демонстрационный проект. Данные, имена и события — вымышленные.<br />
+            API: <a href="/swagger">Swagger</a> · <a href="/api/animals">/api/animals</a>
+        </div>
+    </div>
+</footer>
+
+<script src="/js/app.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

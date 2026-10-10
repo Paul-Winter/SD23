@@ -1,0 +1,134 @@
+@page "/wolf/{slug}/donate"
+@model ZooStav.Wolf.Web.Pages.Wolf.DonateModel
+@{
+    var a = Model.Animal;
+}
+
+<h1>Донат: помочь @a.Name и стае</h1>
+<p>
+    Все средства направляются в вольер «Северная тундра»: оленина и морская рыба для кормления,
+    витаминные премиксы, ветеринарные процедуры и обогащение среды. Можно выбрать любое назначение
+    и любую сумму — принимается и <b>free donation</b> (0 ₽ как слова поддержки, в том числе регулярно).
+</p>
+
+@if (Model.LastDonation != null)
+{
+    <div class="alert alert-ok">
+        <b>Спасибо, @Model.LastDonation.DonorName!</b>
+        @if (Model.LastDonation.Amount > 0)
+        {
+            <text>Донат @Model.LastDonation.Amount.ToString("N0") ₽ на «@Model.LastDonation.Purpose» зарегистрирован.</text>
+        }
+        else
+        {
+            <text>Ваше свободное пожертвование («free donation») зарегистрировано.</text>
+        }
+        Номер операции: №@Model.LastDonation.Id от @Model.LastDonation.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm").
+        Демонстрационный режим: реальный платёж не проводился.
+    </div>
+}
+
+<div class="split">
+    <section class="card">
+        <h2>Оформить донат</h2>
+        <form method="post">
+            <div class="form-row">
+                <div>
+                    <label asp-for="Input.DonorName"></label>
+                    <input asp-for="Input.DonorName" placeholder="Имя или название организации" />
+                    <div class="field-hint">Можно оставить пустым — тогда подарок будет анонимным.</div>
+                </div>
+                <div>
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" placeholder="you@example.com" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label asp-for="Input.Amount"></label>
+                    <input asp-for="Input.Amount" type="number" min="0" step="50" />
+                    <div class="field-hint">Введите 0 — это free donation: поддержка без денежного взноса.</div>
+                </div>
+                <div>
+                    <label asp-for="Input.Purpose"></label>
+                    <select asp-for="Input.Purpose">
+                        @foreach (var purpose in DonationPurposes.All)
+                        {
+                            <option value="@purpose">@purpose</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label asp-for="Input.Comment"></label>
+                <textarea asp-for="Input.Comment" placeholder="Например: Умке на оленину!"></textarea>
+            </div>
+
+            <div class="checkbox-row">
+                <input asp-for="Input.IsRecurring" />
+                <label asp-for="Input.IsRecurring" style="margin:0">Списывать ежемесячно (подписка на кормление)</label>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-ok" type="submit">Отправить донат</button>
+                <span><small>Оплата эмулируется: интегрируйте ЮKassa/CloudPayments/эквайринг в методе <code>OnPostAsync</code>.</small></span>
+            </div>
+        </form>
+    </section>
+
+    <aside>
+        <section class="card">
+            <h3>Сборы вольера</h3>
+            <div class="stat-label">Всего собрано</div>
+            <div class="stat-value">@Model.Summary.Total.ToString("N0") ₽</div>
+            <div class="stat-note">от @Model.Summary.Count дарителей</div>
+
+            <div style="margin-top:14px">
+                <div class="stat-label">Корм — @Model.Summary.Food.ToString("N0") ₽ (@Model.Summary.PercentFood%)</div>
+                <div class="progress"><div class="progress-bar" style="width:@(Model.Summary.PercentFood)%"></div></div>
+                <div class="stat-label">Лечение — @Model.Summary.Treatment.ToString("N0") ₽ (@Model.Summary.PercentTreatment%)</div>
+                <div class="progress"><div class="progress-bar" style="width:@(Model.Summary.PercentTreatment)%"></div></div>
+                <div class="stat-label">Вольер — @Model.Summary.Enclosure.ToString("N0") ₽</div>
+                <div class="stat-label">Свободное назначение — @Model.Summary.Free.ToString("N0") ₽</div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h3>Последние донаты</h3>
+            @if (Model.Recent.Any())
+            {
+                @foreach (var d in Model.Recent)
+                {
+                    <div class="comment">
+                        <span class="comment-author">@d.DonorName</span>
+                        <span class="comment-time"> · @d.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</span>
+                        <div>@d.Amount.ToString("N0") ₽ — @d.Purpose@(d.IsRecurring ? " · ежемесячно" : "")</div>
+                        @if (!string.IsNullOrWhiteSpace(d.Comment))
+                        {
+                            <div><small>«@d.Comment»</small></div>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p><small>Пока донатов нет — станьте первым.</small></p>
+            }
+        </section>
+
+        <section class="card">
+            <h3>Куда идут средства</h3>
+            <ul>
+                <li>Оленина, говядина, морская рыба — основа рациона (~2,4 кг/день на особь);</li>
+                <li>витаминные премиксы и добавки в межсезонье;</li>
+                <li>плановые вакцинации и ветеринарные осмотры;</li>
+                <li>обогащение среды: укрытия, теневые навесы, «ледяные пироги» с рыбой.</li>
+            </ul>
+            <p><small>Отчётность по сбору публикуется в дневнике вольера. API: <code>/api/donations/summary</code>.</small></p>
+        </section>
+    </aside>
+</div>
+
+<p><a class="btn btn-ghost" href="@Url.Page("/Wolf/Index", new { slug = a.SubdomainSlug })">← Карточка животного</a></p>

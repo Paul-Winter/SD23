@@ -1,0 +1,133 @@
+@page
+@model ZooStav.Wolf.Web.Pages.Staff.DonationsModel
+@{
+    Layout = "_StaffLayout";
+    ViewData["Title"] = "Донаты";
+    var s = Model.Vm.Summary;
+    var p = Model.Vm.Page;
+
+    string Link(int page) => Url.Page("/Staff/Donations", new
+    {
+        purpose = Model.Vm.Purpose,
+        from = Model.Vm.From?.ToString("yyyy-MM-dd"),
+        to = Model.Vm.To?.ToString("yyyy-MM-dd"),
+        onlyUnprocessed = Model.Vm.OnlyUnprocessed,
+        page
+    })!;
+}
+
+<h1>Донаты вольера</h1>
+<p>Поступления на корм, лечение и обустройство вольера, включая свободные пожертвования (free donation).</p>
+
+@if (Model.Flash != null)
+{
+    <div class="alert alert-ok">@Model.Flash</div>
+}
+
+<section class="grid grid-4">
+    <div class="stat"><div class="stat-label">Всего</div><div class="stat-value">@s.Total.ToString("N0") ₽</div><div class="stat-note">@s.Count операций</div></div>
+    <div class="stat"><div class="stat-label">Корм</div><div class="stat-value">@s.Food.ToString("N0") ₽</div><div class="stat-note">@s.PercentFood% от цели 60 000 ₽</div></div>
+    <div class="stat"><div class="stat-label">Лечение</div><div class="stat-value">@s.Treatment.ToString("N0") ₽</div><div class="stat-note">@s.PercentTreatment% от цели 30 000 ₽</div></div>
+    <div class="stat"><div class="stat-label">Свободное назначение</div><div class="stat-value">@s.Free.ToString("N0") ₽</div><div class="stat-note">вольер: @s.Enclosure.ToString("N0") ₽</div></div>
+</section>
+
+<section class="card" style="margin-top:18px">
+    <form method="get" class="form-row">
+        <div>
+            <label for="purpose">Назначение</label>
+            <select id="purpose" name="purpose">
+                <option value="">— все —</option>
+                @foreach (var purpose in DonationPurposes.All)
+                {
+                    <option value="@purpose" selected="@(Model.Vm.Purpose == purpose)">@purpose</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="from">Дата с</label>
+            <input type="date" id="from" name="from" value="@Model.Vm.From?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="to">Дата по</label>
+            <input type="date" id="to" name="to" value="@Model.Vm.To?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="checkbox-row" style="align-self:end">
+            <input type="checkbox" id="onlyUnprocessed" name="onlyUnprocessed" value="true" checked="@Model.Vm.OnlyUnprocessed" />
+            <label for="onlyUnprocessed" style="margin:0">Только необработанные</label>
+        </div>
+        <div class="form-actions">
+            <button class="btn" type="submit">Фильтровать</button>
+            <a class="btn btn-ghost" href="/staff/donations">Сбросить</a>
+        </div>
+    </form>
+</section>
+
+<div class="card-head" style="margin-top:18px">
+    <h2 style="margin:0">Операций: @p.TotalCount</h2>
+    <small>страница @p.Page из @(p.TotalPages == 0 ? 1 : p.TotalPages)</small>
+</div>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>№</th><th>Дата</th><th>Даритель</th><th>Сумма</th><th>Назначение</th>
+            <th>Комментарий</th><th>Статус</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var d in p.Items)
+        {
+            <tr>
+                <td class="mono">@d.Id</td>
+                <td class="mono">@d.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@d.DonorName</td>
+                <td><b>@d.Amount.ToString("N0") ₽</b>@(d.IsRecurring ? " / мес" : "")</td>
+                <td>@d.Purpose</td>
+                <td>@d.Comment</td>
+                <td>
+                    @if (d.IsProcessed)
+                    {
+                        <span class="tag tag-feeding">обработан</span>
+                    }
+                    else
+                    {
+                        <span class="tag tag-illness">новый</span>
+                    }
+                </td>
+                <td>
+                    @if (!d.IsProcessed)
+                    {
+                        <form method="post" asp-page-handler="MarkProcessed" class="inline-form">
+                            <input type="hidden" name="id" value="@d.Id" />
+                            <button class="btn btn-sm" type="submit">Отметить</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="pager">
+    @if (p.HasPrev)
+    {
+        <a href="@Link(p.Page - 1)">← Назад</a>
+    }
+    @for (var i = Math.Max(1, p.Page - 2); i <= Math.Min(p.TotalPages, p.Page + 2); i++)
+    {
+        if (i == p.Page)
+        {
+            <span class="current">@i</span>
+        }
+        else
+        {
+            <a href="@Link(i)">@i</a>
+        }
+    }
+    @if (p.HasNext)
+    {
+        <a href="@Link(p.Page + 1)">Вперёд →</a>
+    }
+</div>

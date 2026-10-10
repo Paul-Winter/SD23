@@ -1,0 +1,67 @@
+@inject IConfiguration Configuration
+@{
+    var slug = ViewData["AnimalSlug"] as string ?? "wolf";
+    var animalName = ViewData["AnimalName"] as string ?? "Северный волк";
+    var onSubdomain = Context.Items.ContainsKey("ZooSubdomain");
+    var animalBase = onSubdomain ? "" : $"/wolf/{slug}";
+    var mainSite = Configuration["Zoo:MainSiteUrl"] ?? "https://zoostav.ru";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — кабинет работника · ZooStav</title>
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="icon" href="/images/wolf-hero.jpg" />
+</head>
+<body class="theme-arctic staff-theme">
+<header class="site-header site-header-staff">
+    <div class="container header-inner">
+        <a class="brand" href="/staff">
+            <span class="brand-mark">🛠️</span>
+            <span class="brand-text">
+                <strong>ZooStav · кабинет работника</strong>
+                <small>Вольер «Северная тундра» · дневник особи</small>
+            </span>
+        </a>
+        <nav class="site-nav">
+            <a href="/staff">Сводка</a>
+            <a href="/staff/diary">Дневник</a>
+            <a href="/staff/entry/new">Добавить запись</a>
+            <a href="/staff/audit">Журнал изменений</a>
+            <a href="/staff/donations">Донаты</a>
+            <a href="@animalBase" target="_blank" rel="noopener">Публичная страница ↗</a>
+        </nav>
+        <div class="staff-user">
+            @if (User?.Identity?.IsAuthenticated == true)
+            {
+                <span class="staff-user-name">@User.FindFirst("display_name")?.Value</span>
+                <span class="staff-user-role">@Roles.ToRussian(User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "")</span>
+                <form method="post" asp-page="/Staff/Logout" class="inline-form">
+                    <button class="btn btn-ghost btn-sm" type="submit">Выйти</button>
+                </form>
+            }
+            else
+            {
+                <a class="btn btn-sm" href="/staff/login">Войти</a>
+            }
+        </div>
+    </div>
+</header>
+
+<main class="container page">
+    @RenderBody()
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div>ZooStav · внутренний контур для работников. Все изменения фиксируются в журнале с указанием специалиста и времени.</div>
+        <div><a class="btn btn-ghost" href="@mainSite">Главная страница зоопарка →</a></div>
+    </div>
+</footer>
+
+<script src="/js/app.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,240 @@
+@page
+@model ZooStav.Wolf.Web.Pages.Staff.IndexModel
+@{
+    Layout = "_StaffLayout";
+    var dto = Model.Dto;
+    var animal = dto.Animal;
+    var f = dto.Feeding;
+    ViewData["Title"] = "Сводка";
+}
+
+<h1>Сводка по вольеру</h1>
+
+@if (Model.Flash != null)
+{
+    <div class="alert alert-ok">@Model.Flash</div>
+}
+
+<div class="card" style="margin-bottom:18px">
+    <form method="get" class="form-row">
+        <div>
+            <label for="animalId">Особь</label>
+            <select id="animalId" name="animalId" onchange="this.form.submit()">
+                @foreach (var a in Model.Animals)
+                {
+                    <option value="@a.Id" selected="@(Model.SelectedAnimalId == a.Id)">@a.Name — @a.Enclosure</option>
+                }
+            </select>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-ghost" type="submit">Показать</button>
+        </div>
+    </form>
+</div>
+
+@if (animal == null)
+{
+    <div class="alert alert-warn">В базе пока нет животных.</div>
+}
+else
+{
+    <div class="split">
+        <div>
+            <!-- ============ Последняя кормёжка ============ -->
+            <section class="card feeding-card">
+                <div class="card-head">
+                    <h2 style="margin:0">Последняя кормёжка: @animal.Name</h2>
+                    @if (f.LastFeeding == null)
+                    {
+                        <span class="tag tag-illness">нет записей</span>
+                    }
+                    else if (f.IsOverdue)
+                    {
+                        <span class="tag tag-illness">требуется внимание: просрочено</span>
+                    }
+                    else
+                    {
+                        <span class="tag tag-feeding">в норме</span>
+                    }
+                </div>
+
+                @if (f.LastFeeding != null)
+                {
+                    <div class="grid grid-4">
+                        <div class="stat">
+                            <div class="stat-label">Когда кормили</div>
+                            <div class="stat-value">@f.LastFeeding.OccurredAt.ToString("dd.MM HH:mm")</div>
+                            <div class="stat-note">
+                                @if (f.TimeSinceLastFeeding is TimeSpan ts)
+                                {
+                                    <text>@((int)ts.TotalHours) ч @ts.Minutes мин назад</text>
+                                }
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Специалист</div>
+                            <div class="stat-value" style="font-size:1.15rem">@f.LastFeedingSpecialist</div>
+                            <div class="stat-note">@(f.LastFeeding.Author?.Position ?? "—")</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Рацион</div>
+                            <div class="stat-value" style="font-size:1.1rem">@f.LastFoodType</div>
+                            <div class="stat-note">@(f.LastFoodAmountKg?.ToString("0.##") ?? "—") кг</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Кормлений</div>
+                            <div class="stat-value">@f.FeedingsLast24h / @f.FeedingsLast7Days</div>
+                            <div class="stat-note">за 24 ч / за 7 дней</div>
+                        </div>
+                    </div>
+                    <p style="margin-top:12px">
+                        <small>
+                            Запись №@f.LastFeeding.Id внесена @f.LastFeeding.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm") (UTC+3)
+                            @if (f.LastFeeding.UpdatedAt > f.LastFeeding.CreatedAt.AddMinutes(1))
+                            {
+                                <text> · изменена @f.LastFeeding.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</text>
+                            }
+                            · следующее плановое кормление: <b>@f.NextPlannedFeeding</b>
+                        </small>
+                    </p>
+                }
+                else
+                {
+                    <p>Записей о кормлении этой особи пока нет.</p>
+                }
+
+                @if (Model.CanEdit)
+                {
+                    <form method="post" asp-page-handler="QuickFeed" class="form-row" style="margin-top:12px;border-top:1px dashed var(--line);padding-top:14px">
+                        <input type="hidden" name="animalId" value="@animal.Id" />
+                        <div>
+                            <label>Отметить кормёжку сейчас (время и специалист подставятся автоматически)</label>
+                            <select name="foodType">
+                                <option>Оленина, говяжьи субпродукты, витаминный премикс</option>
+                                <option>Говядина, морская рыба (минтай), яйцо</option>
+                                <option>Кролик, субпродукты, морковь</option>
+                                <option>Замороженная рыба во льду (обогащение среды)</option>
+                                <option>Индейка, творог, премикс (молодняк)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Масса корма, кг</label>
+                            <input type="number" name="foodAmountKg" step="0.1" min="0" placeholder="2.4" />
+                        </div>
+                        <div>
+                            <label>Комментарий (необязательно)</label>
+                            <input type="text" name="details" placeholder="Съедено полностью" />
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-ok" type="submit">Зафиксировать кормёжку</button>
+                            <a class="btn btn-ghost" href="/staff/entry/new?animalId=@animal.Id&amp;type=Feeding">Подробная форма</a>
+                        </div>
+                    </form>
+                }
+            </section>
+
+            <!-- ============ Сводные показатели ============ -->
+            <section class="grid grid-4" style="margin-top:18px">
+                <div class="stat">
+                    <div class="stat-label">Записей в дневнике</div>
+                    <div class="stat-value">@dto.TotalEntries</div>
+                    <div class="stat-note">из них служебных: @dto.NonPublicEntries</div>
+                </div>
+                <div class="stat @(dto.OpenIllnesses > 0 ? "stat-danger" : "")">
+                    <div class="stat-label">Записей о болезнях</div>
+                    <div class="stat-value">@dto.OpenIllnesses</div>
+                    <div class="stat-note">требуют контроля ветеринара</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Вакцинаций в этом году</div>
+                    <div class="stat-value">@dto.VaccinationsThisYear</div>
+                    <div class="stat-note">по календарю прививок</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Комментариев за 7 дней</div>
+                    <div class="stat-value">@dto.CommentsLast7Days</div>
+                    <div class="stat-note">обсуждения в дневнике</div>
+                </div>
+            </section>
+
+            <!-- ============ Последние записи дневника ============ -->
+            <section class="card" style="margin-top:18px">
+                <div class="card-head">
+                    <h2 style="margin:0">Последние записи дневника</h2>
+                    <a class="btn btn-ghost btn-sm" href="/staff/diary?animalId=@animal.Id">Все записи и фильтры →</a>
+                </div>
+                @foreach (var e in dto.RecentEntries)
+                {
+                    ViewData["ShowInternalFields"] = true;
+                    ViewData["ShowComments"] = false;
+                    ViewData["ShowAnimal"] = false;
+                    <partial name="_DiaryEntryCard" model="e" />
+                }
+            </section>
+        </div>
+
+        <aside>
+            <!-- ============ Комментарии работников ============ -->
+            <section class="card">
+                <div class="card-head">
+                    <h3 style="margin:0">Комментарии специалистов</h3>
+                    <a class="btn btn-ghost btn-sm" href="/staff/diary?animalId=@animal.Id">Все →</a>
+                </div>
+                @if (dto.RecentComments.Any())
+                {
+                    @foreach (var c in dto.RecentComments)
+                    {
+                        <div class="comment">
+                            <span class="comment-author">@(c.Author?.DisplayName ?? "—")</span>
+                            <span class="comment-time">
+                                · @c.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                · @ZooStav.Wolf.Web.Models.Roles.ToRussian(c.Author?.Role ?? "")
+                            </span>
+                            <div>@c.Text</div>
+                            <div><small>Запись: «@(c.DiaryEntry?.Title ?? "—")» (№@c.DiaryEntryId)</small></div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p><small>Комментариев пока нет.</small></p>
+                }
+                <p><small>Комментировать можно из <a href="/staff/diary?animalId=@animal.Id">дневника</a> — под каждой записью.</small></p>
+            </section>
+
+            <!-- ============ Журнал изменений: кто, когда, что ============ -->
+            <section class="card">
+                <div class="card-head">
+                    <h3 style="margin:0">Последние изменения</h3>
+                    <a class="btn btn-ghost btn-sm" href="/staff/audit">Журнал целиком →</a>
+                </div>
+                <p><small>Фиксируется каждый вход, создание, правка и удаление — с указанием специалиста и времени.</small></p>
+                @foreach (var log in dto.RecentChanges)
+                {
+                    <div class="audit-row">
+                        <div class="audit-when">@log.TimestampUtc.ToLocalTime().ToString("dd.MM HH:mm")</div>
+                        <div class="audit-who">@log.UserName<small><br />@ZooStav.Wolf.Web.Models.Roles.ToRussian(log.UserRole)</small></div>
+                        <div>
+                            <span class="tag tag-relocation">@log.Action</span>
+                            <div>@log.Summary</div>
+                        </div>
+                    </div>
+                }
+            </section>
+
+            <!-- ============ API для проверки ============ -->
+            <section class="card">
+                <h3>Проверка через API</h3>
+                <p><small>Все действия кабинета доступны и по API (JWT-токен):</small></p>
+                <ul style="font-size:.88rem">
+                    <li><code>POST /api/auth/login</code> — получить токен;</li>
+                    <li><code>GET /api/staff/feeding-status?slug=@animal.SubdomainSlug</code> — последняя кормёжка;</li>
+                    <li><code>GET /api/diary?animalId=@animal.Id&amp;includeNonPublic=true</code> — дневник с фильтрами;</li>
+                    <li><code>GET /api/audit</code> — журнал изменений (кто/когда/что);</li>
+                    <li><code>POST /api/diary</code> — новая запись.</li>
+                </ul>
+                <p><a class="btn btn-sm" href="/swagger" target="_blank" rel="noopener">Открыть Swagger</a></p>
+            </section>
+        </aside>
+    </div>
+}

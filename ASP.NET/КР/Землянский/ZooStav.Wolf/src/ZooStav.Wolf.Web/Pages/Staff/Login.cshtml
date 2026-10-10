@@ -1,0 +1,54 @@
+@page
+@model ZooStav.Wolf.Web.Pages.Staff.LoginModel
+@{
+    Layout = "_StaffLayout";
+    ViewData["Title"] = "Вход для работников";
+}
+
+<div class="login-wrap">
+    <div class="card login-card">
+        <h1 style="font-size:1.5rem">Вход для работников зоопарка</h1>
+        <p><small>
+            Кабинет предназначен для киперов, ветеринаров и руководства: ведение дневника особи,
+            фиксация кормёжек, комментарии и контроль изменений.
+        </small></p>
+
+        @if (Model.Input.Error != null)
+        {
+            <div class="alert alert-danger">@Model.Input.Error</div>
+        }
+
+        <form method="post">
+            <input type="hidden" asp-for="Input.ReturnUrl" />
+            <label asp-for="Input.UserName"></label>
+            <input asp-for="Input.UserName" autocomplete="username" placeholder="keeper" autofocus />
+            <span asp-validation-for="Input.UserName" style="color:#ffb3b3"></span>
+
+            <label asp-for="Input.Password"></label>
+            <input asp-for="Input.Password" type="password" autocomplete="current-password" placeholder="••••••••" />
+            <span asp-validation-for="Input.Password" style="color:#ffb3b3"></span>
+
+            <div class="form-actions">
+                <button class="btn btn-ok" type="submit">Войти</button>
+                <a class="btn btn-ghost" href="/staff/denied">Правила доступа</a>
+            </div>
+        </form>
+
+        <hr style="border-color:var(--line);margin:20px 0" />
+
+        <div class="demo-users">
+            <b>Демонстрационные учётные записи (для проверки работы):</b>
+            <ul style="margin:10px 0 0;padding-left:20px">
+                <li><code>keeper</code> / <code>Keeper#2026</code> — кипер: кормёжки, комментарии (свои записи — правка)</li>
+                <li><code>keeper2</code> / <code>Keeper2#2026</code> — кипер (вторая смена)</li>
+                <li><code>vet</code> / <code>Vet#2026</code> — ветеринар: вакцинации, лечение, служебные записи</li>
+                <li><code>admin</code> / <code>Admin#2026</code> — администратор: удаление, управление доступом</li>
+                <li><code>intern</code> / <code>Intern#2026</code> — наблюдатель: только просмотр</li>
+            </ul>
+            <p style="margin-top:10px">
+                Тот же вход для API (JWT): <code>POST /api/auth/login</code> — пример есть в
+                <a href="/swagger" target="_blank" rel="noopener">Swagger</a> и в README проекта.
+            </p>
+        </div>
+    </div>
+</div>

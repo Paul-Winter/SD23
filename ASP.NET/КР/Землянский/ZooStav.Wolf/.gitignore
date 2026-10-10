@@ -1,0 +1,34 @@
+## Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+## Сборка
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+publish/
+*.dll
+*.pdb
+*.exe
+
+## База данных SQLite (демо-данные создаются автоматически при запуске)
+*.db
+*.db-shm
+*.db-wal
+
+## Прочее
+*.log
+.DS_Store
+Thumbs.db
+
+## Рабочий каталог HLS-транскодера (создаётся автоматически)
+hls/

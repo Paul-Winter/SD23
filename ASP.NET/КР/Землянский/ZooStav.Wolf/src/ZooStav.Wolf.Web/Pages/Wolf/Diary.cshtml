@@ -1,0 +1,121 @@
+@page "/wolf/{slug}/diary"
+@model ZooStav.Wolf.Web.Pages.Wolf.DiaryModel
+@{
+    var a = Model.Vm.Animal;
+    var f = Model.Vm.Filter;
+    var p = Model.Vm.Page;
+
+    string Link(int page) => Url.Page("/Wolf/Diary", new
+    {
+        slug = a.SubdomainSlug,
+        from = f.From?.ToString("yyyy-MM-dd"),
+        to = f.To?.ToString("yyyy-MM-dd"),
+        type = f.Type?.ToString(),
+        animalId = f.AnimalId,
+        search = f.Search,
+        sort = f.Sort,
+        page
+    })!;
+}
+
+<h1>Дневник стаи «Северная тундра»</h1>
+<p>
+    Публичная лента наблюдений зоопарка ZooStav: кормёжки, вакцинации, потомство, лечение и наблюдения.
+    Служебные записи (внутренние заметки ветеринаров) в публичную ленту не попадают —
+    их видят только работники в <a href="/staff/diary">рабочем дневнике</a>.
+</p>
+
+<section class="card">
+    <form method="get" class="form-row">
+        <div>
+            <label for="from">Дата с</label>
+            <input type="date" id="from" name="from" value="@f.From?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="to">Дата по</label>
+            <input type="date" id="to" name="to" value="@f.To?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="type">Тип записи</label>
+            <select id="type" name="type">
+                <option value="">— все типы —</option>
+                @foreach (var t in Enum.GetValues<DiaryEntryType>())
+                {
+                    <option value="@t" selected="@(f.Type == t)">@t.ToRussian()</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="animalId">Особь</label>
+            <select id="animalId" name="animalId">
+                <option value="">— вся стая —</option>
+                @foreach (var m in Model.Vm.Animals)
+                {
+                    <option value="@m.Id" selected="@(f.AnimalId == m.Id)">@m.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="search">Поиск по тексту</label>
+            <input type="search" id="search" name="search" value="@f.Search" placeholder="например: кормёжка, рыба, вакцина" />
+        </div>
+        <div>
+            <label for="sort">Сортировка</label>
+            <select id="sort" name="sort">
+                <option value="date_desc" selected="@(f.Sort == "date_desc")">Сначала новые</option>
+                <option value="date_asc" selected="@(f.Sort == "date_asc")">Сначала старые</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button class="btn" type="submit">Применить фильтр</button>
+            <a class="btn btn-ghost" href="@Url.Page("/Wolf/Diary", new { slug = a.SubdomainSlug })">Сбросить</a>
+        </div>
+    </form>
+</section>
+
+<div class="card-head" style="margin-top:18px">
+    <h2 style="margin:0">Найдено записей: @p.TotalCount</h2>
+    <small>страница @p.Page из @(p.TotalPages == 0 ? 1 : p.TotalPages)</small>
+</div>
+
+@if (!p.Items.Any())
+{
+    <div class="alert alert-warn">По заданным условиям записей не найдено. Попробуйте изменить фильтр.</div>
+}
+else
+{
+    foreach (var e in p.Items)
+    {
+        ViewData["ShowAnimal"] = true;
+        ViewData["ShowInternalFields"] = false;
+        ViewData["ShowComments"] = true;
+        <partial name="_DiaryEntryCard" model="e" />
+    }
+}
+
+<div class="pager">
+    @if (p.HasPrev)
+    {
+        <a href="@Link(p.Page - 1)">← Назад</a>
+    }
+    @for (var i = 1; i <= p.TotalPages; i++)
+    {
+        if (i == p.Page)
+        {
+            <span class="current">@i</span>
+        }
+        else
+        {
+            <a href="@Link(i)">@i</a>
+        }
+    }
+    @if (p.HasNext)
+    {
+        <a href="@Link(p.Page + 1)">Вперёд →</a>
+    }
+</div>
+
+<p style="margin-top:20px">
+    <a class="btn btn-ghost" href="@Url.Page("/Wolf/Index", new { slug = a.SubdomainSlug })">← Карточка животного</a>
+    <a class="btn btn-ghost" href="/api/diary?animalId=@a.Id&amp;pageSize=20" target="_blank" rel="noopener">Этот дневник через API (JSON)</a>
+</p>
