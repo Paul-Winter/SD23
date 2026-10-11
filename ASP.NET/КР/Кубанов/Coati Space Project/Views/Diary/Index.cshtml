@@ -30,23 +30,61 @@
     </div>
 }
 
-<!-- Фильтрация по типам событий -->
+<!-- Фильтрация по типам событий, датам и сотрудникам -->
 <div class="card shadow-sm border mb-4 bg-white">
     <div class="card-body p-3">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-            <span class="fw-semibold text-dark small me-2">Фильтр по категории:</span>
-            @foreach (var cat in categories)
-            {
-                if (cat == currentFilter)
+        <form method="get" asp-action="Index">
+            <div class="d-flex align-items-center flex-wrap gap-2 mb-3 pb-2 border-bottom">
+                <span class="fw-semibold text-dark small me-2">Категория:</span>
+                @foreach (var cat in categories)
                 {
-                    <a asp-action="Index" asp-route-filterType="@cat" class="btn btn-sm btn-dark">@cat</a>
+                    if (cat == currentFilter)
+                    {
+                        <a asp-action="Index" asp-route-filterType="@cat" asp-route-dateFrom="@ViewBag.DateFrom" asp-route-dateTo="@ViewBag.DateTo" asp-route-author="@ViewBag.CurrentAuthor" class="btn btn-sm btn-dark">@cat</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Index" asp-route-filterType="@cat" asp-route-dateFrom="@ViewBag.DateFrom" asp-route-dateTo="@ViewBag.DateTo" asp-route-author="@ViewBag.CurrentAuthor" class="btn btn-sm btn-outline-secondary">@cat</a>
+                    }
                 }
-                else
-                {
-                    <a asp-action="Index" asp-route-filterType="@cat" class="btn btn-sm btn-outline-secondary">@cat</a>
-                }
-            }
-        </div>
+                <input type="hidden" name="filterType" value="@currentFilter" />
+            </div>
+
+            <div class="row g-2 align-items-end">
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label small fw-semibold text-dark mb-1">Дата от:</label>
+                    <input type="date" name="dateFrom" value="@ViewBag.DateFrom" class="form-control form-control-sm" />
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label small fw-semibold text-dark mb-1">Дата до:</label>
+                    <input type="date" name="dateTo" value="@ViewBag.DateTo" class="form-control form-control-sm" />
+                </div>
+                <div class="col-sm-8 col-md-4">
+                    <label class="form-label small fw-semibold text-dark mb-1">Сотрудник:</label>
+                    <select name="author" class="form-select form-select-sm">
+                        <option value="Все">Все сотрудники</option>
+                        @if (ViewBag.Authors != null)
+                        {
+                            foreach (string auth in (List<string>)ViewBag.Authors)
+                            {
+                                if (auth == (string?)ViewBag.CurrentAuthor)
+                                {
+                                    <option value="@auth" selected>@auth</option>
+                                }
+                                else
+                                {
+                                    <option value="@auth">@auth</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-4 col-md-2 d-flex gap-1">
+                    <button type="submit" class="btn btn-sm btn-dark w-100">Применить</button>
+                    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Сброс</a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -54,7 +92,7 @@
 @if (!Model.Any())
 {
     <div class="alert alert-light border text-center py-4 text-secondary">
-        В выбранной категории записей не найдено. Нажмите «Добавить запись», чтобы внести новое наблюдение.
+        По заданным критериям фильтрации записей не найдено. Нажмите «Сброс», чтобы отобразить все записи.
     </div>
 }
 else

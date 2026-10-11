@@ -15,8 +15,8 @@ namespace Coati_Space_Project.Controllers
             db = context;
         }
 
-        // Список событий с возможностью фильтрации по типу события
-        public async Task<IActionResult> Index(string? filterType)
+        // Список событий с возможностью фильтрации по типу события, датам и сотрудникам
+        public async Task<IActionResult> Index(string? filterType, DateTime? dateFrom, DateTime? dateTo, string? author)
         {
             var query = db.DiaryEntries.AsQueryable();
 
@@ -25,8 +25,38 @@ namespace Coati_Space_Project.Controllers
                 query = query.Where(e => e.EventType == filterType);
             }
 
+            if (dateFrom.HasValue)
+            {
+                var from = dateFrom.Value.Date;
+                query = query.Where(e => e.EventDate >= from);
+            }
+
+            if (dateTo.HasValue)
+            {
+                var to = dateTo.Value.Date.AddDays(1);
+                query = query.Where(e => e.EventDate < to);
+            }
+
+            if (!string.IsNullOrWhiteSpace(author) && author != "Все")
+            {
+                query = query.Where(e => e.Author == author);
+            }
+
             var entries = await query.OrderByDescending(e => e.EventDate).ToListAsync();
+
+            var authors = await db.DiaryEntries
+                .Select(e => e.Author)
+                .Where(a => !string.IsNullOrEmpty(a))
+                .Distinct()
+                .OrderBy(a => a)
+                .ToListAsync();
+
             ViewBag.CurrentFilter = filterType ?? "Все";
+            ViewBag.DateFrom = dateFrom?.ToString("yyyy-MM-dd");
+            ViewBag.DateTo = dateTo?.ToString("yyyy-MM-dd");
+            ViewBag.CurrentAuthor = author ?? "Все";
+            ViewBag.Authors = authors;
+
             return View(entries);
         }
 
