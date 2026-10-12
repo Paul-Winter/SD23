@@ -1,0 +1,51 @@
+@page
+@model ZooStav.Wolf.Web.Pages.Staff.Entry.NewModel
+@{
+    Layout = "_StaffLayout";
+    ViewData["Title"] = "Новая запись дневника";
+}
+
+<h1>Новая запись дневника</h1>
+<p>
+    Фиксируются: кормёжка, вакцинация, спаривание, потомство, болезнь, лечение, осмотр, взвешивание, перемещение и комментарии.
+    Набор полей меняется в зависимости от типа записи. Автор записи и время внесения подставляются автоматически.
+</p>
+
+<div class="split">
+    <section class="card">
+        <form method="post">
+            <partial name="_EntryForm" model="Model.Input" />
+            <div class="form-actions">
+                <button class="btn btn-ok" type="submit">Сохранить запись</button>
+                <a class="btn btn-ghost" href="/staff/diary">Отмена</a>
+            </div>
+        </form>
+    </section>
+
+    <aside>
+        <section class="card">
+            <h3>Подсказка для кипера</h3>
+            <ul style="font-size:.9rem">
+                <li><b>Кормёжка</b> — укажите рацион и массу; после сохранения сводка покажет время последней кормёжки и ваше имя;</li>
+                <li><b>Вакцинация/лечение</b> — препарат и дозировку; такие записи по умолчанию можно оставить служебными (снять галочку «видна посетителям»);</li>
+                <li><b>Спаривание/потомство</b> — укажите партнёра и число детёнышей;</li>
+                <li><b>Болезнь</b> — диагноз виден только работникам;</li>
+                <li>любое создание записи фиксируется в <a href="/staff/audit">журнале изменений</a>: кто, когда и что сделал.</li>
+            </ul>
+        </section>
+        <section class="card">
+            <h3>То же самое через API</h3>
+            <p><small>POST <code>/api/diary</code> с JWT-токеном (роль Keeper/Vet/Admin):</small></p>
+            <pre class="mono" style="white-space:pre-wrap;font-size:.78rem;background:#0d1c2c;border:1px solid var(--line);border-radius:10px;padding:12px">{
+  "animalId": 1,
+  "type": "Feeding",
+  "occurredAt": "@DateTime.Now.ToString("s")",
+  "title": "Утренняя кормёжка",
+  "details": "Съедено полностью",
+  "foodType": "Оленина, рыба",
+  "foodAmountKg": 2.4,
+  "isPublic": true
+}</pre>
+        </section>
+    </aside>
+</div>

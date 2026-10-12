@@ -17,16 +17,25 @@ public class DiaryModel : PageModel
     }
 
     public string AnimalName { get; set; } = "";
+    public string Filter { get; set; } = "";
+    public DateTime? From { get; set; }
+    public DateTime? To { get; set; }
+
     public List<Models.LionDiaryEntry> Entries { get; set; } = new();
 
     public int EditId { get; set; }
     public string EditType { get; set; } = "";
     public string EditNotes { get; set; } = "";
+    public string EditRecordedBy { get; set; } = "";
 
-    public void OnGet(string animalName, int? editId)
+    public void OnGet(string animalName, int? editId, string? filter, DateTime? from, DateTime? to)
     {
         AnimalName = animalName;
-        LoadEntries(animalName);
+        Filter = filter ?? "";
+        From = from;
+        To = to;
+
+        LoadEntries(animalName, Filter, From, To);
 
         if (editId != null)
         {
@@ -36,11 +45,12 @@ public class DiaryModel : PageModel
                 EditId = entry.Id;
                 EditType = entry.EntryType;
                 EditNotes = entry.Notes;
+                EditRecordedBy = entry.RecordedBy;
             }
         }
     }
 
-    public IActionResult OnPost(string animalName, string entryType, string notes)
+    public IActionResult OnPost(string animalName, string entryType, string notes, string recordedBy)
     {
         var lion = db.Lions.FirstOrDefault(l => l.Slug == animalName);
         if (lion == null) return NotFound();
@@ -51,7 +61,9 @@ public class DiaryModel : PageModel
             EntryType = entryType,
             Notes = notes,
             RecordedAt = DateTime.UtcNow,
-            RecordedBy = User.Identity?.Name ?? "unknown"
+            RecordedBy = string.IsNullOrWhiteSpace(recordedBy)
+                ? (User.Identity?.Name ?? "unknown")
+                : recordedBy
         };
 
         db.LionDiaryEntries.Add(entry);
@@ -60,13 +72,14 @@ public class DiaryModel : PageModel
         return Redirect($"/stav-zoo/{animalName}/diary");
     }
 
-    public IActionResult OnPostEdit(int id, string animalName, string entryType, string notes)
+    public IActionResult OnPostEdit(int id, string animalName, string entryType, string notes, string recordedBy)
     {
         var entry = db.LionDiaryEntries.FirstOrDefault(e => e.Id == id);
         if (entry == null) return NotFound();
 
         entry.EntryType = entryType;
         entry.Notes = notes;
+        entry.RecordedBy = string.IsNullOrWhiteSpace(recordedBy) ? entry.RecordedBy : recordedBy;
         db.SaveChanges();
 
         return Redirect($"/stav-zoo/{animalName}/diary");
@@ -84,10 +97,27 @@ public class DiaryModel : PageModel
         return Redirect($"/stav-zoo/{animalName}/diary");
     }
 
-    private void LoadEntries(string animalName)
+    private void LoadEntries(string animalName, string filter, DateTime? from, DateTime? to)
     {
-        Entries = db.LionDiaryEntries
-            .Where(e => e.Lion.Slug == animalName)
+        var query = db.LionDiaryEntries
+            .Where(e => e.Lion.Slug == animalName);
+
+        if (!string.IsNullOrWhiteSpace(filter))
+        {
+            query = query.Where(e => e.EntryType == filter);
+        }
+
+        if (from.HasValue)
+        {
+            query = query.Where(e => e.RecordedAt >= from.Value.Date);
+        }
+
+        if (to.HasValue)
+        {
+            query = query.Where(e => e.RecordedAt < to.Value.Date.AddDays(1));
+        }
+
+        Entries = query
             .OrderByDescending(e => e.RecordedAt)
             .ToList();
     }

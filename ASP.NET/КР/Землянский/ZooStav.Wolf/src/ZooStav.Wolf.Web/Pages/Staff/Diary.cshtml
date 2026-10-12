@@ -1,0 +1,166 @@
+@page
+@model ZooStav.Wolf.Web.Pages.Staff.DiaryModel
+@{
+    Layout = "_StaffLayout";
+    ViewData["Title"] = "Дневник (служебный)";
+    var f = Model.Vm.Filter;
+    var p = Model.Vm.Page;
+
+    string Link(int page) => Url.Page("/Staff/Diary", new
+    {
+        from = f.From?.ToString("yyyy-MM-dd"),
+        to = f.To?.ToString("yyyy-MM-dd"),
+        type = f.Type?.ToString(),
+        authorId = f.AuthorId,
+        animalId = f.AnimalId,
+        search = f.Search,
+        includeNonPublic = f.IncludeNonPublic,
+        sort = f.Sort,
+        page
+    })!;
+}
+
+<h1>Рабочий дневник стаи</h1>
+<p>
+    Здесь фиксируются все события: кормёжка, вакцинация, спаривание, потомство, болезни, лечение, осмотры.
+    Каждая запись содержит автора, должность и время внесения, а все правки попадают в
+    <a href="/staff/audit">журнал изменений</a>.
+</p>
+
+@if (Model.Flash != null)
+{
+    <div class="alert alert-ok">@Model.Flash</div>
+}
+
+<section class="card">
+    <form method="get" class="form-row">
+        <div>
+            <label for="from">Дата с</label>
+            <input type="date" id="from" name="from" value="@f.From?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="to">Дата по</label>
+            <input type="date" id="to" name="to" value="@f.To?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="type">Тип записи</label>
+            <select id="type" name="type">
+                <option value="">— все типы —</option>
+                @foreach (var t in Enum.GetValues<DiaryEntryType>())
+                {
+                    <option value="@t" selected="@(f.Type == t)">@t.ToRussian()</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="authorId">Специалист (кто внёс)</label>
+            <select id="authorId" name="authorId">
+                <option value="">— все специалисты —</option>
+                @foreach (var u in Model.Vm.Authors)
+                {
+                    <option value="@u.Id" selected="@(f.AuthorId == u.Id)">@u.DisplayName — @Roles.ToRussian(u.Role)</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="animalId">Особь</label>
+            <select id="animalId" name="animalId">
+                <option value="">— вся стая —</option>
+                @foreach (var a in Model.Vm.Animals)
+                {
+                    <option value="@a.Id" selected="@(f.AnimalId == a.Id)">@a.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="search">Поиск по тексту</label>
+            <input type="search" id="search" name="search" value="@f.Search" placeholder="корм, лечение, диагноз…" />
+        </div>
+        <div>
+            <label for="sort">Сортировка</label>
+            <select id="sort" name="sort">
+                <option value="date_desc" selected="@(f.Sort == "date_desc")">Сначала новые</option>
+                <option value="date_asc" selected="@(f.Sort == "date_asc")">Сначала старые</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button class="btn" type="submit">Применить</button>
+            <a class="btn btn-ghost" href="/staff/diary">Сбросить</a>
+            <a class="btn btn-ok" href="/staff/entry/new?animalId=@(f.AnimalId)">+ Новая запись</a>
+        </div>
+    </form>
+</section>
+
+<div class="card-head" style="margin-top:18px">
+    <h2 style="margin:0">Записей найдено: @p.TotalCount</h2>
+    <small>страница @p.Page из @(p.TotalPages == 0 ? 1 : p.TotalPages) · показаны записи, включая служебные</small>
+</div>
+
+@if (!p.Items.Any())
+{
+    <div class="alert alert-warn">По заданным условиям ничего не найдено.</div>
+}
+else
+{
+    foreach (var e in p.Items)
+    {
+        ViewData["ShowInternalFields"] = true;
+        ViewData["ShowComments"] = true;
+        ViewData["ShowAnimal"] = true;
+        <partial name="_DiaryEntryCard" model="e" />
+
+        <div class="card" style="margin:-6px 0 18px;border-radius:0 0 14px 14px">
+            <div class="card-head">
+                <strong>Действия по записи №@e.Id</strong>
+                <div>
+                    @if (Model.CanEdit && (User.IsInRole(Roles.Admin) || e.AuthorId == Model.CurrentUserId))
+                    {
+                        <a class="btn btn-ghost btn-sm" href="/staff/entry/edit?id=@e.Id">Изменить</a>
+                    }
+                    @if (User.IsInRole(Roles.Admin))
+                    {
+                        <form method="post" asp-page-handler="Delete" class="inline-form"
+                              data-confirm="Удалить запись «@e.Title»? Действие будет записано в журнал изменений.">
+                            <input type="hidden" name="id" value="@e.Id" />
+                            <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
+                        </form>
+                    }
+                </div>
+            </div>
+
+            @if (Model.Vm.CanSeeNonPublic)
+            {
+                <form method="post" asp-page-handler="Comment">
+                    <input type="hidden" name="entryId" value="@e.Id" />
+                    <label for="text-@e.Id">Комментарий специалиста (автор — @(User.FindFirst("display_name")?.Value), время фиксируется автоматически)</label>
+                    <textarea id="text-@e.Id" name="text" placeholder="Комментарий к записи…" style="min-height:64px"></textarea>
+                    <div class="form-actions">
+                        <button class="btn btn-sm" type="submit">Добавить комментарий</button>
+                    </div>
+                </form>
+            }
+        </div>
+    }
+}
+
+<div class="pager">
+    @if (p.HasPrev)
+    {
+        <a href="@Link(p.Page - 1)">← Назад</a>
+    }
+    @for (var i = 1; i <= p.TotalPages; i++)
+    {
+        if (i == p.Page)
+        {
+            <span class="current">@i</span>
+        }
+        else
+        {
+            <a href="@Link(i)">@i</a>
+        }
+    }
+    @if (p.HasNext)
+    {
+        <a href="@Link(p.Page + 1)">Вперёд →</a>
+    }
+</div>

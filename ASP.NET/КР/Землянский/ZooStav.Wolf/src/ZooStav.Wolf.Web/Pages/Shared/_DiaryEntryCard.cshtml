@@ -1,0 +1,89 @@
+@model ZooStav.Wolf.Web.Models.DiaryEntry
+@{
+    var showInternal = ViewData["ShowInternalFields"] as bool? ?? false;
+    var showComments = ViewData["ShowComments"] as bool? ?? true;
+        var showAnimal = ViewData["ShowAnimal"] as bool? ?? false;
+}
+<article class="entry" id="entry-@Model.Id">
+    <div class="entry-head">
+        <div>
+            <span class="@Model.Type.CssClass()">@Model.Type.ToRussian()</span>
+            @if (!Model.IsPublic)
+            {
+                <span class="tag tag-internal">служебная</span>
+            }
+            <div class="entry-title">@Model.Title</div>
+        </div>
+        <div class="entry-meta">
+            <span><b>@Model.OccurredAt.ToString("dd.MM.yyyy HH:mm")</b></span>
+            @if (showAnimal && Model.Animal != null)
+            {
+                <span>особь: <b>@Model.Animal.Name</b></span>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Details))
+    {
+        <div class="entry-details">@Model.Details</div>
+    }
+
+    <div class="entry-facts">
+        @if (!string.IsNullOrWhiteSpace(Model.FoodType))
+        {
+            <span class="fact">Рацион: <b>@Model.FoodType</b></span>
+        }
+        @if (Model.FoodAmountKg.HasValue)
+        {
+            <span class="fact">Масса корма: <b>@Model.FoodAmountKg.Value.ToString("0.##") кг</b></span>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Medication))
+        {
+            <span class="fact">Препарат: <b>@Model.Medication</b>@(string.IsNullOrWhiteSpace(Model.Dosage) ? "" : $", {Model.Dosage}")</span>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.PartnerName))
+        {
+            <span class="fact">Партнёр: <b>@Model.PartnerName</b></span>
+        }
+        @if (Model.OffspringCount.HasValue)
+        {
+            <span class="fact">Детёнышей: <b>@Model.OffspringCount</b></span>
+        }
+        @if (Model.WeightKg.HasValue)
+        {
+            <span class="fact">Вес: <b>@Model.WeightKg.Value.ToString("0.#") кг</b></span>
+        }
+        @if (Model.TemperatureC.HasValue)
+        {
+            <span class="fact">Температура: <b>@Model.TemperatureC.Value.ToString("0.#") °C</b></span>
+        }
+        @if (showInternal && !string.IsNullOrWhiteSpace(Model.Diagnosis))
+        {
+            <span class="fact">Диагноз: <b>@Model.Diagnosis</b></span>
+        }
+    </div>
+
+    <div class="entry-meta">
+        <span>Запись внёс: <b>@(Model.Author?.DisplayName ?? "—")</b>@(Model.Author == null || string.IsNullOrWhiteSpace(Model.Author.Position) ? "" : $" ({Model.Author.Position})")</span>
+        <span>Роль: @(Model.Author == null ? "—" : Roles.ToRussian(Model.Author.Role))</span>
+        <span>Создано: @Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm") UTC+3</span>
+        @if (Model.UpdatedAt > Model.CreatedAt.AddMinutes(1))
+        {
+            <span>Изменено: <b>@Model.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</b></span>
+        }
+    </div>
+
+    @if (showComments && Model.Comments.Any())
+    {
+        <div class="comments">
+            @foreach (var c in Model.Comments.OrderBy(x => x.CreatedAt))
+            {
+                <div class="comment">
+                    <span class="comment-author">@(c.Author?.DisplayName ?? "—")</span>
+                    <span class="comment-time"> · @c.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+                    <div>@c.Text</div>
+                </div>
+            }
+        </div>
+    }
+</article>

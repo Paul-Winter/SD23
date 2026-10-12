@@ -1,0 +1,129 @@
+@page
+@model ZooStav.Wolf.Web.Pages.Staff.AuditModel
+@{
+    Layout = "_StaffLayout";
+    ViewData["Title"] = "Журнал изменений";
+    var p = Model.Vm.Page;
+
+    string Link(int page) => Url.Page("/Staff/Audit", new
+    {
+        from = Model.Vm.From?.ToString("yyyy-MM-dd"),
+        to = Model.Vm.To?.ToString("yyyy-MM-dd"),
+        userId = Model.Vm.UserId,
+        action = Model.Vm.Action,
+        entity = Model.Vm.Entity,
+        page
+    })!;
+}
+
+<h1>Журнал изменений</h1>
+<p>
+    Полная история действий в системе: входы работников, создание и правка записей дневника,
+    комментарии, донаты и удаления. По каждой строке видно <b>кто</b>, <b>когда</b> (UTC+3) и <b>что</b> изменил.
+</p>
+
+<section class="card">
+    <form method="get" class="form-row">
+        <div>
+            <label for="from">Дата с</label>
+            <input type="date" id="from" name="from" value="@Model.Vm.From?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="to">Дата по</label>
+            <input type="date" id="to" name="to" value="@Model.Vm.To?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="userId">Специалист</label>
+            <select id="userId" name="userId">
+                <option value="">— все —</option>
+                @foreach (var u in Model.Vm.Users)
+                {
+                    <option value="@u.Id" selected="@(Model.Vm.UserId == u.Id)">@u.DisplayName — @Roles.ToRussian(u.Role)</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="action">Действие</label>
+            <select id="action" name="action">
+                <option value="">— все —</option>
+                @foreach (var a in Model.Vm.Actions)
+                {
+                    <option value="@a" selected="@(Model.Vm.Action == a)">@a</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="entity">Сущность</label>
+            <select id="entity" name="entity">
+                <option value="">— все —</option>
+                @foreach (var e in new[] { "DiaryEntry", "DiaryComment", "Donation", "AppUser" })
+                {
+                    <option value="@e" selected="@(Model.Vm.Entity == e)">@e</option>
+                }
+            </select>
+        </div>
+        <div class="form-actions">
+            <button class="btn" type="submit">Фильтровать</button>
+            <a class="btn btn-ghost" href="/staff/audit">Сбросить</a>
+        </div>
+    </form>
+</section>
+
+<div class="card-head" style="margin-top:18px">
+    <h2 style="margin:0">Записей журнала: @p.TotalCount</h2>
+    <small>страница @p.Page из @(p.TotalPages == 0 ? 1 : p.TotalPages)</small>
+</div>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>Когда (UTC+3)</th>
+            <th>Специалист</th>
+            <th>Роль</th>
+            <th>Действие</th>
+            <th>Объект</th>
+            <th>Что изменено</th>
+            <th>IP</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var a in p.Items)
+        {
+            <tr>
+                <td class="mono">@a.TimestampUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss")</td>
+                <td><b>@a.UserName</b></td>
+                <td>@Roles.ToRussian(a.UserRole)</td>
+                <td><span class="tag tag-relocation">@a.Action</span></td>
+                <td>@a.EntityName №@a.EntityId</td>
+                <td>@a.Summary</td>
+                <td class="mono">@a.IpAddress</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="pager">
+    @if (p.HasPrev)
+    {
+        <a href="@Link(p.Page - 1)">← Назад</a>
+    }
+    @for (var i = Math.Max(1, p.Page - 2); i <= Math.Min(p.TotalPages, p.Page + 2); i++)
+    {
+        if (i == p.Page)
+        {
+            <span class="current">@i</span>
+        }
+        else
+        {
+            <a href="@Link(i)">@i</a>
+        }
+    }
+    @if (p.HasNext)
+    {
+        <a href="@Link(p.Page + 1)">Вперёд →</a>
+    }
+</div>
+
+<p><small>Тот же журнал доступен по API: <code>GET /api/audit</code> (JWT, роли Admin/Veterinarian) и <code>GET /api/diary/{id}/history</code> — история одной записи.</small></p>

@@ -1,0 +1,55 @@
+@page
+@model ZooStav.Wolf.Web.Pages.Staff.Entry.EditModel
+@{
+    Layout = "_StaffLayout";
+    ViewData["Title"] = $"Изменение записи №{Model.Entry.Id}";
+}
+
+<h1>Изменение записи №@Model.Entry.Id</h1>
+<p>
+    Автор записи: <b>@(Model.Entry.Author?.DisplayName ?? "—")</b>
+    · создана @Model.Entry.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+    <br /><small>Каждое сохранение фиксируется в журнале изменений с указанием специалиста, времени и списка изменённых полей.</small>
+</p>
+
+@if (Model.Flash != null)
+{
+    <div class="alert alert-ok">@Model.Flash</div>
+}
+
+<div class="split">
+    <section class="card">
+        <form method="post">
+            <partial name="_EntryForm" model="Model.Input" />
+            <div class="form-actions">
+                <button class="btn btn-ok" type="submit">Сохранить изменения</button>
+                <a class="btn btn-ghost" href="/staff/diary?animalId=@Model.Entry.AnimalId">К дневнику</a>
+            </div>
+        </form>
+    </section>
+
+    <aside>
+        <section class="card">
+            <h3>История этой записи</h3>
+            <p><small>Кто и когда создавал и менял запись.</small></p>
+            @if (Model.History.Any())
+            {
+                @foreach (var h in Model.History)
+                {
+                    <div class="audit-row">
+                        <div class="audit-when">@h.TimestampUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                        <div class="audit-who">@h.UserName<small><br />@Roles.ToRussian(h.UserRole)</small></div>
+                        <div>
+                            <span class="tag tag-relocation">@h.Action</span>
+                            <div>@h.Summary</div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p><small>История пуста.</small></p>
+            }
+        </section>
+    </aside>
+</div>
