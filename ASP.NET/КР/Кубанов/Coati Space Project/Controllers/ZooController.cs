@@ -1,6 +1,8 @@
+using Coati_Space_Project.Models;
+using Donation;
+using Donation.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Coati_Space_Project.Models;
 
 namespace Coati_Space_Project.Controllers
 {
@@ -84,9 +86,12 @@ namespace Coati_Space_Project.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Donate()
+        public IActionResult Donate()
         {
-            return Redirect("https://pay.cloudtips.ru/p/cceba1a9");
+            //return Redirect("https://pay.cloudtips.ru/p/cceba1a9");
+
+            return View("~/~/Donation/Views/Donations/Index.cshtml");
+            //return View();
         }
     }
 }

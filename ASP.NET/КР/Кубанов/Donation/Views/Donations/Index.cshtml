@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<Animals> animalList = new List<Animals>
+        {
+            new Animals("Камерунская коза"),
+            new Animals("Носуха хахатуха"),
+            new Animals("Кролик"),
+            new Animals("Поросёнок \"Визенау\""),
+            new Animals("Леопард"),
+            new Animals("Северный волк"),
+            new Animals("Альпака"),
+            new Animals("Лев"),
+            new Animals("Енот"),
+            new Animals("Лама"),
+            new Animals("Гамадрил")
+        };
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Donation</title>
+    </head>
+    <body>
+        <h1>Здесь вы сожете помочь зоопарку с содержанием наших животных</h1>
+        <div>
+            <select>
+                @foreach(var animal in animalList)
+                {
+                    <options>
+                        animal.ToString();
+                    </options>
+                }
+            </select>
+            <submit src="https://pay.cloudtips.ru/p/cceba1a9">Пожертвовать</submit>
+        </div>
+    </body>
+</html>

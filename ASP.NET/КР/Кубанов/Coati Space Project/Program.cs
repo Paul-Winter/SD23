@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Coati_Space_Project.Models;
+using Donation;
 
 namespace Coati_Space_Project
 {

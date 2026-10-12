@@ -15,11 +15,15 @@ public class DonationController(
     IPaymentService payments,
     ILogger<DonationController> logger) : Controller
 {
+    //[HttpGet]
+    //[Route("donate/{slug?}")]
     [HttpGet]
-    [Route("donate/{slug?}")]
-    public async Task<IActionResult> Create(string? slug, CancellationToken ct)
+    public async Task<IActionResult> Create(/*string? slug, CancellationToken ct*/)
     {
-        var animal = await db.Animals.AsNoTracking()
+        return Redirect("https://pay.cloudtips.ru/p/cceba1a9");
+
+
+        /*var animal = await db.Animals.AsNoTracking()
             .FirstOrDefaultAsync(a => a.Slug == (slug ?? "raccoon"), ct);
 
         if (animal is null)
@@ -38,10 +42,10 @@ public class DonationController(
                 ? User.FindFirstValue("fullName") ?? User.Identity.Name ?? string.Empty
                 : string.Empty,
             DonorEmail = User.FindFirstValue(ClaimTypes.Email)
-        });
+        });*/
     }
 
-    [HttpPost]
+    /*[HttpPost]
     [Route("donate/{slug?}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(DonationCreateViewModel model, string? slug, CancellationToken ct)
@@ -113,5 +117,5 @@ public class DonationController(
             .ToListAsync(ct);
 
         return amounts.Sum();
-    }
+    }*/
 }
