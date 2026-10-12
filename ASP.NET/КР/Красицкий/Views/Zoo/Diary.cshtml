@@ -16,6 +16,15 @@
     3. <a href="/stav-zoo/@Model.Slug/webcam">Наблюдение через веб-камеру (Online)</a> |
     4. <b>Дневник / история особи и популяции</b> |
     5. <a href="/stav-zoo/@Model.Slug/donate">Донат на корм / лечение (Free donation)</a>
+    6.<a href="https://pay.cloudtips.ru/p/2e7c4e19"
+       target="_blank"
+       style="display:inline-block; background:#8e24aa; color:white; padding:0.7rem 1.5rem; border-radius:6px; font-weight:600; text-decoration:none;">
+        💳 Реальный донат через CloudTips
+    </a>
+7.<a href="https://zoostav.ru" target="_blank" rel="noopener" class="btn-zoostav">
+🌐 Официальный сайт зоопарка
+</a>
+
 </div>
 <hr />
 
@@ -32,11 +41,16 @@
     <button type="button" class="diary-filter-btn" data-category="Ветеринария">Ветеринария</button>
     <button type="button" class="diary-filter-btn" data-category="Уход и стрижка">Уход и стрижка</button>
     <button type="button" class="diary-filter-btn" data-category="Поведение">Поведение</button>
+    <button type="button" class="diary-filter-btn" data-category="Автор">Автор</button>
 </p>
 
 <p>
     Поиск: <input type="text" id="diarySearchInput" placeholder="Поиск по тексту..." />
 </p>
+<p>
+    Поиск по автору: <input type="text" id="authorInput" placeholder="Поиск по автору" />
+</p>
+
 
 <!-- Форма добавления записи для работников -->
 @if (isEmployee)
@@ -55,12 +69,18 @@
                     <option value="Ветеринария">Ветеринария</option>
                     <option value="Уход и стрижка">Уход и стрижка</option>
                     <option value="Поведение">Поведение</option>
+                    <option value="Кормёжка">Автор</option>
                 </select>
             </p>
 
             <p>
                 <label>Дата и время:</label><br />
                 <input type="datetime-local" name="Date" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+            </p>
+
+            <p>
+                <label>Автор:</label><br />
+                <input type="text" name="Author" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
             </p>
 
             <p>
@@ -160,3 +180,7 @@ else
     <button type="button" id="exportDiaryJsonBtn">Скачать JSON</button>
     <button type="button" id="exportDiaryCsvBtn">Скачать CSV</button>
 </p>
+
+<d href="https://zoostav.ru" target="_blank" rel="noopener" class="btn-zoostav">
+    🌐 Перейти на официальный сайт зоопарка
+</d>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,8 @@ namespace StavZooApp.Controllers.Api
                 return NotFound(new { message = $"Животное '{slug}' не найдено" });
             }
 
+
+
             var query = _db.DiaryEntries.Where(d => d.AnimalId == animal.Id);
 
             if (!string.IsNullOrWhiteSpace(category) && category != "Все")
@@ -51,8 +54,9 @@ namespace StavZooApp.Controllers.Api
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var s = search.ToLower();
-                query = query.Where(d => d.Title.ToLower().Contains(s) || d.Description.ToLower().Contains(s) || (d.DietDetails != null && d.DietDetails.ToLower().Contains(s)));
+                query = query.Where(d => d.Title.ToLower().Contains(s) || d.Description.ToLower().Contains(s) || (d.DietDetails != null && d.DietDetails.ToLower().Contains(s)) || (d.AuthorName.Contains(s)));
             }
+
 
             var entries = await query
                 .OrderByDescending(d => d.Date)
@@ -248,5 +252,13 @@ namespace StavZooApp.Controllers.Api
 
             return Ok(new { message = "Запись успешно удалена" });
         }
+        //    [HttpGet]
+        //    public string Donate()
+        //    {
+        //        return Donate("https://zoostav.ru");
+        //    }
+
+
+        //}
     }
 }
