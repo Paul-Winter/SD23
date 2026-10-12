@@ -11,13 +11,13 @@ namespace StavZooApp.Data
         {
             context.Database.EnsureCreated();
 
-            // Check if already seeded
+
             if (context.Animals.Any())
             {
                 return;
             }
 
-            // 1. Seed Users
+
             var passwordHash = BCrypt.Net.BCrypt.HashPassword("Password123!");
 
             var users = new List<User>
@@ -57,7 +57,7 @@ namespace StavZooApp.Data
             context.Users.AddRange(users);
             context.SaveChanges();
 
-            // 2. Seed Animal: Alpaca (Пако и Лола)
+
             var alpaca = new Animal
             {
                 Slug = "alpaca",
@@ -89,7 +89,7 @@ namespace StavZooApp.Data
             context.Animals.Add(alpaca);
             context.SaveChanges();
 
-            // 3. Media Items for Alpaca
+
             var mediaItems = new List<AnimalMedia>
             {
                 new AnimalMedia
@@ -146,7 +146,6 @@ namespace StavZooApp.Data
 
             context.AnimalMedias.AddRange(mediaItems);
 
-            // 4. Diary Entries for Alpaca (Employee logs: Feeding, Mating, Offspring, Veterinary, Care, Behavior)
             var diaryEntries = new List<AnimalDiaryEntry>
             {
                 new AnimalDiaryEntry
@@ -243,7 +242,6 @@ namespace StavZooApp.Data
 
             context.DiaryEntries.AddRange(diaryEntries);
 
-            // 5. Initial Donations
             var donations = new List<Donation>
             {
                 new Donation
