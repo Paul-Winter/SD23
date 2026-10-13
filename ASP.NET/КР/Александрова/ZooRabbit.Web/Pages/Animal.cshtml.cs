@@ -22,7 +22,7 @@ public class AnimalModel : PageModel
     {
         Animal = await _db.Animals.AsNoTracking().FirstOrDefaultAsync(a => a.Slug == slug);
         if (Animal is null) { Response.StatusCode = 404; return Page(); }
-        TotalDonations = await _db.Donations.Where(d => d.AnimalId == Animal.Id).SumAsync(d => d.Amount);
+        //TotalDonations = await _db.Donations.Where(d => d.AnimalId == Animal.Id).SumAsync(d => d.Amount);
         if (IsEmployee)
             Diary = await _db.DiaryEntries.AsNoTracking().Where(e => e.AnimalId == Animal.Id)
                 .OrderByDescending(e => e.Date).ToListAsync();
