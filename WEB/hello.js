@@ -9,3 +9,12 @@ console.log(lodash.union(first, second));
 
 console.log('пересечение массивов:');
 console.log(lodash.intersection(first, second));
+
+function sum(x, y)
+{
+    return x + y;
+}
+function hello(x)
+{
+    console.log('hello, ' + x + '!');
+}
