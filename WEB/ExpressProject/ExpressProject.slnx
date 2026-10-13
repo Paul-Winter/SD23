@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ExpressProject.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>
