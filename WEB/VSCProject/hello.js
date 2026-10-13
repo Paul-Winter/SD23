@@ -1,3 +1,5 @@
+// module.exports = {hello:this.hello};
+
 console.log('подключаем библиотеку lodash');
 const lodash = require("lodash")
 
@@ -10,11 +12,11 @@ console.log(lodash.union(first, second));
 console.log('пересечение массивов:');
 console.log(lodash.intersection(first, second));
 
-function sum(x, y)
+exports.sum = function sum(x, y)
 {
     return x + y;
 }
-function hello(x)
+exports.hello = function hello(x)
 {
     console.log('hello, ' + x + '!');
 }
