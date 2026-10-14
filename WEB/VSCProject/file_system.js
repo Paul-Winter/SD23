@@ -34,3 +34,14 @@ fileSys.stat("hello.txt", function(error, data){
 });
 // console.log("удаление файла 'test.txt'");
 // fileSys.unlinkSync("test.txt");
+fileSys.mkdir("test", (error) => {
+    if(error){
+        console.log(error);
+    }
+});
+fileSys.readdir("test", (error, files) => {
+    if(error){
+        console.log(error);
+    }
+    files.forEach(file => console.log(file));
+});
