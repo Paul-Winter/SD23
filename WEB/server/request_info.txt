@@ -1,0 +1,16 @@
+host - localhost:3000
+connection - keep-alive
+cache-control - max-age=0
+sec-ch-ua - "Not;A=Brand";v="8", "Chromium";v="150", "YaBrowser";v="26.8", "Yowser";v="2.5"
+sec-ch-ua-mobile - ?0
+sec-ch-ua-platform - "Windows"
+upgrade-insecure-requests - 1
+user-agent - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 YaBrowser/26.8.0.0 Safari/537.36
+accept - text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+sec-fetch-site - none
+sec-fetch-mode - navigate
+sec-fetch-user - ?1
+sec-fetch-dest - document
+accept-encoding - gzip, deflate, br, zstd
+accept-language - ru,en;q=0.9
+cookie - StavZoo.AuthCookie=CfDJ8K8qGhIKSTFKqKfIPVeLOl3zR5REDPd8qdR_vHwflZMWe6vo6lNbqBWLui9kVAAs4yjBdWj2SNPp496YpevoBEnTZa4cEVag6SXdaDOV0AQR2pI2rdiyoWo9xReLCng_PuCfPM9KKJP2r8bFbZlYvV4BCIhFpnM4dF9114xnnOzbWxG1iE2c0gmgRU4LUEHgfNx1TJ9zpXRvWfnPq5Ax-oWJs-ImW2FWIPHycYXsZxCr_0FRg-_tcHHFlvtnJW2EKWhZqdJuLOdOKlxOCxafIic47K2EgoMgQ2G1t0cM6OLuIhIbWLgoAP42jDzRNLeXUK_0KLDg6wAP3kz1YpB2_HrothtB_R3utxsRDy3Ex-75R7jqFL7ldaqoIxcFAEaOiqaQ3AU4KY4Dm4umm4OxZb-mYi3AxK8WQcZrSgKhFWNA_uMSPAkiyARTebuqRcZ4g-hBkm4zxztDnBJGIE-hYNnjbT8IQrSi0g7s-HVAJVuw_N4VG4U48FLIgeHd9xPiYEQobkUomeborW3S3P4A5z-zgfUNskXyTecfq6cf3RkQOGjIGkTlVsqNIXJfb2CZ-StJLCfZH1nIpSb2SEagE0iO3h9dIlh35xHdMNjn8QpzXuhUbHQDY09moRpUPcNCcl4FqJOnuytaUSC9wCP6XlUHo1eLNQjNndxciE07aqsAOoJh9AhDdOOiyWnHTmCCxQdK2WgiI6mo_KuPLGO0ePsLn3P0Uf_mIi2AdRXQ8WaERUW6QGYLUakBwIygww5pb1jO68sbiaciTUGyEJoq4C0nv5Gwb0RhFAUQdAJoCr8S96QbfEfZRke0_JNgZocS76JzAxCKM5vKLWADzqErEDs; ZooAuthToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ItCQ0LvQtdC60YHQsNC90LTRgCDQodC80LjRgNC90L7QsiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImtlZXBlckBzdGF2em9vLnJ1IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRW1wbG95ZWUiLCJQb3NpdGlvbiI6ItCh0YLQsNGA0YjQuNC5INC30L7QvtGC0LXRhdC90LjQuiDRgdC10LrRhtC40Lgg0LrQvtC_0YvRgtC90YvRhSIsIlVzZXJuYW1lIjoia2VlcGVyX2FsZXgiLCJqdGkiOiIzYzM1ZjEyOS0xZTZlLTQ1M2EtYWM4OS1iNGEyNWUxODNiNTMiLCJleHAiOjE3OTE5ODE5MjMsImlzcyI6IlN0YXZab29BcHAiLCJhdWQiOiJTdGF2Wm9vQ2xpZW50cyJ9.Do94eIdja7bD7dQ3rPV0-F2QzLC8PkSojTmmT5qUG68
