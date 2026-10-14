@@ -32,3 +32,5 @@ fileSys.stat("hello.txt", function(error, data){
         console.log("is not directory")
     }
 });
+// console.log("удаление файла 'test.txt'");
+// fileSys.unlinkSync("test.txt");
