@@ -1,19 +1,12 @@
 const server = require("http");
 const fs = require("fs");
-const { forEach } = require("lodash");
 
 server.createServer(function(request, response){
+    response.setHeader("user_header", "__________USER_HEADER__________");
     console.log("URL: ", request.url);
     console.log("METHOD: ", request.method);
-    // console.log(request.headers);
+
     const data = request.headers;
-    // for(var header in data) {
-    //     fs.appendFileSync("request_info.txt", header);
-    //     fs.appendFileSync("request_info.txt", " - ");
-    //     fs.appendFileSync("request_info.txt", data[header]);
-    //     fs.appendFileSync("request_info.txt", "\n");
-    // };
-    // console.log("__________записываем_в_файл_'request_info.txt'__________");
     
     response.write("\nURL: ");
     response.write(request.url);
@@ -26,7 +19,7 @@ server.createServer(function(request, response){
         response.write(data[header]);
         response.write("\n");
     };
-    response.end("Конец запроса");
+    response.end("__________END_RESPONSE__________");
 }).listen(3000, "127.0.0.1", function(){
-    console.log("__________server_listen_port_3000___________");
+    console.log("__________server_listen_port_3000__________");
 });
