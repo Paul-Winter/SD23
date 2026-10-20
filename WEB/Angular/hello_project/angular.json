@@ -1,0 +1,31 @@
+{
+    "version": 1,
+    "projects": {
+        "hello_project": {
+            "projectType": "application",
+            "root": "",
+            "sourceRoot": "src",
+            "architect": {
+                "build": {
+                    "builder": "@angular/build:application",
+                    "options": {
+                        "outputPath": "dist/hello_project",
+                        "index": "src/index.html",
+                        "browser": "src/main.ts",
+                        "tsConfig": "tsconfig.json",
+                        "polyfills": ["zone.js"]
+                    }
+                },
+                "serve": {
+                "builder": "@angular/build:dev-server",
+                "options": {
+                    "buildTarget": "hello_project:build"
+                    }
+                }
+            }
+        }
+    },
+    "cli": {
+        "analytics": false
+    }
+}
