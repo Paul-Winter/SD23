@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="Second.esproj">
+  <Project Path="second.esproj">
     <Build />
     <Deploy />
   </Project>
