@@ -26,3 +26,7 @@ createRoot(document.getElementById("application")).render(
     ))}
     </ul>
 );
+
+createRoot(document.getElementById("header")).render(
+    <h1>Список студентов:</h1>
+);

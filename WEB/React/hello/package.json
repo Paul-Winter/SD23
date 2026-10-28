@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite"
+    "dev": "vite",
+    "prod": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "type": "commonjs",
