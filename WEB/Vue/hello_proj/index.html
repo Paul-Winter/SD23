@@ -5,8 +5,7 @@
         <title>IT TOP College</title>
     </head>
     <body>
-        <div id="header">{{message}}</div>
-        <div id="application"></div>
+        <div id="application">{{message}}</div>
         <script src="https://unpkg.com/vue"></script>
         <script>
             Vue.createApp({
@@ -15,7 +14,7 @@
                         message: 'Hello, World!'
                     }
                 }
-            }).mount('#header');
+            }).mount('#application');
         </script>
     </body>
 </html>
