@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8"/>
+        <title>IT TOP College</title>
+    </head>
+    <body>
+        <div id="header">{{message}}</div>
+        <div id="application"></div>
+        <script src="https://unpkg.com/vue"></script>
+        <script>
+            Vue.createApp({
+                data(){
+                    return {
+                        message: 'Hello, World!'
+                    }
+                }
+            }).mount('#header');
+        </script>
+    </body>
+</html>
