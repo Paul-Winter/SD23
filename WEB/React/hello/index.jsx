@@ -13,20 +13,17 @@ const student1 = {
 };
 const students = [student1];
 
-createRoot(document.getElementById("application")).render(
-    <ul>
-    {students.map((stud, index) => (
-        <li key={index}>
-            <p id={stud.id}>
-                <h1>студент: {stud.print()}</h1>
-                <h2>группа: {stud.group}</h2>
-                {stud.isAccept ? <h3>допущен</h3> : <h3>не допущен</h3>}
-            </p>
-        </li>
-    ))}
-    </ul>
-);
+const head_elem = createRoot(document.getElementById("header"));
 
-createRoot(document.getElementById("header")).render(
-    <h1>Список студентов:</h1>
+function timer() {
+    head_elem.render(
+        <h1>{new Date().toLocaleTimeString()}</h1>
+    )
+}
+setInterval(timer, 1000);
+
+createRoot(document.getElementById("application")).render(
+    <div>
+        <h1>{new Date().toLocaleTimeString()}</h1>
+    </div>
 );
